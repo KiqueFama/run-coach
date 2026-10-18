@@ -17,7 +17,8 @@ def export(output_path: str, persona=None):
     for row in cur.execute(
         """
         SELECT activity_id, name, activity_type, start_time, duration_sec,
-               distance_m, calories, avg_hr, max_hr, avg_speed_mps, elevation_gain_m
+               distance_m, calories, avg_hr, max_hr, avg_speed_mps, elevation_gain_m,
+               training_effect_aerobic, training_effect_anaerobic, raw_json
         FROM activities
         ORDER BY start_time
         """
@@ -25,7 +26,14 @@ def export(output_path: str, persona=None):
         (
             activity_id, name, activity_type, start_time, duration_sec,
             distance_m, calories, avg_hr, max_hr, avg_speed_mps, elevation_gain_m,
+            te_aerobic, te_anaerobic, raw_json,
         ) = row
+        try:
+            raw = json.loads(raw_json) if raw_json else {}
+        except Exception:
+            raw = {}
+        cadencia = raw.get("averageRunningCadenceInStepsPerMinute")
+        zancada = raw.get("avgStrideLength")
         actividades.append(
             {
                 "activityId": activity_id,
@@ -39,6 +47,10 @@ def export(output_path: str, persona=None):
                 "fcMax": max_hr,
                 "velocidadMps": avg_speed_mps,
                 "desnivelM": elevation_gain_m,
+                "teAerobico": te_aerobic,
+                "teAnaerobico": te_anaerobic,
+                "cadencia": round(cadencia, 1) if cadencia else None,
+                "zancadaCm": round(zancada, 1) if zancada else None,
             }
         )
 
@@ -69,12 +81,13 @@ def export(output_path: str, persona=None):
         d["bodyBatteryValor"] = round(mean(vals), 1) if vals else None
 
     sueno = []
-    for fecha, sleep_score in cur.execute("SELECT date, sleep_score FROM sleep"):
+    for fecha, sleep_score, total_sec in cur.execute("SELECT date, sleep_score, total_sleep_sec FROM sleep"):
         sueno.append(
             {
                 "fecha": fecha,
                 "puntuacion": sleep_score,
                 "fcReposo": resting_hr_by_date.get(fecha),
+                "horas": round(total_sec / 3600, 2) if total_sec else None,
             }
         )
     sueno.sort(key=lambda x: x["fecha"])
