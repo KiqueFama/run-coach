@@ -160,7 +160,7 @@
 
       <div class="card">
         <h3>Check-in diario</h3>
-        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Dos preguntas rápidas. Tu respuesta ajusta el entrenamiento de hoy y, si hace falta, el de los próximos días.</div>
+        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Dos preguntas: ajustan lo de hoy y lo de los próximos días.</div>
         <div class="checkin-q">
           <div class="qtext">¿Cómo te encuentras hoy?</div>
           <div class="btn-row">
@@ -220,7 +220,21 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card coach-plan" id="coach-card">
+        <h3 id="coach-plan-titulo">Entrenamiento del día</h3>
+        <div id="coach-plan-body"></div>
+        <div id="coach-glosario" style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin:6px 0 10px;"></div>
+        <div id="coach-consejos"></div>
+        <div id="sesion-feedback"></div>
+      </div>
+
+            <div class="card" id="analisis-card" style="display:none;"><h3 id="analisis-titulo">Tu última sesión</h3><div id="analisis-body"></div></div>
+
+      <div class="card" id="why-card">
+        <h3>Por qué esto, hoy</h3>
+        <div id="why-body"></div>
+      </div>
+<div class="card" id="estado-card">
         <div class="ring-wrap">
           <div class="ring">
             <svg width="110" height="110" viewBox="0 0 118 118">
@@ -238,7 +252,7 @@
             <div class="desc" id="ring-desc"></div>
           </div>
         </div>
-        <div class="row"><span class="label">Hoy toca</span><span class="value" id="hoy-toca" style="font-size:12px; max-width:200px;">–</span></div>
+        <div class="row" style="display:none;"><span class="label">Hoy toca</span><span class="value" id="hoy-toca" style="font-size:12px; max-width:200px;">–</span></div>
         <div class="row"><span class="label">Sueño (media 7 días)</span><span class="value" id="hoy-sueno-media">–</span></div>
         <div class="row"><span class="label">FC en reposo (media 7 días)</span><span class="value" id="hoy-fcreposo-media">–</span></div>
         <div class="row"><span class="label">Estrés semanal</span><span class="value" id="hoy-estres">–</span></div>
@@ -250,19 +264,23 @@
         <div id="manana-body"></div>
       </div>
 
+      <div class="card" id="proxima-carrera-card">
+        <h3>Próximo entreno de carrera</h3>
+        <div id="proxima-carrera-body"></div>
+      </div>
+
       <div id="hoy-alerts"></div>
 
       <div class="card" id="repaso-card">
         <h3>Repaso semanal (Estrés / Body Battery) <span class="muted" id="repaso-semana-label"></span></h3>
         <div id="repaso-body"></div>
       </div>
-    </section>
+        </section>
 
-    <!-- ============ ENTRENAMIENTOS ============ -->
-    <section class="screen" data-screen="entrenamientos">
-      <h1 class="page-title">Entrenamientos</h1>
-
-      <div class="card">
+<!-- ============ PLAN COMPLETO ============ -->
+    <section class="screen" data-screen="plan">
+      <h1 class="page-title">Plan</h1>
+<div class="card">
         <h3>Semana actual</h3>
         <div class="week-grid" id="week-grid"></div>
         <div style="font-size:11px; color:var(--text-dim); margin-top:6px;" id="fase-actual-texto"></div>
@@ -271,51 +289,26 @@
       <div id="plan-ajustes"></div>
 
       <div class="card">
-        <h3>Próximas carreras y salidas</h3>
-        <div id="eventos-lista"></div>
-      </div>
-
-      <div class="card coach-plan" id="coach-card">
-        <h3 id="coach-plan-titulo">Entrenamiento del día</h3>
-        <div id="coach-plan-body"></div>
-        <div id="coach-glosario" style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin:6px 0 10px;"></div>
-        <div id="coach-consejos"></div>
-        <div id="sesion-feedback"></div>
-      </div>
-
-      <div class="card" id="proxima-carrera-card">
-        <h3>Próximo entreno de carrera</h3>
-        <div id="proxima-carrera-body"></div>
-      </div>
-
-      <div class="card">
         <h3>Objetivo semanal</h3>
         <div class="row"><span class="label">Sesiones de running</span><span class="value" id="obj-running">0 / 2</span></div>
         <div class="progress-bar"><div class="fill" id="obj-running-bar" style="width:0%"></div></div>
-        <div class="row"><span class="label">Funcional</span><span class="value" id="obj-funcional">0 / 2</span></div>
+        <div class="row"><span class="label">Clases de funcional</span><span class="value" id="obj-funcional">0 / 2</span></div>
         <div class="row"><span class="label">Estiramientos</span><span class="value" id="obj-estiramientos">0 / 0</span></div>
       </div>
 
       <div class="card">
-        <h3>Zonas trabajadas esta semana</h3>
-        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:6px;">Se rellena con lo que marques en "Cómo me ha ido" tras tus sesiones de funcional y estiramientos.</div>
-        <div id="mapa-semana"></div>
+        <h3>Próximas carreras y salidas</h3>
+        <div id="eventos-lista"></div>
       </div>
 
+      
       <div class="card">
-        <h3>Progreso hacia el objetivo</h3>
-        <div class="row"><span class="label">Récord histórico</span><span class="value" id="record-val">–</span></div>
-        <div class="row"><span class="label">Distancia sostenida <span class="muted" id="sostenida-ventana"></span></span><span class="value" id="sostenida-val">–</span></div>
-        <div class="progress-bar"><div class="fill" id="sostenida-bar" style="width:0%"></div></div>
-        <div style="font-size:11.5px; color:var(--text-dim); margin-top:6px;">Se mide por la distancia que <b style="color:var(--text)">mantienes con regularidad</b>, no por tu mejor marca puntual: un pico aislado no significa que estés "en condiciones".</div>
+        <h3 id="plan-resumen-titulo">Tu plan</h3>
+        <div id="plan-resumen" style="font-size:12.5px; line-height:1.55; color:var(--text-dim);"></div>
       </div>
-
-      <div class="card">
-        <h3>Historial reciente <span class="muted">(toca una para ver el detalle)</span></h3>
-        <div id="historial-list"></div>
-      </div>
-
-      <details class="card plegable" id="det-evento">
+      <div id="plan-semanas"></div>
+      <div class="footnote">Es una previsión orientativa: se recalcula sola cuando cambian tus datos, tus check-ins o tus carreras.</div>
+    <details class="card plegable" id="det-evento">
         <summary>＋ Añadir una carrera o salida</summary>
         <div style="font-size:11.5px; color:var(--text-dim); margin:8px 0;">El plan se ajusta solo alrededor de cada evento (menos calidad los días previos, recuperación después).</div>
         <div class="field"><label>Nombre</label><input type="text" id="ev-nombre" placeholder="ej. Carrera de Yecla"></div>
@@ -337,7 +330,7 @@
         <div style="font-size:11.5px; color:var(--text-dim); margin:8px 0;">Solo si algo no llega desde Garmin. El dato importado siempre sustituye al manual de la misma fecha.</div>
         <div class="field">
           <label>Tipo</label>
-          <select id="ms-tipo"><option value="Carrera">Running</option><option value="Fuerza">Funcional</option><option value="Estiramientos">Estiramientos</option></select>
+          <select id="ms-tipo"><option value="Carrera">Running</option><option value="Fuerza">Clase de funcional</option><option value="Estiramientos">Estiramientos</option></select>
         </div>
         <div class="field"><label>Fecha</label><input type="date" id="ms-fecha"></div>
         <div class="field" id="ms-dist-wrap"><label>Distancia (km)</label><input type="number" id="ms-dist" step="0.01" placeholder="ej. 4.5"></div>
@@ -352,17 +345,6 @@
         </div>
         <button class="btn" id="save-manual-session" style="width:100%;">Registrar sesión</button>
       </details>
-    </section>
-
-    <!-- ============ PLAN COMPLETO ============ -->
-    <section class="screen" data-screen="plan">
-      <h1 class="page-title">Plan completo</h1>
-      <div class="card">
-        <h3 id="plan-resumen-titulo">Tu plan</h3>
-        <div id="plan-resumen" style="font-size:12.5px; line-height:1.55; color:var(--text-dim);"></div>
-      </div>
-      <div id="plan-semanas"></div>
-      <div class="footnote">Es una previsión orientativa: se recalcula sola cuando cambian tus datos, tus check-ins o tus carreras.</div>
     </section>
 
     <!-- ============ GARMIN ============ -->
@@ -395,8 +377,26 @@
 
     <!-- ============ EVOLUCIÓN ============ -->
     <section class="screen" data-screen="evolucion">
-      <h1 class="page-title">Evolución</h1>
+      <h1 class="page-title">Progreso</h1>
       <div style="font-size:11.5px; color:var(--text-dim); margin:-8px 0 12px;">Cada gráfica arranca en lo más reciente; desliza hacia la izquierda para ver lo anterior.</div>
+      <div class="card" id="aprendido-card">
+        <h3>Lo que he aprendido de ti</h3>
+        <div id="aprendido-body"></div>
+      </div>
+
+      <div class="card" id="cadencia-card">
+        <h3>Tu cadencia</h3>
+        <div id="cadencia-body"></div>
+      </div>
+<div class="card">
+        <h3>Progreso hacia el objetivo</h3>
+        <div class="row"><span class="label">Récord histórico</span><span class="value" id="record-val">–</span></div>
+        <div class="row"><span class="label">Distancia sostenida <span class="muted" id="sostenida-ventana"></span></span><span class="value" id="sostenida-val">–</span></div>
+        <div class="progress-bar"><div class="fill" id="sostenida-bar" style="width:0%"></div></div>
+        <div style="font-size:11.5px; color:var(--text-dim); margin-top:6px;">Se mide por la distancia que <b style="color:var(--text)">mantienes con regularidad</b>, no por tu mejor marca puntual: un pico aislado no significa que estés "en condiciones".</div>
+      </div>
+
+      
 
       <div class="card chart-card">
         <h3>1 · Distancia máxima continua</h3>
@@ -447,7 +447,18 @@
         <div class="explain"><b>Qué significa:</b> tu <b>distancia sostenida</b> (la mediana de tu mejor tirada semanal en las últimas semanas activas) como % de tu objetivo. No es tu récord puntual: mide si lo mantienes con regularidad.</div>
         <div class="interp" id="interp-6"></div>
       </div>
-    </section>
+    <div class="card">
+        <h3>Zonas trabajadas esta semana</h3>
+        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:6px;">Se rellena con lo que marques en "Cómo me ha ido" tras tus sesiones de funcional y estiramientos.</div>
+        <div id="mapa-semana"></div>
+      </div>
+
+      <div class="card">
+        <h3>Historial reciente <span class="muted">(toca una para ver el detalle)</span></h3>
+        <div id="historial-list"></div>
+      </div>
+
+      </section>
 
     <!-- ============ NUTRICIÓN ============ -->
     <section class="screen" data-screen="nutricion">
@@ -455,6 +466,19 @@
       <div class="card">
         <h3>Hoy: <span id="nutri-tipo-dia"></span></h3>
         <div id="nutri-bloques"></div>
+        <div id="nutri-hoy-extra"></div>
+      </div>
+      <div class="card">
+        <h3>Cómo ha ido hoy (5 toques)</h3>
+        <div id="nutri-check"></div>
+      </div>
+      <div class="card">
+        <h3>Mi menú de 3 semanas</h3>
+        <div id="menu-editor"></div>
+      </div>
+      <div class="card">
+        <h3>Esta semana: ¿voy bien con las comidas?</h3>
+        <div id="menu-valoracion"></div>
       </div>
       <div class="card">
         <h3>Preparar una carrera, salida o entreno</h3>
@@ -466,11 +490,23 @@
       </div>
 
       <div class="card">
+        <h3>Pruebas para correr con gel o comida</h3>
+        <div id="pruebas-body"></div>
+      </div>
+
+      <div class="card">
+        <h3>¿Me conviene algún suplemento?</h3>
+        <div id="supl-guia"></div>
+      </div>
+
+      <div class="card">
         <h3>Diario de comidas con foto</h3>
         <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:8px;">Haz una foto de lo que vas a comer o has comido; se guarda en este dispositivo. Para que te orienten sobre ella, pulsa "Compartir" y envíasela a Claude (la app no analiza fotos por sí sola).</div>
         <div class="field"><label>Comida</label>
           <select id="foto-comida"><option>Desayuno</option><option>Comida</option><option>Merienda</option><option>Cena</option><option>Pre-entreno</option><option>Durante</option><option>Post-entreno</option></select>
         </div>
+        <div class="field"><label>¿Qué lleva? (toca lo que haya: alimenta tu check del día)</label>
+          <div class="btn-row" style="margin-top:0;"><button class="btn small foto-tag" data-t="prot">🍗 Proteína</button><button class="btn small foto-tag" data-t="verd">🥦 Verdura</button><button class="btn small foto-tag" data-t="fruta">🍎 Fruta</button><button class="btn small foto-tag" data-t="ultra">🍟 Ultraprocesado</button></div></div>
         <div class="field"><label>Nota (opcional)</label><input type="text" id="foto-nota" placeholder="ej. antes de la tirada larga"></div>
         <div class="btn-row"><label class="btn file-label">📷 Hacer foto / elegir<input type="file" accept="image/*" capture="environment" id="foto-input" style="display:none;"></label></div>
         <div id="foto-lista" style="margin-top:10px;"></div>
@@ -521,7 +557,15 @@
           <select id="p-busco"><option value="cuidarme">Cuidarme y mantener la forma</option><option value="mejorar">Mejorar poco a poco</option><option value="carrera">Preparar una carrera concreta</option></select></div>
         <div class="profile-item"><span class="l">Cómo de competitivo soy</span>
           <select id="p-compet"><option value="nada">Nada: quiero disfrutar y cuidarme</option><option value="algo">Algo: me gusta superarme</option><option value="mucho">Mucho: quiero rendir al máximo</option></select></div>
-        <div class="profile-item"><span class="l">Distancia de referencia (km)</span><input type="number" id="p-objetivo" step="0.1"></div>
+        <div class="profile-item"><span class="l">Terreno habitual</span>
+          <select id="p-superficie"><option value="asfalto">Asfalto</option><option value="mixto">Mixto: asfalto y monte</option><option value="trail">Trail / montaña</option></select></div>
+        <div class="profile-item"><span class="l">Mi día de monte (con "Mixto")</span>
+          <select id="p-dia-monte"><option value="variar">Que varíe cada semana</option><option value="lun">Lunes</option><option value="mar">Martes</option><option value="mie">Miércoles</option><option value="jue">Jueves</option><option value="vie">Viernes</option><option value="sab">Sábado</option><option value="dom">Domingo</option></select></div>
+        <div class="profile-item"><span class="l">Tengo pista de atletismo cerca</span>
+          <select id="p-pista"><option value="si">Sí</option><option value="no">No</option></select></div>
+        <div style="font-size:11px; color:var(--text-dim); margin:-2px 0 8px;">Con "Mixto" te indico en cada salida si toca asfalto, pista o monte. Por defecto el monte varía de semana en semana para que no sea siempre lo mismo; las series y el tempo van a la pista. Puedes cambiar el terreno de una salida cuando quieras (en Hoy o en el detalle de ese día) y la app recalcula la semana.</div>
+        <div class="profile-item"><span class="l">Mi meta de distancia (km)</span><input type="number" id="p-objetivo" step="0.1"></div>
+        <div style="font-size:11px; color:var(--text-dim); margin:-2px 0 8px;">La distancia a la que quieres llegar a correr con comodidad. Mide tu progreso y marca cuándo pasas de fase (de Aumento a Consolidación). La eliges tú: no se rellena sola.</div>
         <div class="row"><span class="label">Fase actual</span><span class="value" id="p-fase-actual">–</span></div>
         <div class="row"><span class="label">Próxima carrera</span><span class="value" id="p-objetivo-tipo" style="font-size:11px; text-align:right; max-width:170px;">–</span></div>
         <div style="font-size:11px; color:var(--text-dim); margin-top:6px;">Las carreras concretas se añaden en Entreno › "Añadir una carrera o salida". Aquí solo cuenta lo que buscas en general.</div>
@@ -530,7 +574,6 @@
       <div class="card">
         <h3>Datos personales</h3>
         <div class="profile-item"><span class="l">Peso (kg)</span><input type="number" id="p-peso" step="0.1" placeholder="no indicado"></div>
-        <div class="profile-item"><span class="l">Altura (cm)</span><input type="number" id="p-altura" step="1" placeholder="no indicada"></div>
         <div class="profile-item"><span class="l">Edad</span><input type="number" id="p-edad" step="1" placeholder="no indicada"></div>
         <div class="profile-item"><span class="l">FC máxima real (si la conoces)</span><input type="number" id="p-fcmax" step="1" placeholder="no indicada"></div>
         <div class="profile-item"><span class="l">Años corriendo (aprox.)</span><input type="number" id="p-anos" step="0.5" placeholder="ej. 2"></div>
@@ -544,6 +587,12 @@
         <h3>Qué hago cada día</h3>
         <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:8px;">Marca lo que ya está fijado y no depende de ti (gimnasio, clases) y deja el resto en "Decide el entrenador".</div>
         <div id="p-dias"></div>
+        <div id="p-clase-wrap" style="margin-top:10px;">
+          <div style="font-size:12px; margin-bottom:4px;">Mi clase de funcional (en grupo, ejercicios de cuerpo completo que no elijo yo)</div>
+          <div class="btn-row" style="margin-top:0;"><button class="btn small p-clase-int" data-v="alta">Exigente</button><button class="btn small p-clase-int" data-v="media">Intensidad media</button></div>
+          <div class="btn-row"><button class="btn small p-clase-min" data-v="45">45 min</button><button class="btn small p-clase-min" data-v="60">60 min</button><button class="btn small p-clase-min" data-v="75">75 min o más</button></div>
+          <div style="font-size:11px; color:var(--text-dim); margin-top:6px;">Con esto sé cuánta fatiga de piernas me dejan tus clases y cuido el rodaje del día siguiente y los días antes de una carrera.</div>
+        </div>
       </div>
 
       <div class="card" id="zonas-card">
@@ -571,6 +620,22 @@
       </div>
 
       <details class="card plegable">
+        <summary>Cómo uso lo que me cuentas</summary>
+        <div style="font-size:11.5px; line-height:1.6; color:var(--text-dim); margin-top:8px;">
+          <b style="color:var(--text)">Qué busco</b> y <b style="color:var(--text)">competitividad</b>: "cuidarme" mantiene el volumen sin subirlo; "no compito" elimina series y tempo.<br>
+          <b style="color:var(--text)">Mi meta de distancia</b>: marca tu progreso y cuándo pasas de fase.<br>
+          <b style="color:var(--text)">Años corriendo</b>: cuánto subo por semana (7 %, 10 % o 12 %) y si hay calidad.<br>
+          <b style="color:var(--text)">Qué hago cada día</b> y <b style="color:var(--text)">mi clase de funcional</b>: dónde va cada sesión y cuánta fatiga de piernas cuento.<br>
+          <b style="color:var(--text)">Lesiones o molestias previas</b>: notas de cuidado en tus carreras y en tu clase.<br>
+          <b style="color:var(--text)">Horas de sueño habituales</b>: las comparo con lo que mide tu reloj para valorar tu recuperación.<br>
+          <b style="color:var(--text)">Mi día a día</b>, <b style="color:var(--text)">peso</b>, <b style="color:var(--text)">alimentación y alergias</b>: ajustan la nutrición y las ideas de comida.<br>
+          <b style="color:var(--text)">Edad / FC máxima</b>: tus zonas de pulsaciones.<br>
+          <b style="color:var(--text)">Salud (cuestionario)</b>: limita la intensidad.<br>
+          Si algo de lo que pides no sirve para nada, lo quito: no te pregunto por preguntar.
+        </div>
+      </details>
+
+      <details class="card plegable">
         <summary>Llevar mi perfil a otro dispositivo</summary>
         <div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">Tus respuestas se guardan solo en este dispositivo. Para tener lo mismo en otro (por ejemplo el móvil): aquí pulsa <b>Mostrar mi perfil</b>, copia el texto y pégalo en el otro dispositivo, en este mismo sitio, en "Pegar un perfil".</div>
         <div class="btn-row"><button class="btn ghost small" id="perfil-mostrar">Mostrar mi perfil</button></div>
@@ -585,6 +650,8 @@
       </details>
 
       <button class="btn" id="save-perfil" style="width:100%; margin-bottom:8px;">Guardar cambios</button>
+      <button class="btn ghost" id="recalcular-todo" style="width:100%; margin-bottom:8px;">Rehacer mi plan desde mis datos de Garmin</button>
+      <div style="font-size:11px; color:var(--text-dim); margin:-2px 0 10px;">Vuelve a valorar tu fase y a calcular esta semana con tu historial real. Úsalo si el plan te parece corto o demasiado suave.</div>
       <button class="btn ghost" id="redo-onboarding" style="width:100%; margin-bottom:8px;">Repetir cuestionario inicial</button>
       <div class="footnote">Cambiar cualquier dato recalcula al momento tu plan.</div>
     </section>
@@ -614,11 +681,10 @@
 
   <div class="navbar" id="navbar">
     <button class="navbtn active" data-nav="hoy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hoy</button>
-    <button class="navbtn" data-nav="entrenamientos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19l6-6 4 4 6-9"/></svg>Entreno</button>
     <button class="navbtn" data-nav="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Plan</button>
-    <button class="navbtn" data-nav="evolucion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 17l4-6 4 3 5-8 3 4"/></svg>Evolución</button>
+    <button class="navbtn" data-nav="evolucion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 17l4-6 4 3 5-8 3 4"/></svg>Progreso</button>
     <button class="navbtn" data-nav="nutricion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c-3 3-5 6-5 9a5 5 0 0010 0c0-3-2-6-5-9z"/></svg>Nutrición</button>
-    <button class="navbtn" data-nav="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>Ajustes</button>
+    <button class="navbtn" data-nav="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>Yo</button>
   </div>
 
   <div id="detalle-modal" style="position:absolute; inset:0; background:var(--bg); z-index:55; overflow-y:auto; padding:22px 20px; display:none;">
@@ -626,6 +692,13 @@
     <h1 class="page-title" id="detalle-titulo"></h1>
     <div id="detalle-body"></div>
     <button class="btn ghost" id="detalle-cerrar" style="width:100%; margin-top:14px;">Cerrar</button>
+  </div>
+
+  <div id="clave-modal" style="position:absolute; inset:0; background:var(--bg); z-index:90; overflow-y:auto; padding:22px 20px; display:none;">
+    <div class="eyebrow">DATOS DE GARMIN</div>
+    <h1 class="page-title">Tus datos están en la nube</h1>
+    <div id="clave-modal-body"></div>
+    <button class="btn ghost" id="clave-despues" style="width:100%; margin-top:6px;">Más tarde</button>
   </div>
 
   <div id="persona-modal" style="position:absolute; inset:0; background:var(--bg); z-index:60; overflow-y:auto; padding:22px 20px; display:none;">
@@ -956,13 +1029,13 @@ function parseGarminAPIJSON(text){
       const desnivelM = a.desnivelM!=null ? Math.round(a.desnivelM) : null;
       // trail si Garmin lo marca, o inferido por desnivel alto por km (>= 30 m/km)
       const superficie = a.deporte==='trail_running' || (distKm>=2 && desnivelM!=null && desnivelM/distKm>=30) ? 'trail' : 'asfalto';
-      actividades.push({tipo, fecha:a.fecha, dist:distKm, ritmo:fmtRitmo(a.velocidadMps), fc:a.fc||null, fcMax:a.fcMax||null, desnivelM, superficie, duracion:fmtDuracionHMS(a.duracionSec), duracionSec:a.duracionSec||null, calorias:a.calorias||null, nombre:a.nombre||null, fuente:'importado', deporte:a.deporte, deporteLabel:label, activityId:a.activityId});
+      actividades.push({tipo, fecha:a.fecha, dist:distKm, ritmo:fmtRitmo(a.velocidadMps), fc:a.fc||null, fcMax:a.fcMax||null, desnivelM, superficie, teAerobico:(a.teAerobico!=null?a.teAerobico:null), teAnaerobico:(a.teAnaerobico!=null?a.teAnaerobico:null), cadencia:(a.cadencia||null), zancadaCm:(a.zancadaCm||null), duracion:fmtDuracionHMS(a.duracionSec), duracionSec:a.duracionSec||null, calorias:a.calorias||null, nombre:a.nombre||null, fuente:'importado', deporte:a.deporte, deporteLabel:label, activityId:a.activityId});
     } else {
-      actividades.push({tipo, fecha:a.fecha, duracion:fmtDuracionHMS(a.duracionSec), duracionSec:a.duracionSec||null, fc:a.fc||null, fcMax:a.fcMax||null, calorias:a.calorias||null, nombre:a.nombre||null, fuente:'importado', deporte:a.deporte, deporteLabel:label, activityId:a.activityId});
+      actividades.push({tipo, fecha:a.fecha, teAerobico:(a.teAerobico!=null?a.teAerobico:null), teAnaerobico:(a.teAnaerobico!=null?a.teAnaerobico:null), duracion:fmtDuracionHMS(a.duracionSec), duracionSec:a.duracionSec||null, fc:a.fc||null, fcMax:a.fcMax||null, calorias:a.calorias||null, nombre:a.nombre||null, fuente:'importado', deporte:a.deporte, deporteLabel:label, activityId:a.activityId});
     }
   });
   const sueno=(data.sueno||[]).filter(s=>s.fecha && s.puntuacion!==null && s.puntuacion!==undefined)
-    .map(s=>({fecha:s.fecha, puntuacion:s.puntuacion, fcReposo:s.fcReposo}));
+    .map(s=>({fecha:s.fecha, puntuacion:s.puntuacion, fcReposo:s.fcReposo, horas:(s.horas!=null?s.horas:null)}));
 
   const porSemana={};
   (data.diario||[]).forEach(d=>{
@@ -1051,6 +1124,14 @@ function determinarFase(){
   const actual=state.fase.actual;
   const objetivoKm=state.profile.objetivoKm||10;
 
+  // Quien busca "cuidarse y mantener la forma" no persigue subir de nivel: se queda en Mantenimiento
+  if(state.profile.busco==='cuidarme' && actual!=='mantenimiento'){
+    const motivo='Tu objetivo es cuidarte y mantener la forma: te dejo en Mantenimiento, sin subidas de volumen.';
+    state.faseHistorial.push({fecha:TODAY, faseAnterior:actual, faseNueva:'mantenimiento', motivo, tipo:'objetivo'});
+    state.fase={actual:'mantenimiento', desde:TODAY, sostenidaAlEntrar:null};
+    return {fase:'mantenimiento', motivo};
+  }
+
   // Retroceso: cae muy por debajo del nivel que tenía al entrar en la fase actual
   if(state.fase.sostenidaAlEntrar && actual!=='reactivacion' && cons.semanasUsadas>=2 && cons.sostenida < state.fase.sostenidaAlEntrar*0.75){
     const anterior=FASE_ANTERIOR[actual];
@@ -1115,7 +1196,8 @@ function calcularVolumenTaper(baseline, diasRestantes){
 function decidirSubtipo(fase, dCode, diasRunning, taper){
   const s=decidirSubtipoBase(fase, dCode, diasRunning, taper);
   // Sin series ni tempo si hay alguna respuesta "sí" en salud o si no buscas competir
-  const sinCalidad = limitarIntensidad() || state.profile.competitividad==='nada';
+  const pocoTiempo = state.profile.anosCorriendo!=null && state.profile.anosCorriendo<1; // menos de 1 año corriendo: primero base
+  const sinCalidad = limitarIntensidad() || state.profile.competitividad==='nada' || pocoTiempo;
   return (sinCalidad && (s==='Tempo' || s==='Series')) ? 'Continuo suave' : s;
 }
 function decidirSubtipoBase(fase, dCode, diasRunning, taper){
@@ -1215,11 +1297,34 @@ function pasosFuerzaLigera(){
     {titulo:'Movilidad', detalle:'Estiramiento suave de piernas y espalda baja.'},
   ];
 }
+/* --- Clases de funcional (compartidas, cuerpo completo, la persona no elige los ejercicios) --- */
+// Tus salidas de monte de las últimas 12 semanas: ritmo de referencia y desnivel por km (null si hay menos de 3)
+function referenciaTrail(){
+  const t=soloCarreras().filter(c=>c.superficie==='trail' && c.dist>0 && daysBetween(c.fecha,TODAY)>=0 && daysBetween(c.fecha,TODAY)<=84);
+  if(t.length<3) return null;
+  return {ritmo:estimarRitmoBase(soloCarreras(),'trail'), desnivelKm:mediana(t.filter(c=>c.desnivelM!=null).map(c=>c.desnivelM/c.dist))};
+}
+function pasosClaseFuncional(){
+  const alta=(state.profile.claseIntensidad||'alta')==='alta';
+  const les=lesionesDetectadas();
+  return [
+    {titulo:'Antes de la clase', detalle:'Come algo ligero 2-3 h antes (carbohidrato, poca grasa y fibra) y llega hidratado. Si vienes de una carrera dura o mañana tienes una, díselo al monitor y escala tú los ejercicios.'},
+    {titulo:'Durante la clase', detalle:`Es de cuerpo completo y ${alta?'bastante exigente':'de intensidad media'}: tú decides cuánto empujas. Baja el peso, el ritmo o el impacto si notas las piernas cargadas.${les.length?' Cuida: '+les.join(', ')+' (elige variantes sin impacto o con menos rango si molesta).':''}`},
+    {titulo:'Después', detalle:'Carbohidrato + proteína en la hora siguiente y agua. Marca en "Cómo me ha ido" qué zonas has trabajado más: la app lo usa para ajustar tu próximo rodaje.'},
+  ];
+}
+const LESION_ZONAS=[['rodilla',/rodill/i,'evita bajadas fuertes y cuestas largas; si molesta, baja el ritmo'],['gemelo',/gemel|s[oó]leo/i,'calienta bien y no arranques fuerte'],['tobillo',/tobill/i,'cuida el terreno irregular y calza estable'],['cadera',/cader/i,'zancada corta y cómoda, sin forzar'],['espalda',/lumbar|espalda/i,'mantén el tronco erguido y evita acelerar cansado'],['isquiotibiales',/isquio|femoral/i,'evita las aceleraciones bruscas'],['cuádriceps',/cu[aá]dricep/i,'ojo con las bajadas largas'],['pie / planta',/\bpie\b|plant|fascitis|tal[oó]n/i,'calzado amortiguado y superficies blandas si puedes']];
+function lesionesDetectadas(){ const t=state.profile.lesionesNotas||''; return LESION_ZONAS.filter(([,re])=>re.test(t)).map(([n])=>n); }
+function notaLesiones(){ const t=state.profile.lesionesNotas||''; const l=LESION_ZONAS.filter(([,re])=>re.test(t)); return l.length ? 'Tus antecedentes ('+l.map(x=>x[0]).join(', ')+'): '+l.map(x=>x[2]).join('; ')+'.' : ''; }
+function tasaProgresion(){ const a=state.profile.anosCorriendo; if(a==null) return 1.10; return a<1 ? 1.07 : (a<3 ? 1.10 : 1.12); }
+function esClase(dia){ return !!(dia && dia.tipo==='Fuerza' && dia.clase); }
+
 function generarPlanSemana(semanaISO){
   const fase=state.fase.actual;
   const zonas=calcularZonasFC(state.profile, fcReposoRolling());
-  const sup = state.profile.superficie==='trail' ? 'trail' : (state.profile.superficie==='asfalto' ? 'asfalto' : null);
-  const ritmoBase=estimarRitmoBase(soloCarreras(), sup);
+  const supPerfil = state.profile.superficie||'asfalto'; // 'asfalto' | 'trail' | 'mixto' (asfalto y monte según la sesión)
+  const ritmoBase = estimarRitmoBase(soloCarreras(),'asfalto') ?? estimarRitmoBase(soloCarreras(),null); // ritmo de referencia de las sesiones en asfalto
+  const refTrail = referenciaTrail();
   const disp=state.profile.disponibilidad||{};
   const fijos={correr:[], funcional:[], estiramientos:[]}; let autos=[];
   DIAS_SEMANA.forEach(d=>{ const v=disp[d]; if(fijos[v]) fijos[v].push(d); else if(v==='auto') autos.push(d); });
@@ -1235,15 +1340,23 @@ function generarPlanSemana(semanaISO){
   const diasEvento=new Set(DIAS_SEMANA.filter(d=>eventos.some(e=>e.fecha===fechaDeDia(d,semanaISO))));
   autos=autos.filter(d=>!diasEvento.has(d));
   let diasRunning=fijos.correr.filter(d=>!diasEvento.has(d));
-  const faltanRun=Math.max(0, targetDias-diasRunning.length);
+  let faltanRun=Math.max(0, targetDias-diasRunning.length);
+  // el día siguiente a una clase de funcional (cuerpo completo, exigente) se evita para correr cuando hay alternativa
+  const trasClase=d=>disp[DIAS_SEMANA[(DIAS_SEMANA.indexOf(d)+6)%7]]==='funcional';
+  // si la persona fija un día de monte y ese día lo decide el entrenador, ese día se corre
+  const dmFijo=state.profile.diaMonte;
+  if(supPerfil==='mixto' && dmFijo && dmFijo!=='variar' && autos.includes(dmFijo) && !diasRunning.includes(dmFijo) && !trasClase(dmFijo) && !taper){
+    diasRunning=DIAS_SEMANA.filter(d=>diasRunning.includes(d)||d===dmFijo); autos=autos.filter(d=>d!==dmFijo); faltanRun=Math.max(0,faltanRun-1);
+  }
   if(faltanRun>0 && autos.length){
-    const extra=elegirDiasEspaciados(autos, Math.min(faltanRun, autos.length));
+    const sinTras=autos.filter(d=>!trasClase(d));
+    const pool = sinTras.length>=faltanRun ? sinTras : autos;
+    const extra=elegirDiasEspaciados(pool, Math.min(faltanRun, pool.length));
     diasRunning=DIAS_SEMANA.filter(d=>diasRunning.includes(d)||extra.includes(d));
     autos=autos.filter(d=>!extra.includes(d));
   }
-  let diasFuerza=fijos.funcional.filter(d=>!diasEvento.has(d));
-  const extraFz=autos.slice(0, Math.max(0, 2-diasFuerza.length));
-  diasFuerza=DIAS_SEMANA.filter(d=>diasFuerza.includes(d)||extraFz.includes(d));
+  // el funcional son clases fijas del usuario: no se añaden más sesiones de fuerza en los días libres
+  const diasFuerza=fijos.funcional.filter(d=>!diasEvento.has(d));
   const diasEstir=fijos.estiramientos.filter(d=>!diasEvento.has(d));
 
   const carreras=soloCarreras();
@@ -1254,17 +1367,125 @@ function generarPlanSemana(semanaISO){
   // sin semana previa real: la "distancia sostenida" es la mejor tirada semanal (~60 % del volumen semanal), no el total
   if(!baseline || baseline<=0) baseline = consist.sostenida>0 ? +(consist.sostenida*1.6).toFixed(1) : baseKmManual();
   const objKm=state.profile.objetivoKm||10;
-  let targetWeekKm = fase==='aumento' ? Math.min(Math.max(objKm*3, baseline), +(baseline*1.10).toFixed(1)) : baseline;
+  const cuidarme = state.profile.busco==='cuidarme';
+  let targetWeekKm = (fase==='aumento' && !cuidarme) ? Math.min(Math.max(objKm*3, baseline), +(baseline*tasaProgresion()).toFixed(1)) : baseline;
   if(taper) targetWeekKm=calcularVolumenTaper(baseline, diasAlA);
   if(!targetWeekKm || targetWeekKm<=0) targetWeekKm = baseKmManual();
 
+  // Terreno de cada salida. Perfil asfalto/trail → ese (series y tempo en pista si hay); mixto → monte para ganar fuerza y llano/pista para la calidad,
+  // con variación semanal, lo que elige la persona (día fijo o cambio puntual) y la compensación si ha improvisado.
+  const terrenoDe={}, motivoT={}, subOverride={}, ajustesT=[];
+  const manual=state.terrenoManual||{};
+  const fD=d=>fechaDeDia(d,semanaISO);
+  const NOMD={lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
+  const pista=state.profile.pistaCerca!==false;
+  const esCal=s=>s==='Series'||s==='Tempo';
+  const subs={}; diasRunning.forEach(d=>{ subs[d]=decidirSubtipo(fase, d, diasRunning, taper); });
+  const llano=d=>(esCal(subs[d]) && pista) ? 'pista' : 'asfalto';
+  const motivoLlano=d=> esCal(subs[d]) ? (pista ? 'Series y tempo en pista (o un tramo llano medido): sabes la distancia exacta y controlas el ritmo.' : 'En llano controlas ritmo y pulsaciones: es donde mejor se trabaja la calidad.') : (subs[d]==='Progresivo' ? 'En llano controlas cómo vas acelerando.' : 'Asfalto para rodar suave con el ritmo bajo control.');
+  // lo que ya has hecho esta semana (para compensar si improvisas)
+  const real={};
+  DIAS_SEMANA.forEach(d=>{ const f=fD(d); if(f>TODAY) return; const rs=carreras.filter(c=>c.fecha===f); if(rs.length) real[d]=rs.some(c=>c.superficie==='trail')?'trail':'asfalto'; });
+  const planPrevio=state.planSemanal[semanaISO];
+  const evAsf=eventos.filter(e=>(e.prioridad==='A'||e.prioridad==='B') && e.tipo!=='trail');
+  const antesDeEvento=d=>evAsf.some(e=>{ const x=daysBetween(fD(d),e.fecha); return x>=0 && x<=2; });
+
+  if(supPerfil==='trail') diasRunning.forEach(d=>{ terrenoDe[d]='trail'; });
+  else if(supPerfil==='asfalto') diasRunning.forEach(d=>{ terrenoDe[d]=llano(d); motivoT[d]=motivoLlano(d); });
+  else if(taper){
+    const t = proxA && proxA.tipo==='trail' ? 'trail' : null;
+    diasRunning.forEach(d=>{ terrenoDe[d]= t || llano(d); motivoT[d]= t ? `Semana de ${proxA.nombre} (monte): te acostumbras al terreno de la prueba.` : `Semana de ${proxA.nombre}: asfalto, que es lo que vas a correr.`; });
+  } else {
+    const cand=diasRunning.filter(d=>!esCal(subs[d]) && subs[d]!=='Activación' && !trasClase(d) && !antesDeEvento(d));
+    const semNum=parseInt(semanaISO.split('-W')[1],10)||0;
+    const evAsfCerca=evAsf.some(e=>{ const x=daysBetween(lunes,e.fecha); return x>=0 && x<=13; });
+    const dm=state.profile.diaMonte||'variar';
+    let dMonte=null, razon='';
+    if(dm!=='variar' && cand.includes(dm)){ dMonte=dm; razon=`Es tu día de monte (${NOMD[dm]}).`; }
+    else if(dm!=='variar') razon=`Tu día de monte (${NOMD[dm]}) no encaja esta semana (no hay salida suave ese día), así que lo elijo yo.`;
+    if(!dMonte && cand.length && !evAsfCerca){
+      const larga=cand.find(d=>subs[d]==='Largo');
+      const otras=cand.filter(d=>d!==larga);
+      if(larga && (semNum%2===0 || !otras.length)){ dMonte=larga; razon=(razon?razon+' ':'')+'La tirada larga va al monte: las cuestas dan fuerza de piernas ("potencia") y el terreno blando reparte el impacto.'; }
+      else if(otras.length){ dMonte=otras[semNum%otras.length]; razon=(razon?razon+' ':'')+`Esta semana el monte va el ${NOMD[dMonte]}, para variar: cuestas a esfuerzo suave para ganar fuerza.`; }
+    }
+    diasRunning.forEach(d=>{
+      if(d===dMonte){ terrenoDe[d]='trail'; motivoT[d]=razon; }
+      else { terrenoDe[d]=llano(d); motivoT[d]= (!dMonte && evAsfCerca) ? `Semana sin monte: tienes una prueba de asfalto cerca. ${motivoLlano(d)}` : motivoLlano(d); }
+    });
+  }
+  // cambios puntuales que eliges tú (valen para hoy y los días futuros)
+  diasRunning.forEach(d=>{ const f=fD(d), m=manual[f]; if(m && f>=TODAY){ terrenoDe[d]=m; motivoT[d]='Lo has elegido tú para esta salida.'; } });
+  // compensación si has improvisado esta semana (solo se toca lo que aún no has hecho y nunca lo que has elegido tú)
+  if(supPerfil==='mixto' && !taper){
+    const montes=DIAS_SEMANA.filter(d=>real[d]==='trail');
+    const ultimoMonte=montes.length ? fD(montes[montes.length-1]) : null;
+    if(ultimoMonte){
+      diasRunning.forEach(d=>{
+        const f=fD(d); if(f<TODAY || real[d] || manual[f]) return;
+        if(terrenoDe[d]==='trail' && daysBetween(ultimoMonte,f)<3){
+          terrenoDe[d]=llano(d); motivoT[d]=`Ya hiciste monte el ${NOMD[montes[montes.length-1]]}: este día pasa a ${terrenoDe[d]==='pista'?'pista':'asfalto'} para repartir el impacto de las bajadas.`;
+          ajustesT.push({fecha:f, motivo:`Tu salida de monte del ${NOMD[montes[montes.length-1]]} cuenta como la de esta semana: el ${NOMD[d]} pasa a ${terrenoDe[d]==='pista'?'pista':'asfalto'}.`});
+        }
+      });
+    }
+    const perdidas=[];
+    DIAS_SEMANA.forEach(d=>{ const f=fD(d); if(f>=TODAY || real[d]!=='trail') return; const old=planPrevio && planPrevio.dias[d]; if(old && old.tipo==='Carrera' && esCal(old.subtipo)) perdidas.push({d, sub:old.subtipo}); });
+    if(perdidas.length){
+      const pc=perdidas[0];
+      const puedeCalidad = state.profile.competitividad!=='nada' && !limitarIntensidad() && !(state.profile.anosCorriendo!=null && state.profile.anosCorriendo<1)
+        && !evAsf.some(e=>{ const x=daysBetween(TODAY,e.fecha); return x>=0 && x<=5; }) && !diasRunning.some(d=>fD(d)>=TODAY && esCal(subs[d]));
+      const dest=diasRunning.find(d=>fD(d)>=TODAY && !real[d] && !manual[fD(d)] && subs[d]==='Continuo suave' && !trasClase(d) && terrenoDe[d]!=='trail' && (!ultimoMonte || daysBetween(ultimoMonte,fD(d))>=2));
+      if(puedeCalidad && dest){
+        subOverride[dest]=pc.sub; subs[dest]=pc.sub; terrenoDe[dest]=llano(dest);
+        motivoT[dest]=`Las ${pc.sub==='Series'?'series':'sesión de tempo'} del ${NOMD[pc.d]} las hiciste en el monte: las recupero aquí, con 48 h de margen.`;
+        ajustesT.push({fecha:fD(dest), motivo:`Cambiaste las ${pc.sub==='Series'?'series':'sesión de tempo'} del ${NOMD[pc.d]} por monte: las recoloco el ${NOMD[dest]}.`});
+      } else {
+        ajustesT.push({fecha:TODAY, motivo:`La calidad prevista el ${NOMD[pc.d]} se cambió por monte y esta semana ya no encaja: no pasa nada, seguimos con el plan.`});
+      }
+    }
+  }
+
+  const notaLes=notaLesiones();
+  const evTrail=eventos.find(e=>e.tipo==='trail' && (e.prioridad==='A'||e.prioridad==='B') && (e.desnivelM||0)>=300 && e.fecha>=lunes && daysBetween(lunes,e.fecha)<=56);
   const dias={};
+  let cadenciaPuesta=false; // el trabajo de cadencia va en un solo rodaje suave de asfalto por semana
   DIAS_SEMANA.forEach(d=>{
     if(diasRunning.includes(d)){
-      const subtipo=decidirSubtipo(fase, d, diasRunning, taper);
-      dias[d]=construirSesionRunning(subtipo, targetWeekKm, diasRunning.length, ritmoBase, zonas, sup);
+      const subtipo=subOverride[d]||subs[d];
+      const terr=terrenoDe[d]||'asfalto';
+      const supDia= terr==='trail' ? 'trail' : 'asfalto';
+      dias[d]=construirSesionRunning(subtipo, targetWeekKm, diasRunning.length, ritmoBase, zonas, supDia);
+      dias[d].terreno=terr;
+      dias[d].terrenoMixto = supPerfil==='mixto' || terr==='pista';
+      dias[d].terrenoMotivo = motivoT[d]||'';
+      if(terr==='trail'){
+        const desn = refTrail && refTrail.desnivelKm ? Math.round(dias[d].distanciaKm*refTrail.desnivelKm/10)*10 : null;
+        dias[d].desnivelSug=desn;
+        if(refTrail && refTrail.ritmo) dias[d].ritmoObjetivo += `; tus salidas de monte van a ~${toPaceLabel(refTrail.ritmo)}/km`;
+        const ruta = desn ? rutaSugerida(dias[d].distanciaKm, desn) : null;
+        dias[d].rutaSug = ruta;
+        const cuestas = desn ? Math.max(2, Math.round(desn/100)) : 0;
+        dias[d].pasos.splice(1,0,{titulo:'Terreno: monte', detalle:`Busca un recorrido con cuestas${desn?` y unos +${desn} m de desnivel`:''}. El desnivel es lo que sube la ruta en total (tu reloj lo muestra como "Ascenso")${desn?`: +${desn} m equivale a subir ${cuestas} veces una cuesta de ${Math.round(desn/cuestas)} m`:''}.${ruta?` Tu referencia: la salida del ${fmtShort(ruta.fecha)} (${ruta.dist} km, +${ruta.desnivel} m): puedes repetirla.`:''} Sube a esfuerzo suave, andando las cuestas largas; el ritmo es libre, manda la zona de pulsaciones.`});
+      } else if(terr==='pista'){
+        dias[d].pasos.splice(1,0,{titulo:'Terreno: pista', detalle: subtipo==='Series' ? 'Pista de atletismo o un tramo llano medido. En pista, 400 m = 1 vuelta: 6-8 vueltas rápidas con 90 s de trote suave entre una y otra. Sin pista, un parque llano marcando 400 m en el reloj.' : 'Pista de atletismo o tramo llano medido: mantén el mismo ritmo vuelta tras vuelta (en pista, 1 km = 2,5 vueltas). Sin pista, un tramo llano cualquiera.'});
+      } else if(supPerfil==='mixto'){
+        dias[d].pasos.splice(1,0,{titulo:'Terreno: asfalto', detalle:'Llano o ondulado suave, para controlar el ritmo y las pulsaciones.'});
+      }
+      if(!taper && terr!=='trail' && subtipo==='Continuo suave' && !cadenciaPuesta){
+        const pcad=planCadencia(fD(d));
+        if(pcad){
+          cadenciaPuesta=true; dias[d].cadenciaObj=pcad.objetivo;
+          dias[d].pasos.splice(dias[d].pasos.length-2,0,{titulo:`Cadencia: ${pcad.bloque} a ${pcad.objetivo} pasos/min`, detalle:`En mitad del rodaje, con un metrónomo a ${pcad.objetivo}: pasos más cortos y ligeros, sin ir más rápido. El resto del rodaje, a tu cadencia normal. Si notas molestia en rodilla, gemelo o Aquiles, vuelve a tu cadencia habitual.`});
+        }
+      }
+      const notas=[];
+      if(notaLes) notas.push((supDia==='trail' && lesionesDetectadas().includes('rodilla')) ? 'Tu rodilla: en el monte sube a tu ritmo y baja con paso corto (o andando las bajadas técnicas); si molesta, cámbiala por asfalto llano.' : notaLes);
+      if(evTrail && subtipo==='Largo') notas.push(`Tu ${evTrail.nombre} tiene +${evTrail.desnivelM} m: busca un recorrido con desnivel en esta tirada (orientativo, unos +${Math.round(evTrail.desnivelM*0.35/50)*50} m).`);
+      if(notas.length) dias[d].nota=notas.join(' ');
+      if(trasClase(d) && !taper) dias[d].aviso='Va justo después de tu clase de funcional (cuerpo completo, exigente): si notas las piernas cargadas, hazlo muy suave o descansa.';
     } else if(diasFuerza.includes(d)){
-      dias[d]={tipo:'Fuerza', subtipo:'Core/piernas', pasos:pasosFuerzaEstandar()};
+      dias[d]={tipo:'Fuerza', subtipo:'Clase de funcional', clase:true, pasos:pasosClaseFuncional()};
     } else if(diasEstir.includes(d)){
       dias[d]={tipo:'Estiramientos', subtipo:'Movilidad y estiramientos', pasos:pasosEstiramientosEstandar()};
     } else {
@@ -1272,8 +1493,34 @@ function generarPlanSemana(semanaISO){
     }
   });
   const plan={semanaISO, generadoEn:TODAY, faseEnGeneracion:fase, taper, targetWeekKm, baselineKm:baseline, dias, ajustes:[]};
+  ajustesT.forEach(a=>plan.ajustes.push({fecha:a.fecha, origen:'terreno', motivo:a.motivo}));
   ajustarPlanPorEventos(plan);
   return plan;
+}
+// De tus salidas de monte de las últimas 12 semanas, la más parecida en distancia y desnivel a lo que toca (para "repite esta ruta")
+function rutaSugerida(distKm, desnivelM){
+  const t=soloCarreras().filter(c=>c.superficie==='trail' && c.dist>0 && c.desnivelM!=null && daysBetween(c.fecha,TODAY)>=0 && daysBetween(c.fecha,TODAY)<=84);
+  if(t.length<3) return null;
+  const mejor=t.map(c=>({c, e:Math.abs(c.dist-distKm)/distKm + Math.abs(c.desnivelM-desnivelM)/Math.max(desnivelM,50)})).sort((a,b)=>a.e-b.e)[0];
+  return mejor.e<=0.8 ? {fecha:mejor.c.fecha, dist:mejor.c.dist, desnivel:mejor.c.desnivelM} : null;
+}
+// Selector "¿cambias el terreno de esta salida?": avisar antes de improvisar; la app recalcula la semana y lo explica
+function terrenoSelectorHTML(fecha, dia){
+  if(!dia || dia.tipo!=='Carrera' || fecha<TODAY || actividadesDelDia(fecha).length || semaforoActual().parada) return '';
+  const m=(state.terrenoManual||{})[fecha]||'';
+  const op=[['','Lo previsto'],['trail','🌲 Monte'],['asfalto','🛣️ Asfalto'],['pista','🏟️ Pista']];
+  return `<div style="margin-top:10px;"><div style="font-size:11.5px; color:var(--text-dim); margin-bottom:4px;">¿${fecha===TODAY?'Hoy':'Ese día'} cambias el terreno? Si improvisas, la app recalcula el resto de la semana.</div><div class="btn-row" style="margin-top:0;">${op.map(([v,l])=>`<button class="btn small terr-btn${m===v?' selected':''}" data-f="${fecha}" data-v="${v}">${l}</button>`).join('')}</div></div>`;
+}
+document.addEventListener('click', e=>{
+  const b=e.target.closest('.terr-btn'); if(!b) return;
+  state.terrenoManual=state.terrenoManual||{};
+  if(b.dataset.v) state.terrenoManual[b.dataset.f]=b.dataset.v; else delete state.terrenoManual[b.dataset.f];
+  saveState(); recalcularPlan(); renderAll();
+  if(document.getElementById('detalle-modal').style.display==='block') mostrarDetallePlan(b.dataset.f);
+  toast('Terreno cambiado — semana recalculada');
+});
+function etiquetaTerreno(dia){
+  return {trail:'🌲 Monte', pista:'🏟️ Pista', asfalto:'🛣️ Asfalto'}[dia.terreno || (dia.superficie==='trail'?'trail':'asfalto')];
 }
 
 /* ================= MOTOR DE ENTRENADOR: AGENDA DE CARRERAS Y SALIDAS ================= */
@@ -1305,16 +1552,19 @@ function reglaEvento(dia, delta, ev, bandaZ1){
         act.pasos=[{titulo:'Activación (15-20 min)', detalle:'Trote muy suave + 3-4 progresiones cortas de ~20 s. Nada de fatiga.'}];
         return {dia:act, motivo:`víspera de ${ev.nombre}: solo activación`};
       }
+      if(esClase(dia)) return {dia:Object.assign({}, dia, {aviso:`Mañana es ${ev.nombre}: haz la clase muy suave (sin llegar al límite) o sáltatela.`}), motivo:`víspera de ${ev.nombre}: la clase sigue, con aviso para hacerla suave`};
       if(dia.tipo==='Fuerza') return {dia:{tipo:'Descanso'}, motivo:`víspera de ${ev.nombre}: se evita la fuerza`};
       return null;
     }
     if(delta===2){
       if(dia.tipo==='Carrera' && (ES_CALIDAD(dia.subtipo)||p==='A')) return {dia:suavizarCarrera(dia,0.7,bandaZ1), motivo:`a 2 días de ${ev.nombre}: sin calidad`};
+      if(esClase(dia) && p!=='C') return {dia:Object.assign({}, dia, {aviso:`A 2 días de ${ev.nombre}: baja la intensidad de la clase, sobre todo piernas.`}), motivo:`a 2 días de ${ev.nombre}: la clase sigue, con aviso de intensidad`};
       if(dia.tipo==='Fuerza' && p!=='C') return {dia:{tipo:'Descanso'}, motivo:`a 2 días de ${ev.nombre}: se evita la fuerza de piernas`};
       return null;
     }
     if(delta<=5 && p==='A'){
       if(dia.tipo==='Carrera' && ES_CALIDAD(dia.subtipo)) return {dia:suavizarCarrera(dia,0.8,bandaZ1), motivo:`a ${delta} días de ${ev.nombre}: se reduce la calidad`};
+      if(esClase(dia) && delta<=3) return {dia:Object.assign({}, dia, {aviso:`A ${delta} días de ${ev.nombre}: haz la clase a media intensidad.`}), motivo:`a ${delta} días de ${ev.nombre}: la clase sigue, con aviso de intensidad`};
       if(dia.tipo==='Fuerza' && delta<=3) return {dia:Object.assign({}, dia, {subtipo:'Core ligero', pasos:pasosFuerzaLigera()}), motivo:`a ${delta} días de ${ev.nombre}: fuerza ligera`};
     }
     return null;
@@ -1324,10 +1574,12 @@ function reglaEvento(dia, delta, ev, bandaZ1){
   if(k>dura) return null;
   if(k===1){
     if(dia.tipo==='Carrera') return {dia:(p==='C'&&!largo)? suavizarCarrera(dia,0.6,bandaZ1) : {tipo:'Descanso'}, motivo:`día siguiente a ${ev.nombre}: recuperación`};
+    if(esClase(dia)) return {dia:Object.assign({}, dia, {aviso:`Ayer fue ${ev.nombre}: haz la clase suave o salta la parte de piernas.`}), motivo:`día siguiente a ${ev.nombre}: la clase sigue, con aviso de recuperación`};
     if(dia.tipo==='Fuerza') return {dia:{tipo:'Descanso'}, motivo:`día siguiente a ${ev.nombre}: recuperación`};
     return null;
   }
   if(dia.tipo==='Carrera' && ES_CALIDAD(dia.subtipo)) return {dia:suavizarCarrera(dia,0.7,bandaZ1), motivo:`${k} días tras ${ev.nombre}: recuperación`};
+  if(esClase(dia)) return null;
   if(dia.tipo==='Fuerza' && p==='A') return {dia:Object.assign({}, dia, {subtipo:'Core ligero', pasos:pasosFuerzaLigera()}), motivo:`${k} días tras ${ev.nombre}: fuerza ligera`};
   return null;
 }
@@ -1579,17 +1831,20 @@ function computeCoachPlan(){
   const hecha = todasActividades().some(a=>a.fecha===TODAY && (tipoAct ? a.tipo===tipoAct : (diaHoy.tipo==='Evento' ? true : a.tipo==='Carrera')));
   const tagHecha = hecha?' <span class="tag">hecha hoy</span>':'';
   const tagAjuste = (diaHoy.subtipoOriginal ? `<div style="font-size:11px; color:var(--amber); margin-bottom:8px;">Ajustado hoy: originalmente ${diaHoy.subtipoOriginal}, suavizado por un evento cercano.</div>` : '')
-    + (diaHoy.aviso ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">⚠️</div><div class="txt"><strong>Aviso</strong><span>${escapeHTML(diaHoy.aviso)}</span></div></div>` : '');
+    + (diaHoy.aviso ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">⚠️</div><div class="txt"><strong>Aviso</strong><span>${escapeHTML(diaHoy.aviso)}</span></div></div>` : '')
+    + (diaHoy.terrenoMotivo && diaHoy.terrenoMixto ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">🧭 ${escapeHTML(diaHoy.terrenoMotivo)}</div>` : '')
+    + (diaHoy.nota ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">📝 ${escapeHTML(diaHoy.nota)}</div>` : '');
   let cabecera, titulo;
-  if(diaHoy.tipo==='Fuerza'){ cabecera=`Fuerza · ${diaHoy.subtipo}`; titulo='Hoy: sesión de Fuerza'; }
+  if(esClase(diaHoy)){ cabecera=`Clase de funcional · cuerpo completo${(state.profile.claseIntensidad||'alta')==='alta'?' · exigente':''}`; titulo='Hoy: clase de funcional'; }
+  else if(diaHoy.tipo==='Fuerza'){ cabecera=`Fuerza · ${diaHoy.subtipo}`; titulo='Hoy: sesión de Fuerza'; }
   else if(diaHoy.tipo==='Estiramientos'){ cabecera=`${diaHoy.subtipo}`; titulo='Hoy: Estiramientos'; }
   else if(diaHoy.tipo==='Evento'){ cabecera=`${diaHoy.nombre}${diaHoy.hora?' · '+diaHoy.hora:''}${diaHoy.distanciaKm?' · '+diaHoy.distanciaKm+' km':''}${diaHoy.desnivelM?' · +'+diaHoy.desnivelM+' m':''}`; titulo=`Hoy: ${diaHoy.nombre}`; }
-  else { cabecera=`${diaHoy.subtipo} · ${diaHoy.distanciaKm} km · ${diaHoy.ritmoObjetivo} · zona ${diaHoy.zonaFC}${diaHoy.fcRango?' ('+diaHoy.fcRango+')':''}`; titulo=`Hoy: ${diaHoy.subtipo}`; }
+  else { cabecera=`${diaHoy.terrenoMixto?etiquetaTerreno(diaHoy)+' · ':''}${diaHoy.subtipo} · ${diaHoy.distanciaKm} km${diaHoy.desnivelSug?' · ~+'+diaHoy.desnivelSug+' m':''} · ${diaHoy.ritmoObjetivo} · zona ${diaHoy.zonaFC}${diaHoy.fcRango?' ('+diaHoy.fcRango+')':''}`; titulo=`Hoy: ${diaHoy.subtipo}${diaHoy.terrenoMixto?({trail:' en el monte', pista:' en pista', asfalto:' en asfalto'}[diaHoy.terreno||'asfalto']):''}`; }
 
   return {
     hoyTitulo: titulo,
     hoyTexto: 'Ver el detalle de la sesión abajo.', glosario: glosarioDe(diaHoy),
-    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:12.5px; margin-bottom:8px;">${cabecera}${tagHecha}</div>`+renderPasosHTML(diaHoy.pasos),
+    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:12.5px; margin-bottom:8px;">${cabecera}${tagHecha}</div>`+renderPasosHTML(diaHoy.pasos)+terrenoSelectorHTML(TODAY, diaHoy),
     tipoDia: diaHoy.tipo==='Evento' ? 'evento' : (diaHoy.tipo==='Fuerza' ? 'fuerza' : (diaHoy.tipo==='Estiramientos' ? 'descanso' : (['Tempo','Series'].includes(diaHoy.subtipo)?'duro':(diaHoy.subtipo==='Largo'?'largo':'facil'))))
   };
 }
@@ -1714,10 +1969,11 @@ function ultimoDatoImportado(){
 function descripcionDia(dia){
   if(!dia) return 'sin plan';
   if(dia.tipo==='Descanso') return 'descanso';
+  if(esClase(dia)) return 'Clase de funcional';
   if(dia.tipo==='Fuerza') return 'Fuerza · '+dia.subtipo;
   if(dia.tipo==='Estiramientos') return 'Estiramientos';
   if(dia.tipo==='Evento') return `${dia.nombre}${dia.hora?' ('+dia.hora+')':''}`;
-  return `${dia.subtipo} · ${dia.distanciaKm} km`;
+  return `${dia.subtipo} · ${dia.distanciaKm} km${dia.terrenoMixto?({trail:' · monte', pista:' · pista', asfalto:' · asfalto'}[dia.terreno||'asfalto']):''}`;
 }
 function recomendacionManana(){
   const sem=semaforoActual();
@@ -1726,7 +1982,7 @@ function recomendacionManana(){
   const planM=planParaFecha(manana);
   const dia=planM? planM.dias[codigoDeDia(manana)] : null;
   const f=evaluarFatiga();
-  const motivos=(planM? planM.ajustes : []).filter(a=>a.fecha===manana && (a.origen==='evento' || a.origen==='carga' || a.origen==='aviso')).map(a=>a.motivo);
+  const motivos=(planM? planM.ajustes : []).filter(a=>a.fecha===manana && (a.origen==='evento' || a.origen==='carga' || a.origen==='aviso' || a.origen==='terreno')).map(a=>a.motivo);
   let texto='Mañana: '+descripcionDia(dia);
   const hoyC=cargaDelDia(TODAY);
   // La sesión de mañana se mantiene en su día; solo se avisa cuando conviene suavizarla
@@ -1890,10 +2146,6 @@ function renderGarmin(){
   const gen = state.ultimoGenerado ? ` Datos generados el ${state.ultimoGenerado.slice(0,10)} a las ${state.ultimoGenerado.slice(11,16)} (UTC).` : '';
   const slug = slugPersona();
   document.getElementById('garmin-auto-estado').textContent = state.ultimoGenerado ? 'se cargan solos al abrir la app' : 'sin carga automática todavía';
-  if(state.profile.usaGarmin==='no' && !ult){
-    document.getElementById('garmin-problemas').innerHTML = `Indicaste que <b style="color:var(--text)">no usas Garmin</b>, así que la app funciona con lo que anotes tú (check-ins y registro rápido de sesiones). Si más adelante tienes un Garmin, repite el cuestionario desde Perfil y elige "Sí, uso Garmin".`;
-    return;
-  }
   if(window.__nube && window.__nube.fuente==='nube'){
     document.getElementById('garmin-problemas').innerHTML = `${estadoDato}${gen}<br><br>No tienes que hacer nada: la nube se encarga de descargar tus datos de Garmin y la app los coge al abrirse. Si algún día quieres cargar un archivo a mano, usa el botón de abajo.`;
     return;
@@ -1939,7 +2191,12 @@ function urlsDatosNube(slug){
 async function leerDatosNube(slug){ // -> {estado:'ok'|'sin-archivo'|'necesita-clave'|'clave-incorrecta', payload?}
   let texto=null;
   for(const u of urlsDatosNube(slug)){
-    try{ const r=await fetch(u+(u.includes('?')?'&':'?')+'ts='+Date.now(), {cache:'no-store'}); if(r.ok){ texto=await r.text(); break; } }catch(e){ /* sin red o sin archivo */ }
+    try{
+      const r=await fetch(u+(u.includes('?')?'&':'?')+'ts='+Date.now(), {cache:'no-store'});
+      if(!r.ok) continue;
+      const t=await r.text();
+      try{ const o=JSON.parse(t); if(o && o.salt && o.ct){ texto=t; break; } }catch(e){ /* no es un archivo cifrado (p. ej. una página de error) */ }
+    }catch(e){ /* sin red o sin archivo */ }
   }
   if(texto===null) return {estado:'sin-archivo'};
   const clave=lsLeer('runcoach-clave-'+slug);
@@ -1963,9 +2220,13 @@ function pintarPideClave(cont){
 }
 function necesitaClave(){ return !!(window.__nube && (window.__nube.estado==='necesita-clave' || window.__nube.estado==='clave-incorrecta')); }
 function refrescarVistasDatos(){
-  if(document.getElementById('onboarding-modal').style.display==='block' && OB_PASOS[obPasoIdx]==='datosGarmin') renderOnboardingPaso();
+  const modal=document.getElementById('clave-modal');
+  if(necesitaClave() && !window.__claveDespues){ modal.style.display='block'; pintarPideClave(document.getElementById('clave-modal-body')); }
+  else modal.style.display='none';
+  if(document.getElementById('onboarding-modal').style.display==='block' && OB_PASOS[obPasoIdx]==='nivel') renderOnboardingPaso();
   try{ renderGarmin(); }catch(e){ /* la app aún no está lista */ }
 }
+document.getElementById('clave-despues').addEventListener('click', ()=>{ window.__claveDespues=true; document.getElementById('clave-modal').style.display='none'; });
 
 // Carga automática: 1) archivo cifrado de la nube, 2) datos_<persona>.js (lo genera garmin-sync en el PC) o su copia incrustada
 function cargarDatosAuto(cb){ // cb(resultado): 'nuevo' | 'sin-cambios' | 'no-archivo' | 'invalido' | 'necesita-clave' | 'clave-incorrecta'
@@ -1990,8 +2251,10 @@ function cargarDatosAuto(cb){ // cb(resultado): 'nuevo' | 'sin-cambios' | 'no-ar
   };
   const viaScript=()=>{
     const sc=document.createElement('script');
+    const incrustado=window.RUNCOACH_DATOS[slug]; // copia incrustada en la página, si la hay
     sc.src=`datos_${slug}.js?ts=${Date.now()}`;
-    sc.onload=()=>aplicar(window.RUNCOACH_DATOS[slug]);
+    // si hay dos copias de los datos (la incrustada y el archivo suelto), vale la más reciente
+    sc.onload=()=>{ const f=window.RUNCOACH_DATOS[slug]; aplicar(incrustado && f && incrustado.generatedAt>f.generatedAt ? incrustado : f); };
     // si el archivo suelto no se puede cargar (p. ej. la app publicada en claude.ai), vale la copia incrustada en la propia página, si existe
     sc.onerror=()=>{ if(window.RUNCOACH_DATOS[slug]) aplicar(window.RUNCOACH_DATOS[slug]); else fin('no-archivo'); };
     document.head.appendChild(sc);
@@ -2024,7 +2287,7 @@ document.getElementById('garmin-actualizar').addEventListener('click', ()=>{
 /* ================= RENDER: NUTRICIÓN ================= */
 const AJUSTE_CALORICO_DIA = {
   descanso:{mult:1.00,label:'día de descanso'}, facil:{mult:1.10,label:'rodaje suave'},
-  largo:{mult:1.25,label:'tirada larga'}, duro:{mult:1.20,label:'intervalos / tempo'}, fuerza:{mult:1.10,label:'sesión de fuerza'},
+  largo:{mult:1.25,label:'tirada larga'}, duro:{mult:1.20,label:'intervalos / tempo'}, fuerza:{mult:1.10,label:'sesión de fuerza'}, clase:{mult:1.20,label:'clase de funcional exigente'},
   evento:{mult:1.30,label:'día de carrera / salida'},
 };
 const IDEAS_COMIDA = {
@@ -2035,9 +2298,30 @@ const IDEAS_COMIDA = {
   fuerza:{desayuno:'tostada + huevo', comida:'arroz + pollo + verdura', merienda:'yogur + fruta', cena:'proteína + verdura'},
   evento:{desayuno:'pan blanco/tostada + miel o mermelada + plátano (poca fibra y grasa)', comida:'arroz o pasta + proteína magra, para recuperar', merienda:'yogur + fruta + algo salado', cena:'proteína + carbohidrato + verdura cocida'},
 };
+IDEAS_COMIDA.clase = {desayuno:'tostada + plátano o avena con fruta', comida:'arroz o pasta + proteína + verdura', merienda:'yogur + fruta + frutos secos', cena:'proteína + carbohidrato de recuperación + verdura'};
+// Adapta las ideas de comida a lo que la persona cuenta en el perfil (tipo de alimentación y alergias/intolerancias)
+function adaptarComida(txt){
+  const p=state.profile, al=(p.alergias||'').toLowerCase(), alim=p.alimentacion||'omnivoro';
+  const reglas=[];
+  if(alim==='vegetariano'||alim==='vegano') reglas.push([/proteína magra/g,'proteína vegetal o huevo'],[/pollo/g,'tofu o legumbre'],[/pescado/g,'huevo o legumbre']);
+  if(alim==='vegano') reglas.push([/proteína vegetal o huevo/g,'proteína vegetal (tofu, legumbre)'],[/huevo o legumbre/g,'tofu o legumbre'],[/huevo/g,'tofu'],[/yogur/g,'yogur de soja'],[/miel/g,'sirope de arce']);
+  if(/gluten|cel[ií]a/.test(al)) reglas.push([/pasta integral/g,'arroz'],[/pasta/g,'arroz'],[/pan blanco\/tostada/g,'tortitas de arroz'],[/tostada/g,'tortitas de arroz'],[/avena/g,'copos de arroz'],[/bocadillo/g,'tortitas con relleno']);
+  if(/lactosa|l[aá]cteo|leche/.test(al)) reglas.push([/yogur de soja/g,'yogur de soja'],[/yogur/g,'yogur sin lactosa']);
+  if(/frutos secos|cacahuete|man[ií]|nuez|almendra/.test(al)) reglas.push([/frutos secos/g,'semillas de calabaza (si las toleras)']);
+  if(/huevo/.test(al)) reglas.push([/huevos?/g,'tofu o legumbre']);
+  if(/pescado|marisco/.test(al)) reglas.push([/pescado/g,'pollo o legumbre']);
+  return reglas.reduce((t,[re,r])=>t.replace(re,r), txt);
+}
+function notaAdaptacionComida(){
+  const p=state.profile, partes=[];
+  if(p.alimentacion && p.alimentacion!=='omnivoro') partes.push(p.alimentacion==='otra'?'tu tipo de alimentación':p.alimentacion);
+  if((p.alergias||'').trim()) partes.push('sin '+p.alergias.trim());
+  return partes.length ? `<div style="font-size:11px; color:var(--text-dim); margin-top:6px;">Ideas adaptadas a: ${escapeHTML(partes.join(', '))}. Revisa siempre las etiquetas.</div>` : '';
+}
 function tipoDiaNutricional(diaPlan){
   if(!diaPlan || diaPlan.tipo==='Descanso' || diaPlan.tipo==='Estiramientos') return 'descanso';
   if(diaPlan.tipo==='Evento') return 'evento';
+  if(esClase(diaPlan)) return (state.profile.claseIntensidad||'alta')==='alta' ? 'clase' : 'fuerza';
   if(diaPlan.tipo==='Fuerza') return 'fuerza';
   if(diaPlan.subtipo==='Largo') return 'largo';
   if(['Tempo','Series'].includes(diaPlan.subtipo)) return 'duro';
@@ -2058,21 +2342,24 @@ function renderNutricion(){
   renderNutriEventoOpciones();
   renderFotos();
 
+  // "Mi día a día" cambia el gasto base: quien pasa el día de pie o en movimiento necesita algo más
+  const mulAct={sedentario:1, mixto:1.05, activo:1.12}[state.profile.actividadDiaria]||1;
+  const mult=ajuste.mult*mulAct;
   function rango(base){
     if(!peso) return null;
-    return `${Math.round(base.min*peso*ajuste.mult)}–${Math.round(base.max*peso*ajuste.mult)} g`;
+    return `${Math.round(base.min*peso*mult)}–${Math.round(base.max*peso*mult)} g`;
   }
   const antesTexto = peso
     ? `Orientativamente ${rango({min:1,max:2})} de carbohidrato 1-2h antes (ej. plátano, tostada, arroz), según tolerancia.`
     : `Algo ligero con carbohidrato de fácil digestión 1-2h antes (plátano, tostada). Añade tu peso en Perfil para un rango orientativo en gramos.`;
   const hidratacionTexto = peso
-    ? `Orientativamente ${Math.round(peso*5*ajuste.mult)}–${Math.round(peso*7*ajuste.mult)} ml en las 4h previas al esfuerzo, más agua constante el resto del día.`
+    ? `Orientativamente ${Math.round(peso*5*mult)}–${Math.round(peso*7*mult)} ml en las 4h previas al esfuerzo, más agua constante el resto del día.`
     : `Agua a lo largo de todo el día, algo más en los ratos previos y posteriores al entrenamiento.`;
   const despuesTexto = peso
-    ? `Orientativamente ${Math.round(peso*0.3*ajuste.mult)} g de proteína + carbohidrato en la siguiente comida tras entrenar.`
+    ? `Orientativamente ${Math.round(peso*0.3*mult)} g de proteína + carbohidrato en la siguiente comida tras entrenar.`
     : `Proteína + carbohidrato en la siguiente comida tras entrenar (ej. huevos con arroz, yogur con fruta y avena).`;
   const descansoTexto = `Alimentación habitual equilibrada, sin ajustes especiales. Aprovecha para cuidar el sueño.`;
-  const ideas = IDEAS_COMIDA[tipo];
+  const ideas = Object.fromEntries(Object.entries(IDEAS_COMIDA[tipo]).map(([k,v])=>[k, adaptarComida(v)]));
 
   let bloques = '';
   if(tipo==='descanso'){
@@ -2080,16 +2367,18 @@ function renderNutricion(){
   } else {
     bloques = `
       <div class="row"><span class="label">Antes de entrenar</span></div>
-      <div style="font-size:12px; color:var(--text-dim); margin:-4px 0 10px;">${antesTexto}</div>
+      <div style="font-size:12px; color:var(--text-dim); margin:-4px 0 10px;">${adaptarComida(antesTexto)}</div>
       <div class="row"><span class="label">Después de entrenar</span></div>
-      <div style="font-size:12px; color:var(--text-dim); margin:-4px 0 10px;">${despuesTexto}</div>
+      <div style="font-size:12px; color:var(--text-dim); margin:-4px 0 10px;">${adaptarComida(despuesTexto)}</div>
       <div class="row"><span class="label">Hidratación</span></div>
       <div style="font-size:12px; color:var(--text-dim); margin:-4px 0 10px;">${hidratacionTexto}</div>
       <div class="row"><span class="label">Ideas del día</span></div>
       <div style="font-size:12px; color:var(--text-dim); margin:-4px 0 0;">Desayuno: ${ideas.desayuno}<br>Comida: ${ideas.comida}<br>Merienda: ${ideas.merienda}<br>Cena: ${ideas.cena}</div>
+      ${notaAdaptacionComida()}
     `;
   }
   document.getElementById('nutri-bloques').innerHTML = bloques;
+  renderNutricion2();
 }
 
 /* ================= NUTRICIÓN: GUÍA POR EVENTO ================= */
@@ -2115,8 +2404,8 @@ function itemNutri(valor){
   const dia=diaDePlan(fecha);
   if(!dia || dia.tipo==='Descanso' || dia.tipo==='Estiramientos') return {nombre:'Día sin entreno exigente', tipo:'descanso', fecha, descanso:true};
   if(dia.tipo==='Evento') return {nombre:dia.nombre, tipo:dia.subtipo, fecha, distanciaKm:dia.distanciaKm, desnivelM:dia.desnivelM, prioridad:dia.prioridad};
-  if(dia.tipo==='Fuerza') return {nombre:'Sesión de fuerza', tipo:'fuerza', fecha, duracionMin:50};
-  return {nombre:'Entreno: '+dia.subtipo, tipo:'entreno', fecha, distanciaKm:dia.distanciaKm, subtipo:dia.subtipo};
+  if(dia.tipo==='Fuerza') return {nombre:esClase(dia)?'Clase de funcional':'Sesión de fuerza', tipo:'fuerza', fecha, duracionMin:+(state.profile.claseMin||50)};
+  return {nombre:'Entreno: '+dia.subtipo, tipo:dia.superficie==='trail'?'trail':'entreno', fecha, distanciaKm:dia.distanciaKm, desnivelM:dia.desnivelSug||null, subtipo:dia.subtipo};
 }
 function duracionEstimadaMin(it){
   if(it.duracionMin) return it.duracionMin;
@@ -2128,12 +2417,12 @@ function duracionEstimadaMin(it){
 }
 function planNutricionEvento(it, horaStr){
   const sinPeso=!state.profile.pesoKg, peso=state.profile.pesoKg||70;
-  if(it.descanso) return {resumen:it.nombre, lineas:[{hora:'Todo el día', titulo:'Alimentación habitual', detalle:IDEAS_COMIDA.descanso.desayuno+' / '+IDEAS_COMIDA.descanso.comida+' / '+IDEAS_COMIDA.descanso.cena+'. Sin ajustes especiales; hidratación constante y buen sueño.'}], avisos:[]};
+  if(it.descanso) return {resumen:it.nombre, lineas:[{hora:'Todo el día', titulo:'Alimentación habitual', detalle:adaptarComida(IDEAS_COMIDA.descanso.desayuno+' / '+IDEAS_COMIDA.descanso.comida+' / '+IDEAS_COMIDA.descanso.cena)+'. Sin ajustes especiales; hidratación constante y buen sueño.'}], avisos:[]};
   const H=hhmmAMin(horaStr), dur=duracionEstimadaMin(it), largo=dur>=90;
   const ch = largo?[8,10]:(dur>=60?[6,8]:[5,6]);
   const lineas=[];
   lineas.push({hora:'Víspera · 20:00-20:30', titulo:'Cena de víspera', detalle:`Carbohidrato como base (pasta, arroz, patata) + proteína magra, poca grasa y poca fibra. Orientativo: ${Math.round(ch[0]*peso)}–${Math.round(ch[1]*peso)} g de carbohidrato en las ~24 h previas${largo?' (carga de carbohidrato)':''}. Nada nuevo.`});
-  lineas.push({hora:minAhhmm(H-(H<450?120:180)), titulo:'Desayuno previo', detalle:`${IDEAS_COMIDA.evento.desayuno}. Orientativo: ${Math.round(peso)}–${Math.round(2*peso)} g de carbohidrato y 400-500 ml de agua en las 2 h previas.`});
+  lineas.push({hora:minAhhmm(H-(H<450?120:180)), titulo:'Desayuno previo', detalle:`${adaptarComida(IDEAS_COMIDA.evento.desayuno)}. Orientativo: ${Math.round(peso)}–${Math.round(2*peso)} g de carbohidrato y 400-500 ml de agua en las 2 h previas.`});
   if(dur>=45) lineas.push({hora:minAhhmm(H-40), titulo:'Snack previo (opcional)', detalle:'Un plátano, o 20-30 g de carbohidrato rápido (medio gel / bebida) si tienes hambre. Sorbos de agua hasta la salida.'});
   if(dur<60){
     lineas.push({hora:`${minAhhmm(H)} → ${minAhhmm(H+dur)}`, titulo:'Durante', detalle:'Solo agua (sorbos si hace calor). No hace falta gel.'});
@@ -2141,10 +2430,10 @@ function planNutricionEvento(it, horaStr){
     const gh = dur<90?30:(dur<150?45:60);
     const gelsH=+(gh/22).toFixed(1), intervalo=Math.round(60/Math.max(1,gelsH));
     const tiempos=[]; for(let t=H+(dur<90?35:30); t<H+dur-10; t+=intervalo) tiempos.push(minAhhmm(t));
-    lineas.push({hora:`${minAhhmm(H)} → ${minAhhmm(H+dur)}`, titulo:'Durante', detalle:`Unos ${gh} g de carbohidrato/hora ≈ ${gelsH} gel(es)/hora (1 gel ≈ 22-25 g). Primer gel hacia las ${tiempos[0]||minAhhmm(H+30)}; luego cada ~${intervalo} min${tiempos.length?` (${tiempos.length} gel(es) aprox.: ${tiempos.join(', ')})`:''}. Agua: 400-700 ml/hora; añade sodio (isotónico o sales) si hace calor o pasas de 90 min.${dur>=150?' Solo si ya lo toleras entrenando se puede subir hasta ~90 g/h.':''}${dur>=120&&it.tipo!=='carrera'?' Lleva también algo sólido fácil (barrita, plátano, bocadillo).':''}`});
+    lineas.push({hora:`${minAhhmm(H)} → ${minAhhmm(H+dur)}`, titulo:'Durante', detalle:`Unos ${gh} g de carbohidrato/hora ≈ ${gelsH} gel(es)/hora (1 gel ≈ 22-25 g). Primer gel hacia las ${tiempos[0]||minAhhmm(H+30)}; luego cada ~${intervalo} min${tiempos.length?` (${tiempos.length} gel(es) aprox.: ${tiempos.join(', ')})`:''}. Agua: 400-700 ml/hora; añade sodio (isotónico o sales) si hace calor o pasas de 90 min.${dur>=150?' Solo si ya lo toleras entrenando se puede subir hasta ~90 g/h.':''}${dur>=120&&it.tipo!=='carrera'?' Lleva también algo sólido fácil (barrita, plátano, bocadillo).':''} <b>Tu registro de pruebas:</b> ${notaPruebasDurante()}`});
   }
   lineas.push({hora:`${minAhhmm(H+dur)} → +60 min`, titulo:'Recuperación inmediata', detalle:`Carbohidrato + proteína: ~${Math.round(peso)}–${Math.round(1.2*peso)} g de carbohidrato y ~${Math.round(0.3*peso)} g de proteína (ej. yogur con fruta y avena, bocadillo, batido). Bebe hasta recuperar el peso perdido.`});
-  lineas.push({hora:minAhhmm(H+dur+120), titulo:'Comida completa', detalle:IDEAS_COMIDA.evento.comida+'.'});
+  lineas.push({hora:minAhhmm(H+dur+120), titulo:'Comida completa', detalle:adaptarComida(IDEAS_COMIDA.evento.comida)+'.'});
   lineas.push({hora:'Día siguiente', titulo:'Recuperación', detalle:'Comida normal y equilibrada, hidratación y sueño; carga muy ligera si el plan lo indica.'});
   const avisos=['Prueba todo (geles, bebidas, desayuno) en entrenamientos largos: nunca estrenes nada el día de la carrera.', 'Es orientación general, no un plan personalizado. Con alergias, diabetes u otras condiciones, consulta a un nutricionista colegiado.'];
   if(sinPeso) avisos.push('Sin peso en Perfil: he usado 70 kg como referencia.');
@@ -2200,7 +2489,7 @@ async function renderFotos(){
   fotos.slice(0,12).forEach(f=>{
     const url=URL.createObjectURL(f.blob); __urlsFotos.push(url);
     const div=document.createElement('div'); div.className='injury-item';
-    div.innerHTML=`<div style="display:flex; gap:10px;"><img src="${url}" alt="foto" style="width:72px; height:72px; object-fit:cover; border-radius:10px;"><div style="flex:1;"><div class="top"><span>${escapeHTML(f.comida)}</span><span>${fmtShort(f.fecha)} ${f.hora}</span></div><div class="meta">${escapeHTML(f.nota||'')}</div><div class="btn-row" style="margin-top:6px;"><button class="btn small foto-compartir">Compartir</button><button class="btn ghost small foto-borrar">Borrar</button></div></div></div>`;
+    div.innerHTML=`<div style="display:flex; gap:10px;"><img src="${url}" alt="foto" style="width:72px; height:72px; object-fit:cover; border-radius:10px;"><div style="flex:1;"><div class="top"><span>${escapeHTML(f.comida)}</span><span>${fmtShort(f.fecha)} ${f.hora}</span></div><div class="meta">${(f.etiquetas||[]).map(t=>({prot:'🍗',verd:'🥦',fruta:'🍎',ultra:'🍟'}[t]||'')).join(' ')} ${escapeHTML(f.nota||'')}</div><div class="btn-row" style="margin-top:6px;"><button class="btn small foto-compartir">Compartir</button><button class="btn ghost small foto-borrar">Borrar</button></div></div></div>`;
     div.querySelector('.foto-compartir').addEventListener('click', ()=>compartirFoto(f));
     div.querySelector('.foto-borrar').addEventListener('click', async ()=>{ await borrarFoto(f.id); renderFotos(); });
     cont.appendChild(div);
@@ -2234,12 +2523,23 @@ document.getElementById('sup-input').addEventListener('change', async e=>{
   }catch(err){ toast('No se pudo guardar: '+err.message); }
   e.target.value='';
 });
+document.querySelectorAll('.foto-tag').forEach(b=>b.addEventListener('click', ()=>b.classList.toggle('selected')));
 document.getElementById('foto-input').addEventListener('change', async e=>{
   const file=e.target.files[0]; if(!file) return;
   try{
     const blob=await reducirImagen(file);
     const ahora=new Date(), p=n=>String(n).padStart(2,'0');
-    await guardarFoto({id:'f'+Date.now(), personaId:store.activeId, fecha:TODAY, hora:`${p(ahora.getHours())}:${p(ahora.getMinutes())}`, comida:document.getElementById('foto-comida').value, nota:document.getElementById('foto-nota').value, blob, ts:Date.now()});
+    const etiquetas=[...document.querySelectorAll('.foto-tag.selected')].map(b=>b.dataset.t);
+    await guardarFoto({id:'f'+Date.now(), personaId:store.activeId, fecha:TODAY, hora:`${p(ahora.getHours())}:${p(ahora.getMinutes())}`, comida:document.getElementById('foto-comida').value, nota:document.getElementById('foto-nota').value, etiquetas, blob, ts:Date.now()});
+    // las etiquetas de la foto marcan toques del check de hoy sin escribir nada
+    if(etiquetas.length){
+      state.nutriCheck=state.nutriCheck||{}; const cc=state.nutriCheck[TODAY]=state.nutriCheck[TODAY]||{};
+      if(etiquetas.includes('prot')) cc.prot=true; if(etiquetas.includes('verd')) cc.verd=true; if(etiquetas.includes('fruta')) cc.fruta=true;
+      if(etiquetas.includes('ultra')) cc.sinUltra=false;
+      CHECK_ITEMS.forEach(([k])=>{ if(cc[k]===undefined) cc[k]=false; });
+      saveState(); renderCheckNutri();
+    }
+    document.querySelectorAll('.foto-tag').forEach(b=>b.classList.remove('selected'));
     document.getElementById('foto-nota').value='';
     toast('Foto guardada en el diario');
     renderFotos();
@@ -2273,10 +2573,12 @@ function renderPerfil(){
   const persona=store.personas[store.activeId];
   document.getElementById('p-nombre').value = persona? persona.nombre : '';
   document.getElementById('p-busco').value = state.profile.busco || 'mejorar';
+  document.getElementById('p-superficie').value = state.profile.superficie || 'asfalto';
+  document.getElementById('p-dia-monte').value = state.profile.diaMonte || 'variar';
+  document.getElementById('p-pista').value = state.profile.pistaCerca===false ? 'no' : 'si';
   document.getElementById('p-compet').value = state.profile.competitividad || 'nada';
   document.getElementById('p-objetivo').value = state.profile.objetivoKm;
   document.getElementById('p-peso').value = state.profile.pesoKg || '';
-  document.getElementById('p-altura').value = state.profile.alturaCm || '';
   document.getElementById('p-edad').value = state.profile.edad || '';
   document.getElementById('p-fcmax').value = state.profile.fcMax || '';
   document.getElementById('p-anos').value = state.profile.anosCorriendo || '';
@@ -2292,7 +2594,7 @@ function renderPerfil(){
   document.getElementById('p-objetivo-tipo').textContent = proxEv ? `${proxEv.nombre} · ${fmtShort(proxEv.fecha)}` : 'ninguna prevista (plan de mantenimiento)';
 
   const nombresDia={lun:'Lunes',mar:'Martes',mie:'Miércoles',jue:'Jueves',vie:'Viernes',sab:'Sábado',dom:'Domingo'};
-  const tipos=[['correr','🏃 Correr'],['funcional','🏋️ Funcional'],['estiramientos','🧘 Estirar'],['auto','🤖 Decide'],['libre','Libre']];
+  const tipos=[['correr','🏃 Correr'],['funcional','🏋️ Clase funcional'],['estiramientos','🧘 Estirar'],['auto','🤖 Decide'],['libre','Libre']];
   const cont=document.getElementById('p-dias');
   cont.innerHTML = DIAS_SEMANA.map(d=>`<div class="dia-fila"><div style="font-size:12px; margin-bottom:4px;">${nombresDia[d]}</div><div class="btn-row" style="margin-top:0;">${tipos.map(([v,l])=>`<button class="btn small perfil-dia" data-d="${d}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('');
   cont.querySelectorAll('.perfil-dia').forEach(b=>{
@@ -2303,6 +2605,16 @@ function renderPerfil(){
       saveState(); recalcularPlan(); renderAll(); toast('Plan recalculado');
     });
   });
+
+  const hayClase=Object.values(state.profile.disponibilidad||{}).includes('funcional');
+  document.getElementById('p-clase-wrap').style.display = hayClase ? 'block' : 'none';
+  const marcaClase=()=>{
+    document.querySelectorAll('.p-clase-int').forEach(b=>b.classList.toggle('selected', b.dataset.v===(state.profile.claseIntensidad||'alta')));
+    document.querySelectorAll('.p-clase-min').forEach(b=>b.classList.toggle('selected', +b.dataset.v===(state.profile.claseMin||60)));
+  };
+  marcaClase();
+  document.querySelectorAll('.p-clase-int').forEach(b=>b.onclick=()=>{ state.profile.claseIntensidad=b.dataset.v; saveState(); recalcularPlan(); renderAll(); toast('Plan recalculado'); });
+  document.querySelectorAll('.p-clase-min').forEach(b=>b.onclick=()=>{ state.profile.claseMin=+b.dataset.v; saveState(); recalcularPlan(); renderAll(); toast('Guardado'); });
 
   renderZonasCard();
 
@@ -2336,10 +2648,9 @@ document.getElementById('save-perfil').addEventListener('click', ()=>{
   if(nombre && store.personas[store.activeId]) store.personas[store.activeId].nombre=nombre;
   document.getElementById('persona-label').textContent = store.personas[store.activeId].nombre;
   document.getElementById('garmin-persona').textContent = store.personas[store.activeId].nombre;
-  p.busco = v('p-busco'); p.competitividad = v('p-compet');
+  p.busco = v('p-busco'); p.competitividad = v('p-compet'); p.superficie = v('p-superficie') || 'asfalto'; p.diaMonte = v('p-dia-monte') || 'variar'; p.pistaCerca = v('p-pista')!=='no';
   p.objetivoKm = parseFloat(v('p-objetivo')) || 10;
   p.pesoKg = parseFloat(v('p-peso')) || null;
-  p.alturaCm = parseFloat(v('p-altura')) || null;
   p.edad = parseInt(v('p-edad')) || null;
   p.fcMax = parseInt(v('p-fcmax')) || null;
   p.anosCorriendo = parseFloat(v('p-anos')) || null;
@@ -2590,6 +2901,7 @@ document.getElementById('save-manual-session').addEventListener('click', ()=>{
 /* ================= IMPORTACIÓN DE DATOS DE GARMIN ================= */
 function importarJSONGarmin(texto){
   const {actividades, sueno, weeklyManual, ignoradas}=parseGarminAPIJSON(texto);
+  const primeraCarga = !state.lastImport.carrera && !state.lastImport.fuerza && !state.lastImport.sueno;
   actividades.forEach(f=>{
     state.importedActividades = state.importedActividades.filter(x=>x.activityId!==f.activityId);
     state.importedActividades.push(f);
@@ -2599,6 +2911,13 @@ function importarJSONGarmin(texto){
   sueno.forEach(f=>{ state.importedSueno=state.importedSueno.filter(x=>x.fecha!==f.fecha); state.importedSueno.push(f); });
   if(sueno.length) state.lastImport.sueno=sueno.reduce((m,f)=>f.fecha>m?f.fecha:m, state.lastImport.sueno||'');
   state.weeklyManual = Object.assign({}, state.weeklyManual, weeklyManual);
+  // Primera vez que llegan datos a este dispositivo (p. ej. el móvil con el perfil ya cargado): el plan y la fase se habían calculado
+  // sin datos (volumen mínimo, todo suave). Se valoran la fase y el plan de la semana otra vez con el historial real.
+  if(primeraCarga && state.profile.onboardingCompletado){
+    for(let i=0;i<4;i++){ const antes=state.fase.actual; determinarFase(); if(state.fase.actual===antes) break; }
+    delete state.planSemanal[isoWeek(TODAY)];
+    window.__planesTmp={};
+  }
   saveState();
   if(state.profile.onboardingCompletado) recalcularPlan(); else aplicarAdaptacionSemana();
   renderAll(); updateCharts();
@@ -2617,8 +2936,8 @@ document.getElementById('file-garmin-json').addEventListener('change', e=>{
 });
 
 /* ================= WIZARD DE ALTA ================= */
-const OB_PASOS = ['objetivo','datosGarmin','nivel','disponibilidad','salud','lesiones','datosFisicos','resumen'];
-const OB_TITULOS = ['¿Qué buscas?','¿Usas Garmin?','Tu nivel actual','Qué haces cada día','Salud y seguridad','Lesiones o molestias previas','Datos físicos','Resumen'];
+const OB_PASOS = ['objetivo','nivel','disponibilidad','salud','lesiones','datosFisicos','resumen'];
+const OB_TITULOS = ['¿Qué buscas?','Tu nivel actual','Qué haces cada día','Salud y seguridad','Lesiones o molestias previas','Datos físicos','Resumen'];
 const OB_KM = {'5K':5,'10K':10,'Media':21.1,'Maraton':42.2};
 let obPasoIdx = 0;
 let obDatos = {};
@@ -2658,7 +2977,9 @@ function obDefaults(){
     superficie: state.profile.superficie||'asfalto',
     desnivelObjetivoM: state.profile.desnivelObjetivoM||null,
     fechaObjetivo: (state.eventos||[]).find(e=>e.prioridad==='A')?.fecha || null,
-    usaGarmin: state.profile.usaGarmin || (ultimoDatoImportado() ? 'si' : null),
+    metaKm: state.profile.objetivoKm || 10,
+    claseIntensidad: state.profile.claseIntensidad || 'alta',
+    claseMin: state.profile.claseMin || 60,
     nivelBase: (['10-15min','20-30min','distancia_especifica'].includes(state.profile.nivelBase) ? 'regular' : (state.profile.nivelBase || 'ninguno')),
     nivelAuto: true,
     distanciaBaseKm: state.profile.distanciaBaseKm || null,
@@ -2691,12 +3012,18 @@ function renderOnboardingPaso(){
     const busco=[['cuidarme','Cuidarme y mantener la forma'],['mejorar','Mejorar poco a poco'],['carrera','Preparar una carrera concreta']];
     const comp=[['nada','Nada: quiero disfrutar y cuidarme'],['algo','Algo: me gusta superarme'],['mucho','Mucho: quiero rendir al máximo']];
     const dist=[['5K',5],['10K',10],['Media',21.1],['Maraton',42.2],['Otra',null]];
-    const sups=[['asfalto','Asfalto'],['trail','Trail / montaña'],['mixto','Mixto']];
+    const sups=[['asfalto','Asfalto'],['trail','Trail / montaña'],['mixto','Mixto: asfalto y monte']];
     body.innerHTML = `<div class="btn-row" style="flex-direction:column; margin-top:0;">${busco.map(([v,l])=>`<button class="btn ob-busco" data-v="${v}" style="width:100%;">${l}</button>`).join('')}</div>
       <div class="qtext" style="margin:14px 0 0; font-size:13px;">¿Cómo de competitivo eres?</div>
       <div class="btn-row" style="flex-direction:column;">${comp.map(([v,l])=>`<button class="btn small ob-compet" data-v="${v}" style="width:100%;">${l}</button>`).join('')}</div>
       <div class="qtext" style="margin:14px 0 0; font-size:13px;">Terreno habitual</div>
       <div class="btn-row">${sups.map(([v,l])=>`<button class="btn small ob-sup" data-v="${v}">${l}</button>`).join('')}</div>
+      <div id="ob-meta-wrap" style="display:${obDatos.busco==='carrera'?'none':'block'}; margin-top:14px;">
+        <div class="qtext" style="margin:0; font-size:13px;">¿Hasta qué distancia te gustaría correr con comodidad?</div>
+        <div style="font-size:11px; color:var(--text-dim); margin:2px 0 6px;">Es tu meta de distancia: mide tu progreso y marca cuándo pasas de fase. La eliges tú y puedes cambiarla cuando quieras.</div>
+        <div class="btn-row" style="margin-top:0;">${[5,10,15,21.1,30,42.2].map(v=>`<button class="btn small ob-meta" data-v="${v}">${v===21.1?'Media (21)':(v===42.2?'Maratón (42)':v+' km')}</button>`).join('')}</div>
+        <div class="field" style="margin-top:8px;"><label>…u otra distancia (km)</label><input type="number" id="ob-meta-otra" step="0.5" value="${[5,10,15,21.1,30,42.2].includes(obDatos.metaKm)?'':(obDatos.metaKm||'')}"></div>
+      </div>
       <div id="ob-carrera-wrap" style="display:${obDatos.busco==='carrera'?'block':'none'}; margin-top:14px;">
         <div class="card" style="margin-bottom:0;">
           <h3>Tu carrera</h3>
@@ -2711,7 +3038,12 @@ function renderOnboardingPaso(){
       <div style="font-size:11px; color:var(--text-dim); margin-top:10px;">Más carreras o salidas las podrás añadir después en Entreno. Si no preparas ninguna, tu plan será de mantenimiento.</div>`;
     const marca=(sel,val)=>body.querySelectorAll(sel).forEach(b=>b.classList.toggle('selected', b.dataset.v===val));
     marca('.ob-busco', obDatos.busco); marca('.ob-compet', obDatos.competitividad); marca('.ob-sup', obDatos.superficie); marca('.ob-cdist', obDatos.carreraTipoDist);
-    body.querySelectorAll('.ob-busco').forEach(b=>b.addEventListener('click', ()=>{ obDatos.busco=b.dataset.v; marca('.ob-busco', obDatos.busco); document.getElementById('ob-carrera-wrap').style.display = obDatos.busco==='carrera'?'block':'none'; }));
+    body.querySelectorAll('.ob-busco').forEach(b=>b.addEventListener('click', ()=>{ obDatos.busco=b.dataset.v; marca('.ob-busco', obDatos.busco); document.getElementById('ob-carrera-wrap').style.display = obDatos.busco==='carrera'?'block':'none'; document.getElementById('ob-meta-wrap').style.display = obDatos.busco==='carrera'?'none':'block'; }));
+    body.querySelectorAll('.ob-meta').forEach(b=>{
+      b.classList.toggle('selected', +b.dataset.v===+obDatos.metaKm);
+      b.addEventListener('click', ()=>{ obDatos.metaKm=+b.dataset.v; body.querySelectorAll('.ob-meta').forEach(x=>x.classList.toggle('selected', x===b)); document.getElementById('ob-meta-otra').value=''; });
+    });
+    document.getElementById('ob-meta-otra').addEventListener('input', e=>{ const n=parseFloat(e.target.value); if(n>0){ obDatos.metaKm=n; body.querySelectorAll('.ob-meta').forEach(x=>x.classList.remove('selected')); } });
     body.querySelectorAll('.ob-compet').forEach(b=>b.addEventListener('click', ()=>{ obDatos.competitividad=b.dataset.v; marca('.ob-compet', obDatos.competitividad); }));
     body.querySelectorAll('.ob-sup').forEach(b=>b.addEventListener('click', ()=>{ obDatos.superficie=b.dataset.v; marca('.ob-sup', obDatos.superficie); }));
     body.querySelectorAll('.ob-cdist').forEach(b=>b.addEventListener('click', ()=>{
@@ -2734,58 +3066,6 @@ function renderOnboardingPaso(){
         body.querySelectorAll(`.ob-parq[data-k="${b.dataset.k}"]`).forEach(x=>x.classList.toggle('selected', x===b));
       });
     });
-  } else if(paso==='datosGarmin'){
-    const ult=ultimoDatoImportado();
-    const slug=slugPersona();
-    const nombre=escapeHTML(store.personas[store.activeId].nombre);
-    const opts=[['si','Sí, uso Garmin'],['despues','Lo conecto más tarde'],['no','No uso Garmin / tengo otro reloj']];
-    const estado = ult
-      ? `<div class="card" style="border-color:var(--green); margin-bottom:10px;"><div style="font-size:13px; line-height:1.5;">✓ Datos de <b>${nombre}</b> importados hasta <b>${fmtShort(ult)}</b>. No tienes que hacer nada más: con ellos deduzco tu nivel real (carreras, km por semana, ritmo, trail).</div></div>`
-      : `<div class="card" style="margin-bottom:10px;"><div style="font-size:12.5px; color:var(--text-dim); line-height:1.5;">Todavía no hay datos de Garmin para <b style="color:var(--text)">${nombre}</b>. No pasa nada: puedes empezar sin ellos y contarme tu nivel tú mismo en el siguiente paso.</div></div>`;
-    body.innerHTML = estado
-      + `<div id="ob-clave"></div><div class="btn-row" style="flex-direction:column; margin-top:0;">${opts.map(([v,l])=>`<button class="btn ob-usa" data-v="${v}" style="width:100%;">${l}</button>`).join('')}</div>
-      <div id="ob-garmin-ayuda" style="margin-top:12px;"></div>
-      <div class="btn-row"><label class="btn ghost small file-label">Cargar un archivo a mano (avanzado)<input type="file" accept=".json" id="ob-json" style="display:none;"></label></div>
-      <div id="ob-json-estado" style="font-size:12px; margin-top:8px; color:var(--text-dim);"></div>`;
-    if(necesitaClave()) pintarPideClave(document.getElementById('ob-clave'));
-    const ayuda=document.getElementById('ob-garmin-ayuda');
-    const pintaAyuda=()=>{
-      body.querySelectorAll('.ob-usa').forEach(b=>b.classList.toggle('selected', b.dataset.v===obDatos.usaGarmin));
-      if(obDatos.usaGarmin==='si' && !ult){
-        ayuda.innerHTML=`<div class="molestia-extra" style="font-size:12px; line-height:1.6; color:var(--text-dim);">
-          <b style="color:var(--text)">Cómo conectarlo (hace falta un PC, solo la primera vez)</b><br>
-          1. En la carpeta <code>garmin-sync</code> crea un archivo <code>.env.${slug}</code> con tu correo y contraseña de Garmin. Se queda en tu PC; no se comparte con nadie.<br>
-          2. Haz doble clic en <code>actualizar_garmin.bat ${slug}</code>. Tarda un par de minutos y prepara el archivo <code>datos_${slug}.js</code> junto a la app.<br>
-          3. Vuelve aquí y pulsa el botón de abajo.
-          <div class="btn-row"><button class="btn small" id="ob-comprobar">Comprobar de nuevo</button></div>
-          <div id="ob-comprobar-msg" style="margin-top:6px;"></div>
-          <div style="margin-top:6px;">Si usas la app solo desde el móvil y no tienes PC a mano, elige "Lo conecto más tarde": todo lo demás funciona sin Garmin.</div>
-        </div>`;
-        document.getElementById('ob-comprobar').addEventListener('click', ()=>{
-          const msg=document.getElementById('ob-comprobar-msg'); msg.textContent='Buscando…';
-          cargarDatosAuto(r=>{
-            if(r==='no-archivo') msg.innerHTML=`No encuentro <code>datos_${slug}.js</code> junto a la app. Revisa que el paso 2 haya terminado y que el nombre coincida con "${nombre}".`;
-            else if(r==='invalido') msg.textContent='He encontrado el archivo pero no se puede leer. Vuelve a ejecutar el paso 2.';
-            else if(r==='sin-cambios'){ renderOnboardingPaso(); }
-          });
-        });
-      } else if(obDatos.usaGarmin==='despues'){
-        ayuda.innerHTML=`<div style="font-size:12px; color:var(--text-dim); line-height:1.5;">Sigue sin problema: en el siguiente paso me cuentas cómo corres ahora. Cuando conectes Garmin (Ajustes › Garmin explica cómo), lo recalculo con tus datos reales.</div>`;
-      } else if(obDatos.usaGarmin==='no'){
-        ayuda.innerHTML=`<div style="font-size:12px; color:var(--text-dim); line-height:1.5;">Perfecto. El plan, las zonas, la nutrición, los check-ins y el registro rápido de sesiones funcionan igual; solo tendrás que anotar tú lo que hagas.</div>`;
-      } else ayuda.innerHTML='';
-    };
-    body.querySelectorAll('.ob-usa').forEach(b=>b.addEventListener('click', ()=>{ obDatos.usaGarmin=b.dataset.v; pintaAyuda(); }));
-    pintaAyuda();
-    document.getElementById('ob-json').addEventListener('change', e=>{
-      const file=e.target.files[0]; if(!file) return;
-      const reader=new FileReader();
-      reader.onload=ev=>{
-        try{ const msg=importarJSONGarmin(ev.target.result); document.getElementById('ob-json-estado').textContent=msg; obDatos.usaGarmin='si'; setTimeout(renderOnboardingPaso, 900); }
-        catch(err){ document.getElementById('ob-json-estado').textContent='JSON inválido: '+err.message; }
-      };
-      reader.readAsText(file);
-    });
   } else if(paso==='nivel'){
     const nd=derivarNivelBase();
     const manual = !nd.suficiente || !obDatos.nivelAuto;
@@ -2798,7 +3078,7 @@ function renderOnboardingPaso(){
     body.innerHTML = (nd.suficiente
         ? `<div class="card"><div style="font-size:12px; color:var(--text-dim); margin-bottom:6px;">Según tus datos de Garmin:</div><div style="font-size:13px; line-height:1.5;">${nd.resumen}</div></div>
            <div class="btn-row"><button class="btn small ob-nivel-modo" data-v="auto">Usar lo que dice Garmin</button><button class="btn ghost small ob-nivel-modo" data-v="manual">Prefiero indicarlo yo</button></div>`
-        : `<div style="font-size:12px; color:var(--text-dim); margin-bottom:8px;">${obDatos.usaGarmin==='no'?'Sin Garmin, ':'Todavía no tengo datos de carreras recientes (hacen falta al menos 3 en las últimas 6 semanas), así que '}cuéntame cómo corres ahora. Con tus respuestas calculo por dónde empezar; si luego conectas Garmin, lo ajustaré con tus datos reales.</div>`)
+        : `<div style="font-size:12px; color:var(--text-dim); margin-bottom:8px;">Todavía no tengo datos de carreras recientes de Garmin (hacen falta al menos 3 en las últimas 6 semanas), así que cuéntame cómo corres ahora. Con tus respuestas calculo por dónde empezar; si luego conectas Garmin, lo ajustaré con tus datos reales.</div>`)
       + `<div id="ob-nivel-manual" style="display:${manual?'block':'none'}; margin-top:10px;">
           <div class="qtext" style="font-size:13px; margin:0 0 6px;">¿En qué punto estás?</div>
           <div class="btn-row" style="flex-direction:column; margin-top:0;">${opts.map(([v,l])=>`<button class="btn ob-nivel" data-v="${v}" style="width:100%;">${l}</button>`).join('')}</div>
@@ -2858,17 +3138,30 @@ function renderOnboardingPaso(){
     document.getElementById('ob-tiempo').addEventListener('input', e=>{ obDatos.tiempoBaseMin=parseInt(e.target.value)||null; refrescaNivel(); });
     refrescaNivel();
   } else if(paso==='disponibilidad'){
-    const tipos=[['correr','🏃 Correr'],['funcional','🏋️ Funcional'],['estiramientos','🧘 Estirar'],['auto','🤖 Decide el entrenador'],['libre','Libre']];
-    body.innerHTML = `<div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Para cada día, elige qué quieres hacer. "Decide el entrenador" deja que el plan reparta correr/funcional según lo que toque; "Libre" = ese día no se programa nada.</div>`
-      + DIAS_SEMANA.map(d=>`<div style="margin-bottom:10px;"><div style="font-size:12px; margin-bottom:4px;">${nombresDia[d]}</div><div class="btn-row" style="margin-top:0;">${tipos.map(([v,l])=>`<button class="btn small ob-dia-tipo" data-d="${d}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('');
+    const tipos=[['correr','🏃 Correr'],['funcional','🏋️ Clase de funcional'],['estiramientos','🧘 Estirar'],['auto','🤖 Decide el entrenador'],['libre','Libre']];
+    body.innerHTML = `<div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Para cada día, elige qué haces. "Clase de funcional" es tu clase en grupo (la eliges tú, no el entrenador); "Decide el entrenador" deja que el plan ponga ahí una carrera si toca; "Libre" = ese día no se programa nada.</div>`
+      + DIAS_SEMANA.map(d=>`<div style="margin-bottom:10px;"><div style="font-size:12px; margin-bottom:4px;">${nombresDia[d]}</div><div class="btn-row" style="margin-top:0;">${tipos.map(([v,l])=>`<button class="btn small ob-dia-tipo" data-d="${d}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('')
+      + `<div id="ob-clase-wrap" style="margin-top:6px;"><div class="qtext" style="font-size:13px; margin:0 0 4px;">Tu clase de funcional, ¿cómo suele ser?</div>
+        <div class="btn-row" style="margin-top:0;"><button class="btn small ob-clase-int" data-v="alta">Cuerpo completo, exigente</button><button class="btn small ob-clase-int" data-v="media">Intensidad media</button></div>
+        <div class="btn-row"><button class="btn small ob-clase-min" data-v="45">45 min</button><button class="btn small ob-clase-min" data-v="60">60 min</button><button class="btn small ob-clase-min" data-v="75">75 min o más</button></div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:6px;">No elijo yo los ejercicios: solo cuento la fatiga que te dejan para cuidar el rodaje del día siguiente.</div></div>`;
+    const pintaClase=()=>{
+      document.getElementById('ob-clase-wrap').style.display = Object.values(obDatos.disponibilidad).includes('funcional') ? 'block':'none';
+      body.querySelectorAll('.ob-clase-int').forEach(b=>b.classList.toggle('selected', b.dataset.v===obDatos.claseIntensidad));
+      body.querySelectorAll('.ob-clase-min').forEach(b=>b.classList.toggle('selected', +b.dataset.v===obDatos.claseMin));
+    };
+    body.querySelectorAll('.ob-clase-int').forEach(b=>b.addEventListener('click', ()=>{ obDatos.claseIntensidad=b.dataset.v; pintaClase(); }));
+    body.querySelectorAll('.ob-clase-min').forEach(b=>b.addEventListener('click', ()=>{ obDatos.claseMin=+b.dataset.v; pintaClase(); }));
     body.querySelectorAll('.ob-dia-tipo').forEach(b=>{
       const actual = obDatos.disponibilidad[b.dataset.d]||'libre';
       b.classList.toggle('selected', b.dataset.v===actual);
       b.addEventListener('click', ()=>{
         obDatos.disponibilidad[b.dataset.d]=b.dataset.v==='libre'?null:b.dataset.v;
         body.querySelectorAll(`.ob-dia-tipo[data-d="${b.dataset.d}"]`).forEach(x=>x.classList.toggle('selected', x===b));
+        pintaClase();
       });
     });
+    pintaClase();
   } else if(paso==='lesiones'){
     body.innerHTML = `<div class="field"><label>Lesiones o molestias previas relevantes (opcional)</label><textarea id="ob-lesiones" rows="3" placeholder="ej. molestia antigua en rodilla derecha">${obDatos.lesionesNotas}</textarea></div>`;
     document.getElementById('ob-lesiones').addEventListener('input', e=>{ obDatos.lesionesNotas=e.target.value; });
@@ -2905,15 +3198,15 @@ document.getElementById('ob-siguiente').addEventListener('click', ()=>{
   if(obPasoIdx<OB_PASOS.length-1){ obPasoIdx++; renderOnboardingPaso(); return; }
   // distancia de referencia: la de la carrera si preparas una; si no, lo que ya mantienes (o 10 por defecto)
   const nd=derivarNivelBase();
-  const objKm = obDatos.busco==='carrera' ? (obDatos.carreraDist||10) : (nd.suficiente ? Math.max(3, Math.round(nd.tiradaLarga)) : (state.profile.objetivoKm||10));
+  // la meta de distancia la elige la persona (la de la carrera si prepara una); nunca se deduce de la tirada actual
+  const objKm = obDatos.busco==='carrera' ? (obDatos.carreraDist||10) : (obDatos.metaKm || state.profile.objetivoKm || 10);
   obDatos.objetivoTipo = obDatos.busco==='carrera' ? (obDatos.carreraTipoDist==='Otra' ? objKm+' km' : obDatos.carreraTipoDist) : (obDatos.busco==='cuidarme' ? 'Mantenimiento' : 'Mejorar');
   Object.assign(state.profile, {
     busco:obDatos.busco, competitividad:obDatos.competitividad, parq:obDatos.parq,
     objetivoTipo:obDatos.objetivoTipo, objetivoKm:objKm, superficie:obDatos.superficie, desnivelObjetivoM:obDatos.desnivelObjetivoM,
-    usaGarmin:obDatos.usaGarmin || (ultimoDatoImportado() ? 'si' : null),
     nivelBase:obDatos.nivelBase, distanciaBaseKm:obDatos.distanciaBaseKm, tiempoBaseMin:obDatos.tiempoBaseMin,
     salidasSemana:obDatos.salidasSemana, kmSemanaBase:obDatos.kmSemanaBase,
-    disponibilidad:obDatos.disponibilidad, lesionesNotas:obDatos.lesionesNotas,
+    disponibilidad:obDatos.disponibilidad, claseIntensidad:obDatos.claseIntensidad, claseMin:obDatos.claseMin, lesionesNotas:obDatos.lesionesNotas,
     pesoKg:obDatos.pesoKg, fcMax:obDatos.fcMax, edad:obDatos.edad, onboardingCompletado:true
   });
   // la carrera objetivo vive en la agenda como evento A (se sustituye el anterior creado desde el wizard)
@@ -2933,11 +3226,18 @@ document.getElementById('ob-siguiente').addEventListener('click', ()=>{
   toast('¡Listo! Plan generado.');
 });
 document.getElementById('redo-onboarding').addEventListener('click', ()=>{ showOnboarding(); });
+document.getElementById('recalcular-todo').addEventListener('click', ()=>{
+  for(let i=0;i<4;i++){ const antes=state.fase.actual; determinarFase(); if(state.fase.actual===antes) break; }
+  delete state.planSemanal[isoWeek(TODAY)]; window.__planesTmp={};
+  saveState(); recalcularPlan(); renderAll(); updateCharts();
+  toast('Plan rehecho: fase '+(FASE_LABELS[state.fase.actual]||state.fase.actual));
+});
 
 /* Perfil portátil: copiar el perfil de un dispositivo a otro (o incrustarlo en la página publicada vía window.RUNCOACH_PERFIL[slug]) */
 function aplicarPerfilExterno(o){
   if(!o || typeof o!=='object' || !o.profile) throw new Error('no es un perfil');
   Object.assign(state.profile, o.profile, {onboardingCompletado:true});
+  if(o.menu && o.menu.semanas) state.menu=o.menu;
   if(Array.isArray(o.eventos)){
     const ids=new Set((state.eventos||[]).map(e=>e.id));
     state.eventos=(state.eventos||[]).concat(o.eventos.filter(e=>e && !ids.has(e.id)));
@@ -2945,7 +3245,7 @@ function aplicarPerfilExterno(o){
 }
 document.getElementById('perfil-mostrar').addEventListener('click', ()=>{
   const t=document.getElementById('perfil-codigo');
-  t.value=JSON.stringify({v:1, nombre:store.personas[store.activeId].nombre, profile:state.profile, eventos:state.eventos||[]});
+  t.value=JSON.stringify({v:1, nombre:store.personas[store.activeId].nombre, profile:state.profile, eventos:state.eventos||[], menu:state.menu||null});
   t.style.display='block'; t.focus(); t.select();
 });
 document.getElementById('perfil-aplicar').addEventListener('click', ()=>{
@@ -2965,6 +3265,7 @@ const GLOSARIO = {
   'Largo': 'La tirada más larga de la semana, siempre suave. Prepara el cuerpo para aguantar distancia.',
   'Activación': 'Un trote cortito y muy suave el día antes de una carrera para llegar con piernas frescas.',
   'Core/piernas': 'Fuerza sencilla para estabilizar la cadera y proteger rodillas y tobillos. Corredores con buena fuerza se lesionan menos.',
+  'Clase de funcional': 'Tu clase en grupo: trabajo de cuerpo completo que eliges tú. No cuenta kilómetros, pero cansa músculos que luego usas al correr; por eso la app la tiene en cuenta para el día siguiente.',
   'Core ligero': 'Fuerza suave de abdomen y glúteo, sin cargar las piernas, para no llegar cansado a una carrera.',
   'Movilidad y estiramientos': 'Estirar y mover articulaciones suave. No es "entrenar": ayuda a recuperar y a que las piernas respondan mejor.',
 };
@@ -2977,7 +3278,12 @@ function glosarioDe(dia){
 function kmEquivalentes(a){ return (a.dist||0) + (a.desnivelM||0)/100; } // 100 m de desnivel ≈ 1 km más
 function cargaDeActividad(a){
   if(a.tipo==='Estiramientos') return 'baja';
-  if(a.tipo==='Fuerza'){ const min=(a.duracionSec||0)/60; return a.deporte==='hiit' ? (min>=40?'alta':'media') : (min>=75?'alta':(min>=40?'media':'baja')); }
+  if(a.tipo==='Fuerza'){
+    const min=(a.duracionSec||0)/60;
+    if(state.profile.claseIntensidad==='media') return min>=60?'media':'baja';
+    if((state.profile.claseIntensidad||'alta')==='alta' && min>=45 && a.deporte!=='strength_training') return 'alta'; // tu clase de cuerpo completo es exigente
+    return a.deporte==='hiit' ? (min>=40?'alta':'media') : (min>=75?'alta':(min>=40?'media':'baja'));
+  }
   const rec=soloCarreras().filter(c=>{ const d=daysBetween(c.fecha,a.fecha); return d>0 && d<=42; });
   const ref=Math.max(6, ...rec.map(kmEquivalentes));
   const k=kmEquivalentes(a);
@@ -3122,7 +3428,6 @@ function mostrarDetalleActividad(a){
   f('Distancia', a.dist? a.dist+' km':null);
   f('Duración', a.duracion||null);
   f('Ritmo medio', a.ritmo? a.ritmo+' /km':null);
-  f('Velocidad media', (a.dist && a.duracionSec) ? (a.dist/(a.duracionSec/3600)).toFixed(1)+' km/h' : null);
   f('FC media', a.fc? a.fc+' ppm':null);
   f('FC máxima', a.fcMax? a.fcMax+' ppm':null);
   f('Zona de FC media', z? `${z.zona} · ${z.label} (${z.min}-${z.max})`:null);
@@ -3140,7 +3445,8 @@ function mostrarDetalleActividad(a){
   }
   lineas.push({alta:'Ha sido una sesión exigente para ti: las siguientes 24 h conviene descanso o algo muy suave.', media:'Carga media: la puedes digerir bien si duermes y comes bien.', baja:'Carga ligera: no te condiciona los días siguientes.'}[carga]);
   document.getElementById('detalle-titulo').textContent = a.nombre || resumenActividad(a);
-  document.getElementById('detalle-body').innerHTML = `<div class="card">${filas.join('')}</div><div class="interp"><b>En cristiano:</b><br>${lineas.join('<br>')}</div>`;
+  document.getElementById('detalle-body').innerHTML = `<div class="card">${filas.join('')}</div><div class="interp"><b>En cristiano:</b><br>${lineas.join('<br>')}</div>`
+    + (['Carrera','Fuerza','Estiramientos'].includes(a.tipo) ? `<div class="card"><h3>Qué has hecho bien y qué mejorar</h3>${analisisHTML(a)}</div>` : '');
   document.getElementById('detalle-modal').style.display='block';
 }
 document.getElementById('detalle-cerrar').addEventListener('click', ()=>{ document.getElementById('detalle-modal').style.display='none'; });
@@ -3157,7 +3463,7 @@ function proximaCarrera(){
 }
 function metaSesionHTML(dia){
   const fila=(l,v)=>v?`<div class="row"><span class="label">${l}</span><span class="value" style="font-size:12px; max-width:210px;">${v}</span></div>`:'';
-  if(dia.tipo==='Carrera') return fila('Sesión', dia.subtipo)+fila('Distancia', dia.distanciaKm?dia.distanciaKm+' km':'')+fila('Ritmo', dia.ritmoObjetivo)+fila('Zona de FC', dia.zonaFC?dia.zonaFC+(dia.fcRango?' ('+dia.fcRango+')':''):'');
+  if(dia.tipo==='Carrera') return fila('Sesión', dia.subtipo)+(dia.terrenoMixto?fila('Terreno', etiquetaTerreno(dia)):'')+fila('Distancia', dia.distanciaKm?dia.distanciaKm+' km':'')+(dia.desnivelSug?fila('Desnivel orientativo','+'+dia.desnivelSug+' m'):'')+fila('Ritmo', dia.ritmoObjetivo)+fila('Zona de FC', dia.zonaFC?dia.zonaFC+(dia.fcRango?' ('+dia.fcRango+')':''):'');
   if(dia.tipo==='Evento') return fila('Evento', escapeHTML(dia.nombre))+fila('Hora', dia.hora)+fila('Distancia', dia.distanciaKm?dia.distanciaKm+' km':'')+fila('Desnivel', dia.desnivelM?'+'+dia.desnivelM+' m':'');
   return fila('Sesión', dia.subtipo||dia.tipo);
 }
@@ -3182,11 +3488,659 @@ function mostrarDetallePlan(fecha){
   let cuerpo;
   if(!dia) cuerpo='<div class="card" style="font-size:12px; color:var(--text-dim);">Aún no hay plan para este día.</div>';
   else if(dia.tipo==='Descanso') cuerpo='<div class="card" style="font-size:12.5px;"><b>Descanso</b><div style="color:var(--text-dim); margin-top:4px;">Día libre de entrenamiento: descansar también es entrenar.</div></div>';
-  else cuerpo=`<div class="card">${metaSesionHTML(dia)}</div>${dia.aviso?`<div class="alert low"><div class="icon">⚠️</div><div class="txt"><strong>Aviso</strong><span>${escapeHTML(dia.aviso)}</span></div></div>`:''}<div class="card coach-plan">${renderPasosHTML(dia.pasos||[])}</div><div class="interp">${glosarioDe(dia)}</div>`;
+  else cuerpo=`<div class="card">${metaSesionHTML(dia)}</div>${dia.aviso?`<div class="alert low"><div class="icon">⚠️</div><div class="txt"><strong>Aviso</strong><span>${escapeHTML(dia.aviso)}</span></div></div>`:''}${dia.nota?`<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin:6px 0;">📝 ${escapeHTML(dia.nota)}</div>`:''}<div class="card coach-plan">${renderPasosHTML(dia.pasos||[])}</div><div class="interp">${glosarioDe(dia)}</div>`;
+  if(dia && dia.tipo==='Carrera') cuerpo+=`<div class="card">${terrenoSelectorHTML(fecha, dia)||'<div style="font-size:11.5px; color:var(--text-dim);">Esta salida ya no se puede cambiar.</div>'}</div>`;
+  if(dia && dia.tipo!=='Descanso') cuerpo+=`<div class="card"><h3>Por qué esto</h3>${whyHTML(explicarSesion(fecha))}</div>`;
   document.getElementById('detalle-body').innerHTML=cuerpo;
   document.getElementById('detalle-modal').style.display='block';
 }
 document.addEventListener('click', e=>{ const c=e.target.closest('.chip-dia'); if(c && c.dataset.f) mostrarDetallePlan(c.dataset.f); });
+
+/* ================= CONOCIMIENTO: POR QUÉ RECOMIENDA LO QUE RECOMIENDA ================= */
+// ev = nivel de evidencia, dicho con honestidad. Las fuentes citadas se han comprobado; lo que no tiene fuente verificable se marca como criterio de la app.
+const CONOCIMIENTO = {
+  fase:{t:'Por fases, no por semanas sueltas', ev:'Criterio de la app',
+    por:'Subir distancia sin base provoca lesiones y abandonos. Por eso el plan avanza por fases (Reactivación → Base → Aumento → Consolidación → Mantenimiento): solo pasas a la siguiente cuando tu distancia sostenida lo permite, y si caes mucho, retrocede.',
+    fuente:'Diseño propio de la app, basado en la progresión habitual de los entrenadores de fondo (no es un estudio concreto).'},
+  polarizado:{t:'Casi todo suave (la idea del 80/20)', ev:'Orientativa',
+    por:'Quien más corre pasa la mayor parte del tiempo a ritmo fácil (puedes hablar) y solo una parte pequeña a intensidad alta. Lo suave construye base sin acumular tanta fatiga; por eso casi todas tus salidas son en zona 1-2.',
+    fuente:'Seiler y Kjerland (2006), Scandinavian Journal of Medicine & Science in Sports: en deportistas de resistencia de élite, ~75-80 % del entrenamiento era de baja intensidad. Describe lo que hacen atletas de élite; no demuestra que sea lo óptimo para todos.'},
+  carga:{t:'Tu carga reciente frente a tu hábito', ev:'Orientativa (muy usada, aún discutida)',
+    por:'Se compara lo que has hecho en los últimos 7 días (carga aguda) con tu media de las últimas 4 semanas (carga crónica). Si de golpe haces mucho más de lo que tu cuerpo está acostumbrado, sube el riesgo de lesión; cerca de tu media, lo toleras mejor.',
+    fuente:'Gabbett (2016), British Journal of Sports Medicine: relación carga aguda:crónica. Las franjas habituales (≈0,8-1,3 cómoda; >1,5 riesgo alto) vienen de trabajos posteriores y su valor para predecir lesiones se discute: aquí son solo una guía.'},
+  diez:{t:'Subir poco a poco (la regla del 10 %)', ev:'Débil como regla fija',
+    por:'Aumentar el volumen de forma gradual es de sentido común, pero el "10 %" exacto no está demostrado: en un ensayo con corredores principiantes, un plan basado en esa regla no redujo las lesiones frente a uno estándar. Por eso la app lo usa como tope prudente (ajustado a tus años corriendo) y lo cruza con tu carga real.',
+    fuente:'Buist y cols. (2008), American Journal of Sports Medicine (ensayo GRONORUN, 532 corredores principiantes).'},
+  taper:{t:'Bajar carga antes de una carrera', ev:'Sólida',
+    por:'Reducir el volumen en las 1-2 semanas previas, manteniendo algo de intensidad y de frecuencia, mejora el rendimiento: llegas descansado sin perder forma.',
+    fuente:'Bosquet y cols. (2007), Medicine & Science in Sports & Exercise (metaanálisis): la mejor estrategia fue ~2 semanas con el volumen reducido un 41-60 % sin cambiar intensidad ni frecuencia.'},
+  zonas:{t:'Zonas de pulsaciones y ritmos', ev:'Orientativa',
+    por:'Las zonas se calculan con tu frecuencia máxima y tu pulso en reposo (reserva cardíaca). Si la máxima no es real, las zonas se desplazan; por eso la app prefiere la máxima que tu reloj ha visto en carreras y te dice de dónde sale el dato. Los ritmos salen de tus carreras recientes.',
+    fuente:'Método de la reserva de frecuencia cardíaca (Karvonen). Las fórmulas por edad pueden fallar varios latidos por minuto; no hay una cita concreta verificada en la app.'},
+  recuperacion:{t:'Señales de recuperación', ev:'Criterio de la app',
+    por:'Dormir peor de lo habitual en ti y tener el pulso en reposo más alto de lo normal en ti son pistas de cansancio. Se comparan con tu propia media (no con valores universales) y se piden dos señales para no alarmar por un mal día. El Body Battery ya incluye el estrés, así que no se cuenta dos veces.',
+    fuente:'Criterio tomado del manual de análisis de datos de Garmin que compartiste (línea base individual, no doble conteo, "faltan datos").'},
+  clase:{t:'Tu clase de funcional también cansa las piernas', ev:'Criterio de la app',
+    por:'Una clase de cuerpo completo exigente deja fatiga muscular que los kilómetros no reflejan. Por eso el día siguiente (y los días antes de una carrera) llevan avisos para suavizar, aunque la sesión se mantiene en su día.',
+    fuente:'Criterio de la app; no existe una norma publicada exacta para clases en grupo.'},
+  seguridad:{t:'Seguridad primero', ev:'Práctica estándar',
+    por:'Ante síntomas de alarma (dolor en el pecho, falta de aire, mareo, palpitaciones) o varias respuestas "sí" en el cuestionario de salud, la app deja de recomendar o limita la intensidad y te remite a un profesional.',
+    fuente:'Inspirado en el cuestionario PAR-Q de preparación para la actividad física. La app no diagnostica.'},
+  trail:{t:'Desnivel: 100 m ≈ 1 km', ev:'Heurística',
+    por:'Para comparar salidas con cuestas con las llanas se suma 1 km por cada 100 m de desnivel positivo. Es una aproximación sencilla.',
+    fuente:'Regla práctica de uso común; no es una medición científica.'},
+  terreno:{t:'Asfalto, pista y monte: para qué sirve cada uno', ev:'Criterio de entrenadores; evidencia indirecta',
+    por:'En pista (400 m = 1 vuelta) o en llano medido sabes la distancia exacta y controlas el ritmo: ideal para series y tempo. En asfalto controlas ritmo y pulsaciones en los rodajes. Si improvisas y cambias el terreno, la app reparte el monte (no dos seguidos ni en las 48 h siguientes a otro) y recoloca la calidad perdida cuando hay margen. En el monte el desnivel exige más fuerza (cuestas) y el suelo blando reparte el impacto, pero el ritmo deja de ser una referencia fiable (manda el esfuerzo) y las bajadas castigan rodillas y cuádriceps. Alternar los dos aporta variedad y fuerza sin repetir siempre el mismo impacto. Por eso la tirada larga va al monte y la calidad al llano, salvo que prepares una prueba concreta.',
+    fuente:'Práctica habitual de entrenadores de fondo y de montaña; la app no cita un estudio concreto.'},
+  analisis:{t:'Cómo valoro una sesión', ev:'Criterio de la app',
+    por:'Comparo lo que hiciste con lo previsto (distancia, intensidad, ritmo y terreno) y con tu propio historial, usando promedios de la sesión. No veo tus parciales por kilómetro ni lo que sentías minuto a minuto, así que no puedo juzgar el reparto del esfuerzo; por eso te pido tu sensación después.',
+    fuente:'Reglas propias de la app sobre tus datos de Garmin; no sustituye a un entrenador.'},
+  te:{t:'Efecto de entrenamiento de Garmin', ev:'Dato del fabricante',
+    por:'Garmin puntúa de 0 a 5 cuánto mejora tu forma aeróbica una sesión: 1-1,9 ayuda a recuperar, 2-2,9 mantiene, 3-3,9 mejora y 4-4,9 la mejora mucho. Es una estimación del reloj, no una medida de laboratorio.',
+    fuente:'Manual de usuario de Garmin ("About Training Effect").'},
+  pautas:{t:'Pautas generales de alimentación', ev:'Orientativa',
+    por:'La alimentación saludable general (dieta mediterránea) se apoya en verdura y fruta a diario, legumbres y pescado varias veces por semana, frutos secos y cereales, y poca carne procesada, fritos y ultraprocesados. La app cuenta cuántas veces aparece cada grupo en tu menú y lo compara con ese patrón general; los umbrales exactos son criterio de la app, no una norma.',
+    fuente:'AESAN, "Recomendaciones dietéticas para la población española" (revisión de 2020). La app no cita frecuencias concretas de esa fuente porque no se han podido verificar aquí.'},
+  procesada:{t:'Embutidos y fiambres', ev:'Sólida (evidencia de riesgo; el Grupo 1 mide la certeza, no cuánto riesgo)',
+    por:'Los embutidos y fiambres son carne procesada. La OMS (IARC) la clasificó en 2015 como carcinógena para las personas (Grupo 1) por su relación con el cáncer colorrectal. "Grupo 1" indica lo seguro que es el vínculo, no cuánto riesgo supone comerlos de vez en cuando. Por eso la recomendación es reducir su frecuencia y alternar, sin necesidad de eliminarlos.',
+    fuente:'IARC Monographs, volumen 114 (carne roja y carne procesada), evaluación de octubre de 2015.'},
+  cadencia:{t:'Cadencia: el 180 es un mito, pero un pequeño aumento puede ayudar', ev:'Orientativa',
+    por:'La cadencia es cuántos pasos das por minuto. No hay una cifra ideal universal: el "180" nace de observar a atletas de élite en pruebas rápidas, y entre corredores de élite varía mucho. Lo mejor respaldado es que, a igual velocidad, subir tu cadencia un 5-10 % reduce la carga mecánica sobre la rodilla (y sobre la cadera con +10 %): útil si vienes de molestias en esa zona. Que mejore directamente tus tiempos no está demostrado: tu cadencia natural suele ser ya bastante económica y solo en quien la tiene muy baja un estudio pequeño encontró mejor economía de carrera tras entrenarla. Por eso se trabaja poco a poco y sin pasarse del +10 %.',
+    fuente:'Heiderscheit y cols. (2011), Medicine & Science in Sports & Exercise: 45 corredores recreativos; con +5 % y +10 % de cadencia, menos energía absorbida en la rodilla, y en la cadera con +10 %; los autores avisan de que un cambio grande puede ser difícil de adoptar. Estudio pequeño de entrenamiento de frecuencia de paso en corredoras bien entrenadas con cadencia inicial baja (<176). El origen del 180 (observaciones de Daniels, 1984) procede de fuentes secundarias.'},
+  perfil:{t:'Lo que me cuentas', ev:'Criterio de la app',
+    por:'Tus respuestas (días, lesiones, años corriendo, meta, alimentación…) ajustan el plan: qué sesiones hay, cuánto subir y qué evitar.',
+    fuente:'Diseño de la app.'},
+};
+function mediana(a){ const s=a.filter(x=>x!=null && !isNaN(x)).slice().sort((x,y)=>x-y); if(!s.length) return null; const m=Math.floor(s.length/2); return s.length%2 ? s[m] : (s[m-1]+s[m])/2; }
+// Carga aguda (7 días) / crónica (media de 4 semanas), en km-equivalentes; null si no hay al menos 3 de las últimas 4 semanas con carreras
+function ratioCarga(){
+  const car=soloCarreras();
+  const suma=(i)=>car.filter(c=>{ const d=daysBetween(c.fecha,TODAY); return d>=7*i && d<7*(i+1); }).reduce((a,c)=>a+kmEquivalentes(c),0);
+  const semanas=[0,1,2,3].map(suma);
+  if(semanas.filter(x=>x>0).length<3) return null;
+  const aguda=semanas[0], cronica=semanas.reduce((a,b)=>a+b,0)/4;
+  if(cronica<=0) return null;
+  return {aguda:+aguda.toFixed(1), cronica:+cronica.toFixed(1), ratio:+(aguda/cronica).toFixed(2)};
+}
+function explicarSesion(fecha){
+  const R=[]; const add=(k,txt,prio)=>R.push({k,txt,prio:prio||5});
+  const p=state.profile, dia=diaDePlan(fecha), plan=planParaFecha(fecha), esHoy=fecha===TODAY;
+  const zonas=calcularZonasFC(p, fcReposoRolling());
+  const faltan=[]; const ult=ultimoDatoImportado();
+  if(!ult) faltan.push('datos de Garmin (el plan se basa solo en lo que me cuentas)');
+  else if(daysBetween(ult,TODAY)>=3) faltan.push(`datos recientes de Garmin (el último es de hace ${daysBetween(ult,TODAY)} días)`);
+  if(esHoy){
+    const c=state.checkinByDate[TODAY]||{}, f=evaluarFatiga();
+    if(c.animo==='mal' || c.molestia==='si') add('recuperacion','En el check-in has dicho que no estás bien o que notas una molestia: eso manda sobre cualquier cálculo.',1);
+    else if(f.fatigado) add('recuperacion',`Señales de recuperación justa: ${f.motivo}.`,1);
+  }
+  const ayer=restarUnDia(fecha), cAyer=cargaDelDia(ayer);
+  if(cAyer.nivel && dia && dia.tipo!=='Descanso'){
+    const a=cAyer.acts[0];
+    add(a.tipo==='Fuerza'?'clase':'carga', `${esHoy?'Ayer':'El día anterior'} hiciste ${resumenActividad(a)} (carga ${cAyer.nivel})${a.tipo==='Fuerza'?': una clase de cuerpo completo cansa las piernas aunque no sume kilómetros':''}.`, cAyer.nivel==='alta'?2:5);
+  }
+  const zAyer=((state.sesionNotas||{})[ayer]||{}).zonas;
+  if(zAyer && dia && dia.tipo==='Carrera'){
+    const piernas=(zAyer.muslos||0)+(zAyer.gluteos||0)+(zAyer.gemelos||0);
+    if(piernas>=2) add('clase','Marcaste piernas o glúteos como muy trabajados en tu sesión anterior: hoy mejor suave.',1);
+  }
+  const ec=eventoCercano(fecha,14);
+  if(ec){
+    const d=daysBetween(fecha,ec.ev.fecha);
+    if(d>0) add('taper',`Faltan ${d} día(s) para ${ec.ev.nombre} (prioridad ${ec.ev.prioridad}): ${(d<=5&&ec.ev.prioridad==='A')?'estás en la bajada de carga previa a la prueba':'aún no toca bajar carga, pero cuido que llegues fresco'}.`, d<=3?1:4);
+    else if(d<0) add('taper',`Hace ${-d} día(s) fue ${ec.ev.nombre}: se prioriza recuperar.`,2);
+  }
+  (plan?plan.ajustes:[]).filter(a=>a.fecha===fecha && (a.origen==='evento' || a.origen==='terreno') && !/la clase sigue/.test(a.motivo)).forEach(a=>add('taper',a.motivo+'.',2));
+  const cod=codigoDeDia(fecha), disp=(p.disponibilidad||{})[cod];
+  if(dia && dia.tipo==='Carrera'){
+    const exp={'Continuo suave':`Rodaje suave: la mayor parte de lo que corres debe ser así (poder hablar sin ahogarte), en zona ${dia.zonaFC}${dia.fcRango?' ('+dia.fcRango+')':''}.`,
+      'Progresivo':'Progresivo: empiezas suave y terminas algo más fuerte, sin llegar a ser duro; es la sesión de más calidad que admite tu plan ahora.',
+      'Largo':'Tirada larga: la que más resistencia construye; siempre en zona suave.',
+      'Tempo':'Tempo: un tramo "cómodamente duro" para subir tu umbral.',
+      'Series':'Series: repeticiones rápidas con descanso; es lo más exigente de la semana.',
+      'Activación':'Activación: un trote corto para llegar a la carrera con las piernas frescas.'}[dia.subtipo];
+    if(exp) add('polarizado',exp,3);
+    if(p.competitividad==='nada' && ['Continuo suave','Progresivo','Largo'].includes(dia.subtipo)) add('polarizado','Dijiste que no buscas competir, así que no programo series ni tempo: ganas más con constancia suave.',3);
+    if(limitarIntensidad()) add('seguridad','En el cuestionario de salud respondiste "sí" a algo: evito la intensidad alta hasta que lo valore un profesional.',2);
+    if(p.anosCorriendo!=null && p.anosCorriendo<1) add('diez','Llevas menos de un año corriendo: priorizo la base aeróbica y subo más despacio (máx. 7 % por semana).',3);
+    else if(p.anosCorriendo!=null) add('diez',`Llevas ${p.anosCorriendo} año(s) corriendo: subo como máximo un ${Math.round((tasaProgresion()-1)*100)} % por semana.`,7);
+    if(plan && plan.targetWeekKm){
+      const pct = plan.baselineKm ? (plan.targetWeekKm/plan.baselineKm-1)*100 : null;
+      add(plan.taper?'taper':'diez',`Esta semana suma ${plan.targetWeekKm} km${pct!=null?` (${pct>=0?'+':''}${pct.toFixed(0)} % sobre ${plan.baselineKm} km de la semana base)`:''}; esta sesión son ${dia.distanciaKm} km.${plan.taper?' Es semana de bajada de carga.':''}`,4);
+    }
+    const r=ratioCarga();
+    if(r) add('carga',`Tus últimos 7 días suman ${r.aguda} km-equivalentes frente a tu media de 4 semanas (${r.cronica}): ratio ${r.ratio.toFixed(2).replace('.',',')} — ${r.ratio<0.8?'por debajo de tu hábito':(r.ratio<=1.3?'en tu zona cómoda':'por encima de tu hábito, mejor suave')}.`, r.ratio>1.3?1:5);
+    else faltan.push('al menos 3 de las últimas 4 semanas con carreras (para calcular tu carga reciente)');
+    const rb=estimarRitmoBase(soloCarreras(),'asfalto') ?? estimarRitmoBase(soloCarreras(),null);
+    if(dia.terrenoMotivo && dia.terrenoMixto) add('terreno', dia.terrenoMotivo, 3);
+    if(dia.superficie==='trail') add('trail','Es trail: manda el esfuerzo y las pulsaciones, no el ritmo; 100 m de desnivel cuentan como ~1 km de esfuerzo.',6);
+    else add('zonas', rb!=null ? `El ritmo sale de la mediana de tus últimas carreras (${toPaceLabel(rb)}/km), ajustado al tipo de sesión.` : 'No tengo ritmo en cifras porque faltan carreras recientes en Garmin: ve por sensación y pulsaciones.', 6);
+    add('zonas',`Tus zonas usan FC máx ${zonas.fcMax} ppm (${{perfil:'la que me diste',estimada_edad:'estimada por tu edad',observada:'la máxima que ha registrado tu reloj',generica:'un valor genérico: ponla en Perfil para afinar'}[zonas.fuenteFcMax]}) y FC en reposo ${Math.round(zonas.fcReposo)} ppm.`,8);
+    if(dia.nota) add('perfil',dia.nota,3);
+    add('perfil', disp==='correr' ? 'Ese día lo marcaste tú para correr.' : 'Ese día lo dejaste en manos del entrenador: lo uso para correr cuidando los descansos entre sesiones y clases.', 9);
+  } else if(esClase(dia)){
+    add('clase','Es tu clase de funcional (la eliges tú): cuerpo completo, '+((p.claseIntensidad||'alta')==='alta'?'exigente':'de intensidad media')+'. No suma kilómetros, pero cansa piernas y core.',2);
+    const man=diaDePlan(sumarDias(fecha,1));
+    if(man && man.tipo==='Carrera') add('clase',`Mañana tienes ${descripcionDia(man)}: si hoy aprietas mucho, el rodaje irá con aviso de hacerlo suave.`,3);
+    if(dia.aviso) add('taper',dia.aviso,1);
+    if(notaLesiones()) add('perfil','Tus antecedentes: elige variantes que no carguen esa zona.',3);
+  } else if(dia && dia.tipo==='Descanso'){
+    add('fase','Los días de descanso son los que consolidan el entrenamiento: el cuerpo se adapta mientras descansa.',6);
+    if(!disp) add('perfil','Ese día lo marcaste como libre.',7);
+  } else if(dia && dia.tipo==='Evento'){
+    add('taper',`Hoy es ${dia.nombre}: el trabajo ya está hecho; toca ejecutar con cabeza.`,1);
+  }
+  if(esHoy){
+    const su=todoSueno(), u3=su.slice(-3), base=su.slice(-24,-3);
+    const sA=avg(u3,'puntuacion'), sB=avg(base,'puntuacion');
+    if(sA!=null && sB!=null) add('recuperacion',`Tu sueño de las últimas 3 noches (${sA.toFixed(0)}) está ${sA>=sB*0.97?'en línea con':'por debajo de'} tu media de las 3 semanas anteriores (${sB.toFixed(0)}).`, sA<sB*0.85?2:7);
+    const horas=u3.filter(s=>s.horas!=null).map(s=>s.horas);
+    if(horas.length && p.horasSueno){ const h=horas.reduce((a,b)=>a+b,0)/horas.length; add('recuperacion',`Has dormido de media ${h.toFixed(1).replace('.',',')} h; dices que necesitas unas ${p.horasSueno} h${h<p.horasSueno-1?': vas corto, ojo con la intensidad':''}.`, h<p.horasSueno-1?2:7); }
+  }
+  const hist=state.faseHistorial||[], ultF=hist[hist.length-1];
+  add('fase',`Fase ${FASE_LABELS[state.fase.actual]}${state.fase.desde?` desde el ${fmtShort(state.fase.desde)}`:''}${ultF&&ultF.motivo?': '+ultF.motivo:''}`,7);
+  if(p.busco==='cuidarme') add('perfil','Tu objetivo es cuidarte y mantener la forma: no subo el volumen, solo lo sostengo.',4);
+  const vistos=new Set();
+  const razones=R.filter(x=>{ if(vistos.has(x.txt)) return false; vistos.add(x.txt); return true; }).sort((a,b)=>a.prio-b.prio).slice(0,6);
+  return {razones, faltan:[...new Set(faltan)]};
+}
+function whyHTML(res){
+  const items=res.razones.map(r=>{
+    const k=CONOCIMIENTO[r.k];
+    return `<div class="why-item" style="padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer;"><div style="font-size:12.5px; line-height:1.5;">• ${escapeHTML(r.txt)} <span style="color:var(--accent); font-size:11px; white-space:nowrap;">¿por qué?</span></div><div class="why-more" style="display:none; margin-top:6px; font-size:11.5px; line-height:1.5; color:var(--text-dim); background:var(--surface-2); border-radius:10px; padding:8px 10px;">${k?`<b style="color:var(--text)">${k.t}</b> <span class="tag">${k.ev}</span><br>${k.por}<br><i>Fuente: ${k.fuente}</i>`:''}</div></div>`;
+  }).join('');
+  const faltan=res.faltan.length ? `<div style="font-size:11px; color:var(--amber); margin-top:8px;">Me faltan: ${res.faltan.map(escapeHTML).join('; ')}.</div>` : '';
+  return items+faltan+`<div style="font-size:10.5px; color:var(--text-dim); margin-top:8px;">Orientación general basada en tus datos; no sustituye a un profesional de la salud o del deporte. Toca una razón para ver el conocimiento que hay detrás.</div>`;
+}
+function renderWhy(){
+  const el=document.getElementById('why-body'); if(!el) return;
+  if(semaforoActual().parada){ el.innerHTML='<div style="font-size:12px; color:var(--text-dim);">Sin recomendación mientras haya síntomas de alarma marcados.</div>'; return; }
+  if(!state.profile.onboardingCompletado){ el.innerHTML=''; return; }
+  el.innerHTML=whyHTML(explicarSesion(TODAY));
+}
+document.addEventListener('click', e=>{ const w=e.target.closest('.why-item'); if(!w) return; const m=w.querySelector('.why-more'); m.style.display = m.style.display==='none' ? 'block' : 'none'; });
+
+// Lo que la app aprende de TUS datos (con "faltan datos" cuando no hay histórico suficiente)
+function aprendizajes(){
+  const out=[]; const car=soloCarreras(); const z=calcularZonasFC(state.profile, fcReposoRolling());
+  const dentro=d=>car.filter(c=>{ const x=daysBetween(c.fecha,TODAY); return x>=0 && x<=d; });
+  const suaves=dentro(70).filter(c=>c.fc && c.ritmo && (c.superficie||'asfalto')==='asfalto' && c.fc<=z.bandas[1].max);
+  out.push(suaves.length>=4
+    ? {k:'zonas', t:'Tu rodaje suave real', txt:`En tus ${suaves.length} carreras suaves de las últimas 10 semanas corres a ~${toPaceLabel(mediana(suaves.map(c=>ritmoADec(c.ritmo))))}/km con ~${Math.round(mediana(suaves.map(c=>c.fc)))} ppm (tu zona 2 teórica es ${z.bandas[1].min}-${z.bandas[1].max}).`}
+    : {k:'zonas', t:'Tu rodaje suave real', txt:'Aún faltan carreras en zona suave (hacen falta 4 en 10 semanas) para calcularlo.'});
+  const efi=c=>(c.dist>=3 && c.fc && c.ritmo && (c.superficie||'asfalto')==='asfalto') ? (60/ritmoADec(c.ritmo))*(kmEquivalentes(c)/c.dist)/c.fc : null; // corrige el desnivel (100 m ≈ 1 km)
+  const rec=car.filter(c=>{ const d=daysBetween(c.fecha,TODAY); return d>=0 && d<=42; }).map(efi).filter(x=>x);
+  const prev=car.filter(c=>{ const d=daysBetween(c.fecha,TODAY); return d>42 && d<=84; }).map(efi).filter(x=>x);
+  if(rec.length>=4 && prev.length>=4){
+    const pct=(mediana(rec)/mediana(prev)-1)*100;
+    out.push({k:'zonas', t:'Tu tendencia', txt: Math.abs(pct)<1 ? 'Tu eficiencia (velocidad por pulsación) está estable respecto a las 6 semanas anteriores.' : `Corres un ${Math.abs(pct).toFixed(1).replace('.',',')} % ${pct>0?'más rápido':'más lento'} a las mismas pulsaciones que en las 6 semanas anteriores${pct>0?': tu forma aeróbica mejora':''}. (El calor, el terreno y el cansancio también influyen.)`});
+  } else out.push({k:'zonas', t:'Tu tendencia', txt:'Aún faltan carreras (4 en las últimas 6 semanas y 4 en las 6 anteriores) para comparar tu eficiencia.'});
+  const kmLarga=Math.max(6,(mediana(car.slice(-20).map(c=>c.dist))||0)*1.2);
+  const su=todoSueno();
+  const dFC=[], dS=[];
+  dentro(120).filter(c=>c.dist>=kmLarga).forEach(c=>{
+    const sig=su.find(s=>s.fecha===sumarDias(c.fecha,1)); if(!sig) return;
+    const ventana=su.filter(s=>s.fecha<c.fecha && s.fecha>=restarUnDiaN(c.fecha,21));
+    const bF=avg(ventana,'fcReposo'), bS=avg(ventana,'puntuacion');
+    if(sig.fcReposo!=null && bF!=null) dFC.push(sig.fcReposo-bF);
+    if(sig.puntuacion!=null && bS!=null) dS.push(sig.puntuacion-bS);
+  });
+  if(dFC.length>=4){
+    const d=mediana(dFC), s=mediana(dS);
+    out.push({k:'recuperacion', t:'Cómo recuperas', txt:`Tras tus salidas más largas (≥ ${kmLarga.toFixed(0)} km), tu FC en reposo del día siguiente es de media ${d>=0?'+':''}${d.toFixed(1).replace('.',',')} ppm sobre tu línea base${dS.length>=4?` y tu puntuación de sueño ${s>=0?'+':''}${s.toFixed(0)} puntos`:''} (${dFC.length} salidas).`});
+  } else out.push({k:'recuperacion', t:'Cómo recuperas', txt:'Aún faltan salidas largas con datos de sueño y pulso (hacen falta 4) para ver cómo respondes al día siguiente.'});
+  const NOMD={lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábados',dom:'domingos'};
+  const dows={}; dentro(84).forEach(c=>{ const k=codigoDeDia(c.fecha); dows[k]=(dows[k]||0)+1; });
+  const top=Object.entries(dows).sort((a,b)=>b[1]-a[1]).slice(0,2);
+  if(dentro(84).length>=6 && top.length) out.push({k:'perfil', t:'Tus días', txt:`En las últimas 12 semanas corres sobre todo los ${top.map(([d,n])=>`${NOMD[d]} (${n})`).join(' y ')}.`});
+  const r12=dentro(84);
+  if(r12.length>=6){
+    const tr=r12.filter(c=>c.superficie==='trail'), as=r12.filter(c=>(c.superficie||'asfalto')==='asfalto');
+    const pAs=as.length>=3?estimarRitmoBase(soloCarreras(),'asfalto'):null, pTr=tr.length>=3?estimarRitmoBase(soloCarreras(),'trail'):null;
+    const dk=mediana(tr.filter(c=>c.desnivelM!=null&&c.dist>0).map(c=>c.desnivelM/c.dist));
+    out.push({k:'terreno', t:'Tu terreno', txt:`En 12 semanas: ${as.length} salidas en asfalto${pAs?` (~${toPaceLabel(pAs)}/km)`:''} y ${tr.length} en monte${pTr?` (~${toPaceLabel(pTr)}/km${dk?`, ~${Math.round(dk*10)} m de desnivel cada 10 km`:''})`:''}.${tr.length/r12.length>=0.25 && state.profile.superficie==='asfalto' ? ' Sales bastante al monte: pon "Mixto" en tu perfil y te propongo cuándo hacerlo.' : ''}`});
+  }
+  const r=ratioCarga();
+  out.push(r ? {k:'carga', t:'Tu carga ahora', txt:`Últimos 7 días: ${r.aguda} km-equivalentes; media de 4 semanas: ${r.cronica}; ratio ${r.ratio.toFixed(2).replace('.',',')}.`} : {k:'carga', t:'Tu carga ahora', txt:'Aún faltan semanas con carreras (3 de las últimas 4) para calcular tu carga reciente.'});
+  const cl=todasActividades().filter(a=>a.tipo==='Fuerza' && daysBetween(a.fecha,TODAY)<=56 && daysBetween(a.fecha,TODAY)>=0);
+  if(cl.length) out.push({k:'clase', t:'Tus clases', txt:`Has hecho ${cl.length} sesiones de funcional en 8 semanas (~${(cl.length/8).toFixed(1).replace('.',',')} por semana).`});
+  return out;
+}
+function renderAprendido(){
+  const el=document.getElementById('aprendido-body'); if(!el) return;
+  el.innerHTML=aprendizajes().map(a=>{ const k=CONOCIMIENTO[a.k]; return `<div class="why-item" style="padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer;"><div style="font-size:12.5px; line-height:1.5;"><b>${a.t}.</b> ${escapeHTML(a.txt)}</div><div class="why-more" style="display:none; margin-top:6px; font-size:11.5px; line-height:1.5; color:var(--text-dim); background:var(--surface-2); border-radius:10px; padding:8px 10px;">${k?`<b style="color:var(--text)">${k.t}</b> <span class="tag">${k.ev}</span><br>${k.por}<br><i>Fuente: ${k.fuente}</i>`:''}</div></div>`; }).join('')
+    + `<div style="font-size:10.5px; color:var(--text-dim); margin-top:8px;">Se calcula con tus propios datos de Garmin; cuando faltan datos, lo digo.</div>`;
+}
+
+/* ================= ANÁLISIS DE LA SESIÓN: QUÉ HAS HECHO BIEN, QUÉ MEJORAR Y POR QUÉ ================= */
+function rangoRitmoDe(dia){ const m=/(\d+):(\d+)-(\d+):(\d+)/.exec((dia&&dia.ritmoObjetivo)||''); return m ? [(+m[1])+(+m[2])/60, (+m[3])+(+m[4])/60] : null; }
+function analizarSesion(a){
+  const bien=[], mejorar=[], notas=[], faltan=[]; let proximo='';
+  const p=state.profile, dia=diaDePlan(a.fecha), nota=(state.sesionNotas||{})[a.fecha];
+  const zonas=calcularZonasFC(p, fcReposoRolling());
+  const B=(k,t)=>bien.push({k,txt:t}), M=(k,t,acc)=>mejorar.push({k,txt:t,acc}), N=(k,t)=>notas.push({k,txt:t});
+  const man=diaDePlan(sumarDias(a.fecha,1));
+  const carga=cargaDeActividad(a);
+  if(a.tipo==='Carrera'){
+    const planC=dia && dia.tipo==='Carrera';
+    const z=a.fc ? zonaDeFC(a.fc) : null;
+    const sub=planC ? dia.subtipo : null;
+    const suave=sub ? ['Continuo suave','Largo','Activación'].includes(sub) : null;
+    const calidad=sub ? ['Series','Tempo'].includes(sub) : false;
+    if(!planC) N('perfil','Esta salida no estaba en el plan de ese día: la valoro con tu historial y lo que dicen tus pulsaciones.');
+    // distancia
+    if(planC && dia.distanciaKm && a.dist){
+      const r=a.dist/dia.distanciaKm;
+      if(r>=0.85 && r<=1.15) B('fase',`Hiciste ${a.dist} km, justo lo previsto (${dia.distanciaKm} km): cumples el plan sin pasarte.`);
+      else if(r<0.7) M('recuperacion',`Te quedaste en ${a.dist} km de los ${dia.distanciaKm} previstos. Si fue por cansancio o molestia, anótalo en "Cómo me ha ido"; si fue por tiempo, no pasa nada: la semana lo absorbe.`,'Si te falta tiempo, acorta la sesión pero mantén el tipo (suave sigue siendo suave).');
+      else if(r>1.3) M('carga',`Hiciste ${a.dist} km frente a los ${dia.distanciaKm} previstos (+${Math.round((r-1)*100)} %): sumas carga que el plan no contaba.`,'Respeta la distancia prevista: lo que te sobra de energía lo guardas para la tirada larga.');
+      else N('fase',`Hiciste ${a.dist} km frente a los ${dia.distanciaKm} previstos (${r<1?'algo menos':'algo más'}): dentro de lo razonable.`);
+    }
+    // intensidad
+    if(z && suave===true){
+      if(['Z1','Z2'].includes(z.zona)) B('polarizado',`Pulsaciones medias ${a.fc} ppm (zona ${z.zona}): rodaste suave, que era el objetivo. Así se construye base sin acumular fatiga.`);
+      else if(z.zona==='Z3') M('polarizado',`Pulsaciones medias ${a.fc} ppm (zona 3): un poco altas para una sesión suave; pierdes parte de la recuperación.`,`En los rodajes suaves, ve a ritmo de conversación y vigila no pasar de ${zonas.bandas[1].max} ppm.`);
+      else M('polarizado',`Pulsaciones medias ${a.fc} ppm (zona ${z.zona}): era una sesión suave y la hiciste exigente. Eso suma fatiga que se nota los días siguientes.`,`Baja el ritmo hasta que puedas hablar: pulsaciones por debajo de ${zonas.bandas[1].max} ppm.`);
+    } else if(z && calidad){
+      if(a.fcMax && a.fcMax>=0.9*zonas.fcMax) B('polarizado',`Llegaste a ${a.fcMax} ppm (≥90 % de tu máxima, ${zonas.fcMax}): hubo intensidad real, que es el sentido de esta sesión.`);
+      else if(['Z1','Z2'].includes(z.zona)) M('polarizado',`Pulsaciones medias ${a.fc} ppm (zona ${z.zona}): para ser ${sub==='Series'?'series':'tempo'} faltó intensidad.`,'Aprieta más en las repeticiones y respeta los descansos entre ellas.');
+      else B('polarizado',`Pulsaciones medias ${a.fc} ppm (zona ${z.zona}): esfuerzo acorde a una sesión de calidad.`);
+    } else if(z && !planC){
+      N('zonas',`Pulsaciones medias ${a.fc} ppm (zona ${z.zona}, ${z.label}).`);
+    }
+    // ritmo (solo asfalto/pista, donde el ritmo es una referencia fiable)
+    const rr=planC ? rangoRitmoDe(dia) : null;
+    if(rr && a.ritmo && a.superficie!=='trail' && dia.superficie!=='trail'){
+      const pace=ritmoADec(a.ritmo);
+      if(pace<rr[0]-0.33) N('zonas',`Fuiste a ${a.ritmo}/km, más rápido que el rango previsto (${toPaceLabel(rr[0])}-${toPaceLabel(rr[1])}). Si te salió sin esfuerzo, bien; si no, ojo con pasarte en los días suaves.`);
+      else if(pace>rr[1]+0.33) N('zonas',`Fuiste a ${a.ritmo}/km, más lento que el rango previsto (${toPaceLabel(rr[0])}-${toPaceLabel(rr[1])}). Calor, cuestas o cansancio lo explican: si las pulsaciones fueron bajas, no pasa nada.`);
+      else B('zonas',`Ritmo ${a.ritmo}/km, dentro del rango previsto (${toPaceLabel(rr[0])}-${toPaceLabel(rr[1])}).`);
+    }
+    // terreno y desnivel
+    const real=a.superficie==='trail' ? 'trail' : 'asfalto';
+    const prev=planC ? (dia.terreno || (dia.superficie==='trail'?'trail':'asfalto')) : null;
+    if(planC && (dia.terrenoMixto || p.superficie==='mixto')){
+      const prevBase=prev==='trail'?'trail':'asfalto';
+      const lab={trail:'monte', pista:'pista', asfalto:'asfalto'};
+      if(prevBase===real) B('terreno',`Terreno como estaba previsto (${lab[prev]}).`);
+      else {
+        const aj=((planParaFecha(a.fecha)||{}).ajustes||[]).filter(x=>x.origen==='terreno').map(x=>x.motivo);
+        N('terreno',`Improvisaste: estaba previsto ${lab[prev]} y fuiste a ${lab[real]}. No pasa nada.${aj.length?' He recalculado la semana: '+aj.join(' '):' El resto de la semana se mantiene.'}`);
+      }
+    }
+    if(real==='trail' && a.desnivelM){
+      if(planC && dia.desnivelSug){
+        const r=a.desnivelM/dia.desnivelSug;
+        if(r>=0.75 && r<=1.25) B('terreno',`Desnivel +${a.desnivelM} m, cerca de lo orientativo (+${dia.desnivelSug} m).`);
+        else N('terreno',`Desnivel +${a.desnivelM} m frente a +${dia.desnivelSug} m orientativos (${r<1?'menos':'más'}): úsalo para calibrar la próxima ruta.`);
+      } else N('terreno',`Desnivel +${a.desnivelM} m en ${a.dist} km (${Math.round(a.desnivelM/a.dist)} m por km).`);
+    }
+    // contra ti: eficiencia en asfalto
+    const efi=c=>(c.dist>=3 && c.fc && c.ritmo) ? (60/ritmoADec(c.ritmo))*(kmEquivalentes(c)/c.dist)/c.fc : null; // corrige el desnivel (100 m ≈ 1 km)
+    if(real==='asfalto' && efi(a)){
+      const previas=soloCarreras().filter(c=>(c.superficie||'asfalto')==='asfalto' && c.fecha<a.fecha && daysBetween(c.fecha,a.fecha)<=56).map(efi).filter(x=>x);
+      if(previas.length>=4){
+        const pct=(efi(a)/mediana(previas)-1)*100;
+        if(pct>=3) B('zonas',`Eficiencia (velocidad por pulsación) un ${pct.toFixed(0)} % mejor que tu media de las últimas 8 semanas en asfalto: hoy rendiste más con el mismo esfuerzo.`);
+        else if(pct<=-3) M('recuperacion',`Eficiencia un ${Math.abs(pct).toFixed(0)} % peor que tu media reciente en asfalto: calor, cansancio o poco descanso suelen ser la causa.`,'Mira tu sueño de estos días y no encadenes dos sesiones exigentes.');
+      } else faltan.push('más salidas de asfalto (4 en 8 semanas) para comparar tu eficiencia');
+    } else if(real==='trail') faltan.push('comparación de ritmo en monte: el desnivel lo hace poco fiable, valoro el esfuerzo');
+    // sensación
+    if(nota && nota.rpe){
+      if(suave===true && nota.rpe==='duro') M('recuperacion','Dijiste que se te hizo duro en una sesión suave: es una señal de fatiga acumulada.','Descansa o haz algo muy suave mañana y vigila el sueño.');
+      else if(calidad && nota.rpe==='suave') B('recuperacion','Una sesión de calidad que te pareció suave: buena tolerancia al esfuerzo.');
+      else if(nota.rpe==='normal') N('recuperacion','Sensación normal: ni sobrada ni al límite.');
+    } else faltan.push('tu sensación (pulsa "Cómo me ha ido" para decirme si se te hizo suave, normal o duro)');
+    // efecto de entrenamiento de Garmin, si lo hay
+    if(a.teAerobico!=null){
+      const te=a.teAerobico;
+      N('te',`Efecto de entrenamiento aeróbico de Garmin: ${te.toFixed(1)} (${te<2?'ayuda a recuperar':(te<3?'mantiene tu forma':(te<4?'mejora tu forma':'la mejora mucho'))}).`);
+    }
+    // cadencia (solo asfalto: en monte se camina y no es comparable)
+    if(a.cadencia && real==='asfalto' && a.dist>=3){
+      const prevs=soloCarreras().filter(c=>c.cadencia>0 && c.fecha<a.fecha && daysBetween(c.fecha,a.fecha)<=56 && (c.superficie||'asfalto')==='asfalto' && c.dist>=3 && !(c.desnivelM && c.desnivelM/c.dist>=30)).map(c=>c.cadencia);
+      const obj=planC && dia.cadenciaObj;
+      if(obj){
+        if(a.cadencia>=obj*0.97) B('cadencia',`Cadencia media ${Math.round(a.cadencia)} pasos/min (objetivo en los bloques: ${obj}): objetivo cumplido, y eso que la media incluye calentamiento y vuelta a la calma.`);
+        else M('cadencia',`Cadencia media ${Math.round(a.cadencia)} pasos/min; el objetivo en los bloques era ${obj}. La media incluye tramos sin bloque, así que no es un fallo, pero comprueba que en los bloques sí llegaste.`,`En los bloques, pon el metrónomo a ${obj} y acorta el paso sin acelerar.`);
+      } else if(prevs.length>=4){
+        const med=mediana(prevs), pct=(a.cadencia/med-1)*100;
+        if(pct<=-5) N('cadencia',`Cadencia ${Math.round(a.cadencia)} pasos/min, un ${Math.abs(pct).toFixed(0)} % por debajo de tu media (${Math.round(med)}): suele pasar con cansancio o al ir más lento.`);
+        else if(pct>=4) N('cadencia',`Cadencia ${Math.round(a.cadencia)} pasos/min, un ${pct.toFixed(0)} % por encima de tu media (${Math.round(med)}): pasos más cortos y ligeros, menos carga en rodilla y cadera.`);
+      } else faltan.push('más salidas de asfalto con cadencia (4) para comparar la tuya');
+    }
+    // carga
+    N('carga',`Carga de la sesión: ${{alta:'alta',media:'media',baja:'baja'}[carga]}.`);
+    faltan.push('tus parciales por km (el reloj no me los pasa): no puedo valorar si empezaste demasiado rápido');
+    if(!a.fc) faltan.push('pulsaciones de la sesión');
+  } else if(a.tipo==='Fuerza'){
+    B('clase',`Hiciste ${a.duracion||'tu sesión'} de ${a.deporteLabel||'funcional'}${a.fc?` con ${a.fc} ppm de media (zona ${zonaDeFC(a.fc).zona})`:''}: cuenta como carga ${{alta:'alta',media:'media',baja:'baja'}[carga]}.`);
+    const piernas=nota&&nota.zonas ? (nota.zonas.muslos||0)+(nota.zonas.gluteos||0)+(nota.zonas.gemelos||0) : 0;
+    if(man && man.tipo==='Carrera' && (carga==='alta' || piernas>=2)) M('clase',`Mañana toca ${descripcionDia(man)} y hoy ha sido una clase exigente${piernas>=2?' con piernas muy trabajadas':''}: llegarás con las piernas cargadas.`,'Haz mañana el rodaje muy suave, o cámbialo por descanso si las notas pesadas.');
+    if(nota && nota.rpe==='duro' && man && man.tipo==='Carrera') N('recuperacion','La clase se te hizo dura: tenlo en cuenta para la intensidad de mañana.');
+    if(!nota) faltan.push('tu sensación y las zonas que has trabajado (pulsa "Cómo me ha ido")');
+    faltan.push('qué ejercicios hiciste y con qué peso: el reloj no lo registra');
+  } else {
+    B('perfil','Sesión de movilidad o estiramientos hecha: ayuda a recuperar y a mantener el rango de movimiento.');
+  }
+  proximo = mejorar.length && mejorar[0].acc ? mejorar[0].acc
+    : (carga==='alta' && man && man.tipo==='Carrera' ? `Mañana (${descripcionDia(man)}): hazlo muy suave o descansa; hoy ha sido una sesión exigente.`
+    : (man ? `Sigue con el plan: mañana, ${descripcionDia(man)}.` : 'Sigue con el plan de la semana.'));
+  return {bien, mejorar, notas, proximo, faltan:[...new Set(faltan)]};
+}
+function analisisHTML(a){
+  const r=analizarSesion(a);
+  const item=x=>{ const k=CONOCIMIENTO[x.k]; return `<div class="why-item" style="padding:7px 0; border-bottom:1px solid var(--line); cursor:pointer;"><div style="font-size:12.5px; line-height:1.5;">${escapeHTML(x.txt)} <span style="color:var(--accent); font-size:11px; white-space:nowrap;">¿por qué?</span></div><div class="why-more" style="display:none; margin-top:6px; font-size:11.5px; line-height:1.5; color:var(--text-dim); background:var(--surface-2); border-radius:10px; padding:8px 10px;">${k?`<b style="color:var(--text)">${k.t}</b> <span class="tag">${k.ev}</span><br>${k.por}<br><i>Fuente: ${k.fuente}</i>`:''}</div></div>`; };
+  const grupo=(tit,arr)=>arr.length ? `<div style="font-size:12px; font-weight:600; margin:10px 0 2px;">${tit}</div>${arr.map(item).join('')}` : '';
+  return grupo('✅ Lo que has hecho bien', r.bien) + grupo('🔧 Qué podrías mejorar', r.mejorar) + grupo('📌 A tener en cuenta', r.notas)
+    + `<div style="font-size:12.5px; line-height:1.5; margin-top:10px; padding:8px 10px; background:var(--accent-soft); border-radius:10px;"><b>La próxima vez:</b> ${escapeHTML(r.proximo)}</div>`
+    + (r.faltan.length ? `<div style="font-size:11px; color:var(--amber); margin-top:8px;">Me faltan: ${r.faltan.map(escapeHTML).join('; ')}.</div>` : '')
+    + `<div style="font-size:10.5px; color:var(--text-dim); margin-top:8px;">Valoración con tus propios datos y reglas sencillas; orientación general, no sustituye a un entrenador o profesional de la salud.</div>`;
+}
+function renderAnalisisHoy(){
+  const card=document.getElementById('analisis-card'); if(!card) return;
+  if(semaforoActual().parada || !state.profile.onboardingCompletado){ card.style.display='none'; return; }
+  const rec=todasActividades().filter(x=>{ const d=daysBetween(x.fecha,TODAY); return d>=0 && d<=1 && ['Carrera','Fuerza','Estiramientos'].includes(x.tipo); }).sort((a,b)=>(a.fecha===b.fecha ? ((a.tipo==='Carrera')-(b.tipo==='Carrera')) : (a.fecha<b.fecha?-1:1)));
+  if(!rec.length){ card.style.display='none'; return; }
+  const a=rec[rec.length-1];
+  card.style.display='block';
+  document.getElementById('analisis-titulo').textContent = `Tu última sesión · ${a.fecha===TODAY?'hoy':'ayer'}`;
+  document.getElementById('analisis-body').innerHTML = `<div style="font-size:12px; color:var(--text-dim); margin-bottom:2px;">${escapeHTML(resumenActividad(a))}</div>` + analisisHTML(a);
+}
+
+/* ================= NUTRICIÓN: MENÚ, VALORACIÓN, CHECK DIARIO, PRUEBAS DURANTE Y SUPLEMENTOS ================= */
+const MEALS=[['des','Desayuno'],['alm','Almuerzo'],['mer','Merienda'],['cen','Cena']];
+const NOMBRE_DIA_L={lun:'Lunes',mar:'Martes',mie:'Miércoles',jue:'Jueves',vie:'Viernes',sab:'Sábado',dom:'Domingo'};
+// Clasificador por palabras (sin IA): a qué grupos pertenece cada comida escrita en texto libre
+const GRUPOS_COMIDA=[
+  ['pescado',/pescado|at[uú]n|salm[oó]n|merluza|bacalao|sardina|caballa|boquer|anchoa|gamba|marisco|dorada|lubina|pulpo|calamar/i],
+  ['legumbre',/lentej|garbanz|jud[ií]a|alubia|guisante|legumbre|hummus|soja|potaje|cocido/i],
+  ['verdura',/verdura|ensalada|lechuga|tomate|br[oó]coli|espinaca|calabac|zanahoria|pimiento|cebolla|berenjena|coliflor|acelga|gazpacho|crudit|pisto|menestra|jud[ií]as verdes|champi|puerro|r[uú]cula|pepino|sopa de verdura|crema de verdura/i],
+  ['fruta',/fruta|manzana|pl[aá]tano|naranja|mandarina|\bpera\b|kiwi|fresa|\buva|mel[oó]n|sand[ií]a|pi[ñn]a|melocot|cereza|ciruela|aguacate|frutos rojos|ar[aá]ndano|higo|granada/i],
+  ['lacteo',/k[eé]fir|yogur|leche|queso|reques[oó]n|cuajada/i],
+  ['huevo',/huevo|tortilla/i],
+  ['carne_magra',/pollo|pavo asado|pechuga|ternera|conejo|solomillo/i],
+  ['embutido',/fiambre|embutido|york|jam[oó]n|chorizo|salchich|mortadela|salami|bacon|panceta|chopped|sobrasada|lomo embuchado|fuet|longaniza|morcilla|pavo en lonchas|pavo cocido/i],
+  ['cereal',/\bpan\b|bocadillo|bocata|arroz|\bpasta\b|macarron|espagueti|fideo|avena|cereal|tostada|patata|boniato|cusc[uú]s|quinoa|tortita|sandwich|s[aá]ndwich|bocadillo|lentejas con arroz/i],
+  ['frutos_secos',/frutos secos|nueces|almendra|avellana|pistacho|anacardo|cacahuete/i],
+  ['frito_ultra',/frito|fritura|croqueta|empanad|pizza|hamburguesa|bollo|boller|donut|croissant|galleta|refresco|snack|patatas fritas|nugget|helado|chocolate|az[uú]car|cola cao|nocilla|palmera|magdalena/i],
+];
+function gruposDe(txt){
+  const s=new Set(); const t=txt||'';
+  GRUPOS_COMIDA.forEach(([g,re])=>{ if(re.test(t)) s.add(g); });
+  if(s.has('embutido')) s.delete('carne_magra'); // el fiambre cuenta como embutido, no como carne fresca
+  return s;
+}
+const tieneProteina=s=>['pescado','legumbre','huevo','carne_magra','lacteo'].some(x=>s.has(x));
+function menuVacio(){
+  const dia=()=>({des:'',alm:'',mer:'',cen:''}), sem=()=>Object.fromEntries(DIAS_SEMANA.map(d=>[d,dia()]));
+  return {inicio:isoWeek(TODAY), semanas:[sem(),sem(),sem()], horas:{des:'08:00',alm:'14:30',mer:'17:30',cen:'21:00'}, excepciones:{}};
+}
+function menuActivo(){ return state.menu && state.menu.semanas ? state.menu : null; }
+function semanaDelCiclo(fecha){
+  const m=menuActivo(); if(!m) return 0;
+  const n=Math.round(daysBetween(mondayOfIsoWeek(m.inicio), mondayOfIsoWeek(isoWeek(fecha)))/7);
+  return ((n%3)+3)%3;
+}
+function menuDeFecha(fecha){
+  const m=menuActivo(); if(!m) return null;
+  if((m.excepciones||{})[fecha]) return null;
+  const dia=m.semanas[semanaDelCiclo(fecha)][codigoDeDia(fecha)];
+  return (dia && Object.values(dia).some(x=>(x||'').trim())) ? dia : null;
+}
+function itemPorQueHTML(x){
+  const k=CONOCIMIENTO[x.k];
+  return `<div class="why-item" style="padding:7px 0; border-bottom:1px solid var(--line); cursor:pointer;"><div style="font-size:12.5px; line-height:1.5;">${escapeHTML(x.txt)}${x.idea?`<div style="font-size:11.5px; color:var(--text-dim); margin-top:2px;">💡 ${escapeHTML(x.idea)}</div>`:''} <span style="color:var(--accent); font-size:11px; white-space:nowrap;">¿por qué?</span></div><div class="why-more" style="display:none; margin-top:6px; font-size:11.5px; line-height:1.5; color:var(--text-dim); background:var(--surface-2); border-radius:10px; padding:8px 10px;">${k?`<b style="color:var(--text)">${k.t}</b> <span class="tag">${k.ev}</span><br>${k.por}<br><i>Fuente: ${k.fuente}</i>`:''}</div></div>`;
+}
+// Valoración del menú de 3 semanas: cuenta grupos de alimentos y compara con pautas generales (orientativo, por palabras clave)
+function valorarMenu(){
+  const m=menuActivo(); if(!m) return null;
+  const sems=m.semanas.map(sem=>{
+    const c={verdura:0,fruta:0,pescado:0,legumbre:0,embutido:0,frito_ultra:0,comidas:0,diasVerdura:0,diasFruta:0};
+    DIAS_SEMANA.forEach(d=>{
+      let v=false, f=false;
+      MEALS.forEach(([k])=>{ const txt=(sem[d][k]||'').trim(); if(!txt) return; c.comidas++; const g=gruposDe(txt); ['pescado','legumbre','embutido','frito_ultra'].forEach(x=>{ if(g.has(x)) c[x]++; }); if(g.has('verdura')) v=true; if(g.has('fruta')) f=true; });
+      if(v) c.diasVerdura++; if(f) c.diasFruta++;
+    });
+    return c;
+  });
+  const llenas=sems.filter(c=>c.comidas>=10);
+  if(!llenas.length) return {vacio:true};
+  const prom=k=>llenas.reduce((a,c)=>a+c[k],0)/llenas.length;
+  const bien=[], mejorar=[]; const fx=n=>(Math.round(n*10)/10).toString().replace('.',',');
+  const dv=prom('diasVerdura'), df=prom('diasFruta'), pe=prom('pescado'), le=prom('legumbre'), em=prom('embutido'), fu=prom('frito_ultra');
+  (dv>=6?bien:mejorar).push({k:'pautas', txt:`Verdura en ${fx(dv)} de 7 días por semana.`, idea: dv>=6?'':'Añade verdura al bocadillo (tomate, lechuga) o una guarnición o ensalada en la cena.'});
+  (df>=6?bien:mejorar).push({k:'pautas', txt:`Fruta en ${fx(df)} de 7 días por semana.`, idea: df>=6?'':'Una pieza en la merienda o en el desayuno basta.'});
+  const vez=n=>fx(n)+(fx(n)==='1'?' vez':' veces');
+  (pe>=2?bien:mejorar).push({k:'pautas', txt:`Pescado ${vez(pe)} por semana.`, idea: pe>=2?'':'Cambia una cena por pescado; una lata de atún, caballa o sardinas también vale.'});
+  (le>=2?bien:mejorar).push({k:'pautas', txt:`Legumbres ${vez(le)} por semana.`, idea: le>=2?'':'Un día de lentejas o garbanzos, o hummus en el bocadillo.'});
+  if(em<=2) bien.push({k:'procesada', txt:`Embutido o fiambre ${vez(em)} por semana: poco frecuente.`});
+  else mejorar.push({k:'procesada', txt:`Embutido o fiambre ${vez(em)} por semana${em>=5?' (casi a diario)':''}.`, idea:'No hace falta cambiar todo: alterna el fiambre con atún, huevo, hummus, queso fresco o pollo/pavo asado casero, y deja el embutido para algún día.'});
+  (fu<=1?bien:mejorar).push({k:'pautas', txt:`Fritos, bollería o ultraprocesados ${vez(fu)} por semana.`, idea: fu<=1?'':'Guárdalos para ocasiones y sustitúyelos por fruta, kéfir o frutos secos.'});
+  return {bien, mejorar, semanas:llenas.length, comidas:llenas.reduce((a,c)=>a+c.comidas,0)};
+}
+// Cruza el menú de un día con el entrenamiento previsto
+function planNutricionDia(fecha){
+  const m=menuActivo(); if(!m) return '';
+  const menu=menuDeFecha(fecha);
+  if(!menu) return `<div style="font-size:12px; color:var(--text-dim); margin-top:8px;">${(m.excepciones||{})[fecha]?'Hoy lo marcaste como excepción (festivo o comida fuera).':'No hay menú escrito para este día.'}</div>`;
+  const dia=diaDePlan(fecha), tipo=tipoDiaNutricional(dia);
+  const g=Object.fromEntries(MEALS.map(([k])=>[k,gruposDe(menu[k])]));
+  const man=diaDePlan(sumarDias(fecha,1));
+  const visp=man && (man.tipo==='Evento' || man.subtipo==='Largo');
+  const alta=['clase','largo','duro','evento'].includes(tipo);
+  const L=[];
+  if(alta || visp){
+    const motivo = visp ? 'mañana toca una prueba o tirada larga' : ({clase:'hoy hay una clase de funcional exigente',largo:'hoy toca tirada larga',duro:'hoy toca calidad',evento:'hoy es día de carrera'}[tipo]);
+    if(g.cen.has('cereal') && tieneProteina(g.cen)) L.push(`Como ${motivo}, tu cena (${menu.cen}) ya lleva carbohidrato y proteína: justo lo que toca.`);
+    else if(!g.cen.has('cereal')) L.push(`Como ${motivo}, a tu cena (${menu.cen||'—'}) le falta carbohidrato: añade arroz, pasta, pan o patata.`);
+    else L.push(`Como ${motivo}, a tu cena (${menu.cen}) le falta proteína: añade huevo, pescado o legumbre.`);
+  }
+  if(tipo!=='descanso' && !g.alm.has('cereal') && !g.cen.has('cereal')) L.push('Hoy entrenas y no veo carbohidrato en tu almuerzo ni en tu cena: ponlo en alguna de las dos.');
+  if(!(g.alm.has('verdura')||g.cen.has('verdura'))) L.push('No veo verdura hoy en tu almuerzo ni en tu cena: una guarnición o una ensalada lo arregla.');
+  if(!L.length) L.push('Tu menú de hoy encaja con tu entrenamiento: no hace falta tocar nada.');
+  const hora=(state.horaEntreno||{})[fecha];
+  let h2='';
+  if(hora){
+    const mm=hhmmAMin(hora), t=m.horas||{}; let antes=null, despues=null;
+    MEALS.forEach(([k,n])=>{ const mt=hhmmAMin(t[k]||'12:00'); if(mt<=mm) antes={k,n,mt}; });
+    MEALS.slice().reverse().forEach(([k,n])=>{ const mt=hhmmAMin(t[k]||'12:00'); if(mt>mm) despues={k,n,mt}; });
+    h2=`<div style="font-size:12px; margin-top:6px;"><b>Entrenas a las ${hora}:</b> ${antes?`lo último que comes antes es ${antes.n.toLowerCase()} (${escapeHTML(menu[antes.k]||'—')}) a las ${t[antes.k]}${mm-antes.mt<60?': queda poco margen, mejor algo ligero':(mm-antes.mt>=240?': hay mucho margen, un plátano o tostada 1 h antes ayuda':'')}`:'sales en ayunas o casi: si es suave, no pasa nada; si es largo o exigente, toma algo ligero antes'}; después, tu recuperación es ${despues?`${despues.n.toLowerCase()} (${escapeHTML(menu[despues.k]||'—')})`:'la primera comida que hagas'}${despues&&!tieneProteina(g[despues.k])?': le falta proteína, añade huevo, atún, kéfir o legumbre':''}.</div>`;
+  }
+  return `<div style="font-size:12px; line-height:1.5; margin-top:8px; padding:8px 10px; background:var(--surface-2); border-radius:10px;"><b>Tu menú de hoy:</b> ${MEALS.map(([k,n])=>`${n}: ${escapeHTML(menu[k]||'—')}`).join(' · ')}<br>${L.map(x=>'• '+escapeHTML(x)).join('<br>')}${h2}</div>`;
+}
+function renderNutriHoyExtra(){
+  const el=document.getElementById('nutri-hoy-extra'); if(!el) return;
+  const hora=(state.horaEntreno||{})[TODAY]||'';
+  el.innerHTML = planNutricionDia(TODAY)
+    + `<div class="field" style="margin-top:8px;"><label>¿A qué hora entrenas hoy? (opcional)</label><input type="time" id="nu-hora-hoy" value="${hora}"></div>`;
+  document.getElementById('nu-hora-hoy').addEventListener('change', e=>{ state.horaEntreno=state.horaEntreno||{}; if(e.target.value) state.horaEntreno[TODAY]=e.target.value; else delete state.horaEntreno[TODAY]; saveState(); renderNutriHoyExtra(); });
+}
+
+/* --- Mi menú de 3 semanas (editor) --- */
+let __menuSem=0;
+function renderMenuEditor(){
+  const cont=document.getElementById('menu-editor'); if(!cont) return;
+  const m=menuActivo();
+  if(!m){ cont.innerHTML=`<div style="font-size:12px; color:var(--text-dim); line-height:1.5;">Escribe aquí el menú que repites (por ejemplo, el que alternas cada tres semanas) y la app lo valorará y lo cruzará con tu entrenamiento. Es opcional y se guarda solo en este dispositivo.</div><div class="btn-row"><button class="btn small" id="menu-crear">Crear mi menú</button></div>`; document.getElementById('menu-crear').addEventListener('click', ()=>{ state.menu=menuVacio(); saveState(); renderMenuEditor(); }); return; }
+  const cicloHoy=semanaDelCiclo(TODAY)+1;
+  const sem=m.semanas[__menuSem];
+  cont.innerHTML=`<div style="font-size:11.5px; color:var(--text-dim); margin-bottom:6px;">Esta semana toca la <b style="color:var(--text)">semana ${cicloHoy}</b> de tu menú. <select id="menu-cual" style="font-size:12px;"><option value="">Cambiar…</option><option value="1">Esta es la semana 1</option><option value="2">Esta es la semana 2</option><option value="3">Esta es la semana 3</option></select></div>
+    <div class="btn-row" style="margin-top:0;">${[0,1,2].map(i=>`<button class="btn small menu-sem${i===__menuSem?' selected':''}" data-i="${i}">Semana ${i+1}</button>`).join('')}</div>
+    ${DIAS_SEMANA.map(d=>`<details class="plegable" style="margin-top:6px;"><summary style="font-size:12.5px;">${NOMBRE_DIA_L[d]}${Object.values(sem[d]).some(x=>x.trim())?'':' <span class="muted">(vacío)</span>'}</summary>
+      ${MEALS.map(([k,n])=>`<div class="field" style="margin:4px 0;"><label style="font-size:11px;">${n}</label><input type="text" class="menu-in" data-d="${d}" data-k="${k}" value="${escapeHTML(sem[d][k]||'')}" placeholder="ej. bocadillo de jamón york y tomate"></div>`).join('')}</details>`).join('')}
+    <details class="plegable" style="margin-top:8px;"><summary style="font-size:12px;">Pegar el menú de la semana ${__menuSem+1} de golpe</summary>
+      <div style="font-size:11px; color:var(--text-dim); margin:6px 0;">Una línea por día, con las 4 comidas separadas por | (desayuno | almuerzo | merienda | cena). Ejemplo: <code>Lunes | café | bocadillo de fiambre | kéfir | pescado con ensalada</code></div>
+      <textarea id="menu-pegar" rows="5" style="width:100%; font-size:11.5px;"></textarea>
+      <div class="btn-row"><button class="btn small" id="menu-importar">Usar este texto</button><button class="btn ghost small" id="menu-copiar">Copiar semana ${__menuSem+1} a las otras dos</button></div></details>
+    <details class="plegable" style="margin-top:6px;"><summary style="font-size:12px;">Horas habituales de mis comidas</summary>
+      <div class="btn-row" style="margin-top:6px;">${MEALS.map(([k,n])=>`<label style="font-size:11px;">${n}<br><input type="time" class="menu-hora" data-k="${k}" value="${(m.horas||{})[k]||''}"></label>`).join('')}</div></details>
+    <details class="plegable" style="margin-top:6px;"><summary style="font-size:12px;">Hoy es una excepción (festivo, comida fuera)</summary>
+      <div class="btn-row" style="margin-top:6px;"><button class="btn small" id="menu-excep">${(m.excepciones||{})[TODAY]?'Quitar la excepción de hoy':'Marcar hoy como excepción'}</button></div></details>
+    <div class="btn-row"><button class="btn ghost small" id="menu-borrar" style="color:var(--red);">Borrar mi menú</button></div>`;
+  document.getElementById('menu-cual').addEventListener('change', e=>{ const n=+e.target.value; if(!n) return; m.inicio=isoWeek(sumarDias(mondayOfIsoWeek(isoWeek(TODAY)), -7*(n-1))); saveState(); renderMenuEditor(); renderNutricion(); });
+  cont.querySelectorAll('.menu-sem').forEach(b=>b.addEventListener('click', ()=>{ __menuSem=+b.dataset.i; renderMenuEditor(); }));
+  cont.querySelectorAll('.menu-in').forEach(i=>i.addEventListener('change', ()=>{ m.semanas[__menuSem][i.dataset.d][i.dataset.k]=i.value; saveState(); renderValoracionMenu(); renderNutriHoyExtra(); }));
+  cont.querySelectorAll('.menu-hora').forEach(i=>i.addEventListener('change', ()=>{ m.horas=m.horas||{}; m.horas[i.dataset.k]=i.value; saveState(); renderNutriHoyExtra(); }));
+  document.getElementById('menu-importar').addEventListener('click', ()=>{
+    const nomb={lunes:'lun',martes:'mar','miércoles':'mie',miercoles:'mie',jueves:'jue',viernes:'vie','sábado':'sab',sabado:'sab',domingo:'dom'};
+    let n=0;
+    document.getElementById('menu-pegar').value.split(/\r?\n/).forEach(l=>{
+      const partes=l.split('|').map(x=>x.trim()); const d=nomb[(partes[0]||'').toLowerCase()]; if(!d || partes.length<2) return;
+      MEALS.forEach(([k],i)=>{ if(partes[i+1]!==undefined) m.semanas[__menuSem][d][k]=partes[i+1]; }); n++;
+    });
+    saveState(); renderMenuEditor(); renderValoracionMenu(); renderNutriHoyExtra(); toast(n?`${n} día(s) cargados`:'No he reconocido ningún día: empieza cada línea por Lunes, Martes…');
+  });
+  document.getElementById('menu-copiar').addEventListener('click', ()=>{ [0,1,2].filter(i=>i!==__menuSem).forEach(i=>{ m.semanas[i]=JSON.parse(JSON.stringify(m.semanas[__menuSem])); }); saveState(); renderValoracionMenu(); toast('Copiada a las otras dos semanas: edítalas donde cambie'); });
+  document.getElementById('menu-excep').addEventListener('click', ()=>{ m.excepciones=m.excepciones||{}; if(m.excepciones[TODAY]) delete m.excepciones[TODAY]; else m.excepciones[TODAY]=true; saveState(); renderMenuEditor(); renderNutriHoyExtra(); });
+  document.getElementById('menu-borrar').addEventListener('click', ()=>{ if(!window.__confMenu){ window.__confMenu=true; document.getElementById('menu-borrar').textContent='¿Seguro? Pulsa otra vez'; setTimeout(()=>{ window.__confMenu=false; },4000); return; } window.__confMenu=false; state.menu=null; saveState(); renderMenuEditor(); renderValoracionMenu(); renderNutriHoyExtra(); });
+}
+function renderValoracionMenu(){
+  const el=document.getElementById('menu-valoracion'); if(!el) return;
+  const v=valorarMenu();
+  if(!v){ el.innerHTML='<div style="font-size:12px; color:var(--text-dim);">Escribe tu menú arriba y te diré qué va bien y qué podrías mejorar.</div>'; return; }
+  if(v.vacio){ el.innerHTML='<div style="font-size:12px; color:var(--text-dim);">Faltan comidas: rellena al menos 10 de las 28 de una semana para poder valorarla.</div>'; return; }
+  const grupo=(t,a)=>a.length?`<div style="font-size:12px; font-weight:600; margin:8px 0 2px;">${t}</div>${a.map(itemPorQueHTML).join('')}`:'';
+  el.innerHTML=`<div style="font-size:11.5px; color:var(--text-dim);">Valoración de ${v.semanas} semana(s) de menú (${v.comidas} comidas), por palabras clave: es orientativa.</div>`+grupo('✅ Lo que va bien',v.bien)+grupo('🔧 Qué podrías mejorar',v.mejorar)
+    +`<div style="font-size:10.5px; color:var(--text-dim); margin-top:8px;">No es una dieta ni un diagnóstico. Para algo ajustado a tu caso, consulta a un dietista-nutricionista colegiado.</div>`;
+}
+
+/* --- Check diario de 5 toques y semáforo semanal --- */
+const CHECK_ITEMS=[['prot','🍗 Proteína en las comidas principales'],['verd','🥦 Verdura'],['fruta','🍎 Fruta'],['agua','💧 Agua a lo largo del día'],['sinUltra','🚫 Sin ultraprocesados ni fritos']];
+function puntosCheck(f){ const c=(state.nutriCheck||{})[f]; return c ? CHECK_ITEMS.filter(([k])=>c[k]===true).length : null; }
+function semaforoNutri(){
+  const dias=[1,2,3,4,5,6,7].map(n=>puntosCheck(restarUnDiaN(TODAY,n))).filter(x=>x!==null); // hoy cuenta a partir de mañana, cuando el día está completo
+  if(dias.length<3) return {color:'neutral', txt:`Llevas ${dias.length} día(s) anotados esta semana: anota al menos 3 para ver cómo vas.`};
+  const buenos=dias.filter(x=>x>=4).length;
+  const color = buenos/dias.length>=0.7 ? 'green' : (buenos/dias.length>=0.4 ? 'amber' : 'red');
+  return {color, txt:`${buenos} de ${dias.length} días anotados (de los últimos 7, sin contar hoy) con 4 o 5 toques. ${color==='green'?'Vas muy bien.':(color==='amber'?'Vas bien, con margen de mejora: mira qué toque falta más.':'Hay margen: empieza por uno o dos toques que te cuesten menos.')}`};
+}
+function renderCheckNutri(){
+  const el=document.getElementById('nutri-check'); if(!el) return;
+  const c=(state.nutriCheck||{})[TODAY]||{};
+  const sem=semaforoNutri();
+  const falta=CHECK_ITEMS.map(([k,l])=>({k,l,n:[1,2,3,4,5,6,7].filter(i=>{ const cc=(state.nutriCheck||{})[restarUnDiaN(TODAY,i)]; return cc && cc[k]===false; }).length})).sort((a,b)=>b.n-a.n)[0];
+  el.innerHTML=`<div class="btn-row" style="flex-direction:column; margin-top:0;">${CHECK_ITEMS.map(([k,l])=>`<button class="btn small chk-nutri${c[k]===true?' selected':''}" data-k="${k}" style="width:100%; text-align:left;">${c[k]===true?'✓ ':''}${l}</button>`).join('')}</div>
+    <div class="alert ${sem.color==='green'?'ok':(sem.color==='red'?'high':'low')}" style="margin-top:10px;"><div class="icon">${sem.color==='green'?'✅':(sem.color==='red'?'⚠️':'📝')}</div><div class="txt"><strong>Esta semana</strong><span>${sem.txt}${falta&&falta.n>=2?` Lo que más se te escapa: ${falta.l.replace(/^\S+\s/,'')}.`:''}</span></div></div>
+    <div style="font-size:11px; color:var(--text-dim); margin-top:6px;">Toca lo que has cumplido hoy. Las fotos del diario con etiquetas también marcan toques solas. Sin contar cantidades ni calorías.</div>`;
+  el.querySelectorAll('.chk-nutri').forEach(b=>b.addEventListener('click', ()=>{
+    state.nutriCheck=state.nutriCheck||{}; const cc=state.nutriCheck[TODAY]=state.nutriCheck[TODAY]||{};
+    cc[b.dataset.k]= cc[b.dataset.k]===true ? false : true;
+    CHECK_ITEMS.forEach(([k])=>{ if(cc[k]===undefined) cc[k]=false; });
+    saveState(); renderCheckNutri();
+  }));
+}
+
+/* --- Pruebas para correr con comida o gel (nunca estrenar en carrera) --- */
+function notaPruebasDurante(){
+  const l=state.pruebasDurante||[];
+  if(!l.length) return 'Aún no has probado nada durante el esfuerzo: no lo estrenes en carrera. Haz antes 1-2 pruebas en tiradas largas (mira "Pruebas para correr con gel o comida").';
+  const bien=[...new Set(l.filter(x=>x.res==='bien').map(x=>x.que))], mal=[...new Set(l.filter(x=>x.res==='mal').map(x=>x.que))];
+  return (bien.length?`Te ha sentado bien: ${bien.join(', ')}. `:'')+(mal.length?`Te ha sentado mal: ${mal.join(', ')} (evítalo). `:'')+(!bien.length?'Aún no tienes ninguna prueba bien tolerada: repite en una tirada larga antes de la carrera.':'Usa en carrera solo lo que ya has probado.');
+}
+function renderPruebas(){
+  const el=document.getElementById('pruebas-body'); if(!el) return;
+  const l=(state.pruebasDurante||[]).slice().sort((a,b)=>a.fecha<b.fecha?1:-1);
+  el.innerHTML=`<div style="font-size:12px; color:var(--text-dim); line-height:1.55;">Para correr más de ~60 minutos suele ayudar tomar carbohidrato durante, pero el estómago se entrena: <b style="color:var(--text)">nunca estrenes nada en carrera</b>. Plan de pruebas, en tus tiradas largas (no en las suaves cortas):<br>
+    1. Primera tirada: un plátano o medio gel hacia el minuto 40-45, con agua.<br>2. Segunda: lo mismo, más otro a los 75-80 minutos.<br>3. Cuando te siente bien, sube poco a poco. Si molesta, anótalo y prueba otra cosa (bebida isotónica, barrita, fruta).<br>En carreras de menos de 60 minutos, basta con agua.</div>
+    <div style="font-size:12px; margin:10px 0 4px;"><b>Tu registro:</b> ${escapeHTML(notaPruebasDurante())}</div>
+    <details class="plegable"><summary style="font-size:12.5px;">＋ Anotar una prueba</summary>
+      <div class="field" style="margin-top:6px;"><label>¿Qué tomaste?</label><select id="pr-que"><option>Plátano</option><option>Medio gel</option><option>Gel entero</option><option>Bebida isotónica</option><option>Barrita</option><option>Fruta u otra comida</option></select></div>
+      <div class="field"><label>¿En qué minuto de la salida?</label><input type="number" id="pr-min" step="5" placeholder="ej. 45"></div>
+      <div class="field"><label>¿Cómo te sentó?</label><div class="btn-row" style="margin-top:0;"><button class="btn small pr-res" data-v="bien">Bien</button><button class="btn small pr-res" data-v="regular">Regular</button><button class="btn small pr-res" data-v="mal">Mal (molestias)</button></div></div>
+      <div class="field"><label>Nota (opcional)</label><input type="text" id="pr-nota" placeholder="ej. algo de flato a los 10 minutos"></div>
+      <button class="btn" id="pr-guardar" style="width:100%;">Guardar prueba</button></details>
+    <div style="margin-top:8px;">${l.slice(0,8).map(x=>`<div class="injury-item"><div class="top"><span>${escapeHTML(x.que)}${x.min?' · min '+x.min:''}</span><span>${fmtShort(x.fecha)} · <b>${x.res}</b></span></div>${x.nota?`<div class="meta">${escapeHTML(x.nota)}</div>`:''}<div class="btn-row" style="margin-top:4px;"><button class="btn ghost small pr-borrar" data-id="${x.id}">Borrar</button></div></div>`).join('')}</div>`;
+  let res=null;
+  el.querySelectorAll('.pr-res').forEach(b=>b.addEventListener('click', ()=>{ res=b.dataset.v; el.querySelectorAll('.pr-res').forEach(x=>x.classList.toggle('selected', x===b)); }));
+  document.getElementById('pr-guardar').addEventListener('click', ()=>{
+    if(!res){ toast('Dime cómo te sentó'); return; }
+    state.pruebasDurante=state.pruebasDurante||[];
+    state.pruebasDurante.push({id:'pr'+Date.now(), fecha:TODAY, que:document.getElementById('pr-que').value, min:parseInt(document.getElementById('pr-min').value)||null, res, nota:document.getElementById('pr-nota').value});
+    saveState(); renderPruebas(); toast('Prueba guardada');
+  });
+  el.querySelectorAll('.pr-borrar').forEach(b=>b.addEventListener('click', ()=>{ state.pruebasDurante=(state.pruebasDurante||[]).filter(x=>x.id!==b.dataset.id); saveState(); renderPruebas(); }));
+}
+
+/* --- ¿Me conviene? Guía de suplementos (orientación general, nunca receta) --- */
+const FICHAS_SUPL=[
+  {id:'creatina', n:'Creatina (monohidrato)', ev:'Sólida', que:'Compuesto que el cuerpo usa para producir energía rápida en esfuerzos muy intensos y cortos.',
+   para:'Mejora la fuerza, la potencia y la masa muscular en entrenamientos de alta intensidad. Para correr de fondo, el beneficio directo es pequeño.',
+   fuente:'Kreider y cols. (2017), posición de la International Society of Sports Nutrition (J Int Soc Sports Nutr 14:18): es de los suplementos más estudiados y seguros en personas sanas. Dosis habituales en la literatura: unos 3-5 g al día de monohidrato (cifra no verificada en esta consulta: confírmala en la fuente).',
+   caso:p=>`Haces clases de funcional ${(p.claseIntensidad||'alta')==='alta'?'exigentes':''} de cuerpo completo: es el caso donde más sentido puede tener, si buscas más potencia en ellas. ${(p.alimentacion==='vegetariano'||p.alimentacion==='vegano')?'Al no comer carne, parte de tu aporte natural es menor: puede notarse más. ':''}Puede subir algo el peso por retención de agua.`,
+   no:'Si tienes algún problema de riñón o tomas medicación, consúltalo antes. No hace falta si tu objetivo es solo correr y no buscas más fuerza.'},
+  {id:'cafeina', n:'Cafeína', ev:'Sólida', que:'Estimulante presente en el café, el té y algunos geles.',
+   para:'Mejora el rendimiento sobre todo en esfuerzos de resistencia, y también en personas no entrenadas.',
+   fuente:'Guest y cols. (2021), posición de la ISSN (J Int Soc Sports Nutr 18:1): efecto consistente con 3-6 mg por kg de peso, hacia 60 minutos antes; mínima eficaz quizá desde ~2 mg/kg; con 9 mg/kg aumentan los efectos secundarios.',
+   caso:p=>p.pesoKg?`Con tus ${p.pesoKg} kg, 3-6 mg/kg serían unos ${Math.round(3*p.pesoKg)}-${Math.round(6*p.pesoKg)} mg (un café fuerte tiene ~80-100 mg, dato general). Empieza por lo bajo y solo en una carrera o tirada larga que hayas probado antes.`:'Añade tu peso en el perfil y te calculo el rango. Pruébalo primero en entrenamientos, nunca estrenándolo en carrera.',
+   no:'Si te da nervios, taquicardia o duermes mal, evítala; no la tomes por la tarde-noche. Con síntomas de alarma, no.'},
+  {id:'colageno', n:'Colágeno', ev:'Limitada', que:'Proteína que forma tendones, ligamentos y cartílago; se vende en polvo o cápsulas.',
+   para:'Puede ayudar algo al dolor y la función de las articulaciones en deportistas recreativos; en tendones la evidencia es débil.',
+   fuente:'Revisión sistemática de 2021 (Amino Acids): 15 ensayos, sobre todo en deportistas recreativos, con beneficio en función y dolor articular. Revisión sistemática de 2022 sobre nutrición y tendón: evidencia débil, sin dosis ni pauta establecida.',
+   caso:p=>`${lesionesDetectadas().length?`Tienes antecedentes (${lesionesDetectadas().join(', ')}): podrías probarlo como experimento, sin esperar milagros. `:''}No sustituye ni a la fuerza ni a comer suficiente proteína, que es lo que protege de verdad tus articulaciones.`,
+   no:'Si ya comes proteína suficiente y no tienes molestias, no hay una razón clara para tomarlo.'},
+  {id:'magnesio', n:'Magnesio', ev:'Escasa (salvo déficit)', que:'Mineral que interviene en músculos y nervios; abunda en verdura de hoja, legumbres y frutos secos.',
+   para:'Corregir un déficit real. En personas sin déficit, el efecto sobre el rendimiento, la recuperación y los calambres es mínimo.',
+   fuente:'Revisión sistemática de 2024 en deportistas: impacto mínimo en rendimiento, recuperación y calambres; el papel en los calambres sigue sin estar claro.',
+   caso:p=>'Antes de comprarlo, mira tu dieta (verdura, legumbres y frutos secos aportan magnesio) y, si tienes calambres frecuentes o cansancio raro, comenta con tu médico si conviene una analítica.',
+   no:'Dosis altas de magnesio pueden dar molestias digestivas; con problemas de riñón, consulta antes.'},
+  {id:'proteina', n:'Proteína en polvo', ev:'Criterio general', que:'Proteína de suero o vegetal en polvo; es comida, no un compuesto especial.',
+   para:'Es una forma cómoda de completar la proteína del día si no llegas con comida normal.',
+   fuente:'Criterio general (la posición conjunta de ACSM, Academy of Nutrition and Dietetics y Dietitians of Canada, 2016, trata la proteína en deportistas); la app no cita cifras concretas.',
+   caso:p=>'Si con tu menú (huevo, pescado, legumbre, kéfir, carne) ya tomas proteína en las comidas principales, no te hace falta. Mira "Esta semana" para comprobarlo.',
+   no:'No es necesaria si comes proteína suficiente con comida normal.'},
+  {id:'electrolitos', n:'Electrolitos (sales)', ev:'General', que:'Sodio y otras sales que se pierden con el sudor.',
+   para:'Útiles en esfuerzos largos (más de 60-90 minutos) o con mucho calor; para salidas cortas basta con agua.',
+   fuente:'Pauta general de nutrición deportiva (posición ACSM/Academy/Dietitians of Canada, 2016); las cantidades exactas varían entre personas y son orientativas.',
+   caso:p=>'Tus salidas actuales son de menos de una hora y media: de momento agua. Si preparas una carrera larga, pruébalo en una tirada larga como el resto.',
+   no:'En esfuerzos cortos no aportan nada que no cubra tu comida normal.'},
+];
+function renderFichasSuplementos(){
+  const el=document.getElementById('supl-guia'); if(!el) return;
+  const p=state.profile;
+  el.innerHTML=`<div style="font-size:12px; color:var(--text-dim); line-height:1.5; margin-bottom:6px;">Hoy no tomas ningún suplemento y no hace falta empezar por ninguno: <b style="color:var(--text)">lo primero es comer bien</b> (mira "Esta semana"). Esta guía te explica qué es cada uno, qué dice la evidencia y si podría tener sentido <b style="color:var(--text)">en tu caso</b>. No receta nada: ante la duda, consulta a un médico o dietista.</div>`
+    + FICHAS_SUPL.map(f=>`<details class="plegable" style="margin-top:6px;"><summary style="font-size:12.5px;"><b>${f.n}</b> <span class="tag">Evidencia: ${f.ev}</span></summary>
+      <div style="font-size:12px; line-height:1.55; margin-top:6px;"><b>Qué es:</b> ${f.que}<br><b>Para qué se usa:</b> ${f.para}<br><b>En tu caso:</b> ${escapeHTML(f.caso(p))}<br><b>Cuándo no:</b> ${f.no}<br><i style="color:var(--text-dim);">Fuente: ${f.fuente}</i></div></details>`).join('')
+    + `<div style="font-size:11px; color:var(--text-dim); margin-top:8px;">De vitamina D, omega-3 y otros todavía no tengo fuentes verificadas en la app: pregunta a un profesional. Si compites, comprueba que el producto tenga control de calidad y no lleve sustancias prohibidas.</div>`;
+}
+function renderNutricion2(){ renderNutriHoyExtra(); renderCheckNutri(); renderMenuEditor(); renderValoracionMenu(); renderPruebas(); renderFichasSuplementos(); }
+
+/* ================= CADENCIA (pasos por minuto) ================= */
+// Salidas de asfalto de las últimas semanas con cadencia (en monte se camina y no es comparable)
+function carrerasConCadencia(dias){
+  return soloCarreras().filter(c=>c.cadencia>0 && c.dist>=3 && (c.superficie||'asfalto')==='asfalto' && !(c.desnivelM && c.dist && c.desnivelM/c.dist>=30) && daysBetween(c.fecha,TODAY)>=0 && daysBetween(c.fecha,TODAY)<=(dias||84));
+}
+function cadenciaTipica(){
+  const l=carrerasConCadencia(84); if(l.length<4) return null;
+  const zan=l.map(c=>c.zancadaCm).filter(x=>x);
+  return {n:l.length, mediana:Math.round(mediana(l.map(c=>c.cadencia))), min:Math.round(Math.min(...l.map(c=>c.cadencia))), max:Math.round(Math.max(...l.map(c=>c.cadencia))), zancadaM:zan.length?mediana(zan)/100:null, ultimas:l.slice(-6).map(c=>({fecha:c.fecha, cad:Math.round(c.cadencia), ritmo:c.ritmo}))};
+}
+// Trabajo progresivo: +5 % las primeras 4 semanas, +7 % hasta la 8.ª y +10 % después (máximo), siempre en bloques dentro de rodajes suaves
+function planCadencia(fecha){
+  const c=state.cadencia; if(!c || !c.base) return null;
+  const sem=Math.max(0, Math.round(daysBetween(mondayOfIsoWeek(c.inicio), mondayOfIsoWeek(isoWeek(fecha||TODAY)))/7));
+  const pct = sem<4 ? 0.05 : (sem<8 ? 0.07 : 0.10);
+  const bloque = ['3 bloques de 3 minutos','3 bloques de 5 minutos','2 bloques de 8 minutos','10 minutos seguidos'][sem] || '15 minutos seguidos';
+  return {sem, pct, objetivo:Math.round(c.base*(1+pct)), bloque};
+}
+function renderCadencia(){
+  const el=document.getElementById('cadencia-body'); if(!el) return;
+  const t=cadenciaTipica(), c=state.cadencia, pc=planCadencia();
+  const queEs=`<div style="font-size:12px; color:var(--text-dim); line-height:1.55;">La cadencia son los pasos que das por minuto. Se habla mucho del "180", pero <b style="color:var(--text)">no hay una cifra ideal para todos</b> y mejorar tus tiempos solo con la cadencia no está demostrado. Lo mejor respaldado: subirla un poco (5-10 %) reduce la carga sobre rodilla y cadera.</div>`;
+  const porque=itemPorQueHTML({k:'cadencia', txt:'¿Qué dice la evidencia sobre la cadencia?'});
+  if(!t){ el.innerHTML=queEs+`<div style="font-size:12px; margin-top:8px;">Aún faltan salidas de asfalto con cadencia (hacen falta 4 de 3 km o más en las últimas 12 semanas) para valorar la tuya.</div>`+porque; return; }
+  const lectura = t.mediana<165 ? `Es una cadencia baja para correr a tus ritmos de asfalto (por debajo de ~165-170 se suele considerar baja; es una referencia de divulgación, no una norma). Suele significar pasos largos.` : (t.mediana<=180 ? 'Está en el rango habitual a ritmos suaves o moderados.' : 'Es una cadencia alta: no hace falta subirla.');
+  const rodilla = lesionesDetectadas().includes('rodilla') ? `<br>Con tus antecedentes de rodilla, es justo donde un pequeño aumento tiene más respaldo (menos energía absorbida en la rodilla).` : '';
+  el.innerHTML = queEs
+    + `<div style="font-size:12.5px; line-height:1.55; margin-top:10px;"><b>Tu cadencia en asfalto:</b> ~${t.mediana} pasos/min (entre ${t.min} y ${t.max}) en tus últimas ${t.n} salidas${t.zancadaM?`, con una zancada media de ~${t.zancadaM.toFixed(2).replace('.',',')} m`:''}. ${lectura}${rodilla}</div>`
+    + `<div style="margin-top:6px;">${t.ultimas.map(u=>`<span class="chip">${fmtShort(u.fecha)} · ${u.cad} · ${u.ritmo||''}/km</span>`).join('')}</div>`
+    + (c && pc ? `<div style="font-size:12.5px; line-height:1.55; margin-top:10px; padding:8px 10px; background:var(--accent-soft); border-radius:10px;"><b>Estás trabajando tu cadencia</b> (semana ${pc.sem+1}). Objetivo en los bloques: <b>${pc.objetivo} pasos/min</b> (+${Math.round(pc.pct*100)} % sobre tus ${c.base}). Esta semana: ${pc.bloque} dentro de un rodaje suave de asfalto; ya está en tu plan.<div class="btn-row"><button class="btn ghost small" id="cad-parar">Dejar de trabajarla</button></div></div>`
+      : `<div style="font-size:12.5px; line-height:1.55; margin-top:10px;">Si quieres probarlo, te propongo un trabajo muy gradual: <b>objetivo ${Math.round(t.mediana*1.05)} pasos/min (+5 %)</b>, en bloques cortos dentro de tus rodajes suaves de asfalto, y subiendo poco a poco (nunca más de +10 %).<div class="btn-row"><button class="btn small" id="cad-empezar">Empezar a trabajar mi cadencia</button></div></div>`)
+    + `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-top:8px;"><b style="color:var(--text)">Cómo se hace:</b> pon un metrónomo (una app, el reloj o una lista de música a ese ritmo) y da pasos más cortos y ligeros, sin ir más rápido: lo que sube es la frecuencia, no la velocidad. Si notas molestia en rodilla, gemelo o tendón de Aquiles, vuelve a tu cadencia habitual.</div>`
+    + porque;
+  const e=document.getElementById('cad-empezar'); if(e) e.addEventListener('click', ()=>{ state.cadencia={inicio:isoWeek(TODAY), base:t.mediana}; saveState(); recalcularPlan(); renderAll(); toast('Cadencia: plan actualizado'); });
+  const p=document.getElementById('cad-parar'); if(p) p.addEventListener('click', ()=>{ state.cadencia=null; saveState(); recalcularPlan(); renderAll(); });
+}
 
 /* ================= PLAN COMPLETO ================= */
 function renderPlanCompleto(){
@@ -3238,7 +4192,7 @@ function renderPlanCompleto(){
 const TAGS_POR_SUBTIPO = {
   'Largo':['tirada larga','largo','rodaje largo'], 'Series':['series','intervalos','velocidad'], 'Tempo':['tempo','umbral'],
   'Continuo suave':['rodaje','suave','principiante','base'], 'Progresivo':['progresivo','rodaje'], 'Activación':['carrera','competición','pretaper'],
-  'Core/piernas':['fuerza','core','funcional'], 'Core ligero':['fuerza','core'], 'Movilidad y estiramientos':['estiramientos','movilidad'],
+  'Core/piernas':['fuerza','core','funcional'], 'Clase de funcional':['fuerza','funcional'], 'Core ligero':['fuerza','core'], 'Movilidad y estiramientos':['estiramientos','movilidad'],
 };
 function normTag(t){ return String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').trim(); }
 function consejosPara(claves, tipo, max=2){
@@ -3299,6 +4253,10 @@ function renderAll(){
   renderProximaCarrera();
   renderMapaSemana();
   renderSuplementos();
+  renderWhy();
+  renderAprendido();
+  renderAnalisisHoy();
+  renderCadencia();
 }
 
 /* ================= INIT ================= */
