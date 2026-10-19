@@ -101,6 +101,11 @@
   .profile-item .l{font-size:12px; color:var(--text-dim); margin-bottom:6px; display:block;}
   .chip{display:inline-block; background:var(--surface-2); padding:4px 9px; border-radius:8px; font-size:11px; margin:2px 3px 0 0;}
   .footnote{font-size:10.5px; color:var(--text-dim); text-align:center; margin:18px 0 4px; line-height:1.5;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px;}
+  .cal-cab{text-align:center; font-size:10px; color:var(--text-dim);}
+  .cal-dia{background:var(--surface-2); border:1px solid transparent; color:var(--text); border-radius:8px; padding:3px 0; font-size:10px; min-height:46px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; cursor:pointer;}
+  .cal-dia b{font-size:11px; font-weight:600;} .cal-dia i{font-style:normal; color:var(--accent); font-size:10px; min-height:12px;}
+  .cal-dia:disabled{opacity:.35; cursor:default;} .cal-dia.hoy{border-color:var(--accent);}
   .navbar{position:absolute; bottom:0; left:0; right:0; background:rgba(28,36,64,0.92); backdrop-filter:blur(10px); border-top:1px solid var(--line); display:flex; padding:8px 4px 18px; padding-bottom:calc(18px + env(safe-area-inset-bottom, 0px)); z-index:40;}
   .navbtn{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:var(--text-dim); font-family:'Inter'; font-size:9px; cursor:pointer; padding:4px 0;}
   .navbtn svg{width:18px; height:18px;}
@@ -163,124 +168,35 @@
       <div class="eyebrow" id="today-dow"></div>
       <h1 class="page-title">Hoy</h1>
 
-      <div class="card">
-        <h3>Check-in diario</h3>
-        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Dos preguntas: ajustan lo de hoy y lo de los próximos días.</div>
-        <div class="checkin-q">
-          <div class="qtext">¿Cómo te encuentras hoy?</div>
-          <div class="btn-row">
-            <button class="btn" data-q="animo" data-v="bien">Bien</button>
-            <button class="btn" data-q="animo" data-v="normal">Normal</button>
-            <button class="btn" data-q="animo" data-v="mal">Mal</button>
-          </div>
-        </div>
-        <div class="checkin-q">
-          <div class="qtext">¿Notas alguna molestia o dolor ahora mismo?</div>
-          <div class="btn-row">
-            <button class="btn" data-q="molestia" data-v="no">No</button>
-            <button class="btn" data-q="molestia" data-v="si">Sí</button>
-          </div>
-        </div>
+      <button id="estado-pill" class="btn ghost" style="width:100%; text-align:left; display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+        <span id="estado-pill-dot" style="width:10px; height:10px; border-radius:50%; background:var(--green); flex:none;"></span>
+        <span id="estado-pill-txt" style="flex:1; font-size:12px; font-weight:400;"></span>
+        <span style="color:var(--text-dim); font-size:11px; font-weight:400;">Cómo estoy ›</span>
+      </button>
 
-        <div id="molestia-extra" class="molestia-extra" style="display:none;">
-          <div class="field">
-            <label>Zona del cuerpo</label>
-            <select id="mol-zona">
-              <option>Rodilla</option><option>Tobillo</option><option>Gemelo</option><option>Isquiotibiales</option>
-              <option>Cuádriceps</option><option>Cadera</option><option>Espalda baja</option><option>Pie / planta</option><option>Otra</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Tipo de molestia</label>
-            <select id="mol-tipo">
-              <option>Dolor agudo</option><option>Molestia leve</option><option>Rigidez</option><option>Inflamación</option><option>Sobrecarga muscular</option><option>Otro</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Nivel de dolor (1-5)</label>
-            <select id="mol-nivel"><option value="1">1 · apenas notable</option><option value="2">2</option><option value="3">3 · moderado</option><option value="4">4</option><option value="5">5 · intenso</option></select>
-          </div>
-          <div class="field">
-            <label>¿Lo estás tratando?</label>
-            <select id="mol-tratamiento"><option>No</option><option>Sí, en casa (hielo/reposo/estiramientos)</option><option>Sí, con un profesional</option></select>
-          </div>
-          <div class="field">
-            <label>Notas (opcional)</label>
-            <input type="text" id="mol-notas" placeholder="ej. me duele al bajar escaleras">
-          </div>
-          <button class="btn" id="save-molestia" style="width:100%;">Guardar detalle</button>
-        </div>
-
-        <div id="alarma-wrap" style="display:none; margin-top:10px;">
-          <div class="field">
-            <label>¿Alguno de estos síntomas? (marca los que apliquen)</label>
-            <div class="btn-row">
-              <button class="btn small alarma-opt" data-v="torax">Dolor torácico</button>
-              <button class="btn small alarma-opt" data-v="disnea">Falta de aire</button>
-              <button class="btn small alarma-opt" data-v="sincope">Mareo/síncope</button>
-              <button class="btn small alarma-opt" data-v="palpitaciones">Palpitaciones</button>
-            </div>
-          </div>
-          <div id="alarma-aviso"></div>
-        </div>
-      </div>
-
-      <div class="card coach-plan" id="coach-card">
+<div class="card coach-plan" id="coach-card">
         <h3 id="coach-plan-titulo">Entrenamiento del día</h3>
         <div id="coach-plan-body"></div>
-        <div id="coach-glosario" style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin:6px 0 10px;"></div>
-        <div id="coach-consejos"></div>
+        <details class="plegable" id="coach-detalle" style="margin-top:10px; display:none;">
+          <summary style="font-size:12px; color:var(--text-dim);">Ver cómo hacerla</summary>
+          <div id="coach-pasos" style="margin-top:8px;"></div>
+          <div id="coach-glosario" style="font-size:11px; color:var(--text-dim); line-height:1.5; margin:8px 0 4px;"></div>
+          <div id="coach-consejos"></div>
+        </details>
         <div id="sesion-feedback"></div>
       </div>
 
-            <div class="card" id="analisis-card" style="display:none;"><h3 id="analisis-titulo">Tu última sesión</h3><div id="analisis-body"></div></div>
+<div class="card" id="analisis-card" style="display:none;"><h3 id="analisis-titulo">Tu última sesión</h3><div id="analisis-body"></div></div>
 
-      <div class="card" id="why-card">
-        <h3>Por qué esto, hoy</h3>
-        <div id="why-body"></div>
-      </div>
-<div class="card" id="estado-card">
-        <div class="ring-wrap">
-          <div class="ring">
-            <svg width="110" height="110" viewBox="0 0 118 118">
-              <circle cx="59" cy="59" r="50" fill="none" stroke="var(--line)" stroke-width="10"/>
-              <circle id="ring-arc" cx="59" cy="59" r="50" fill="none" stroke="var(--green)" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="30" stroke-linecap="round"/>
-              <g stroke="rgba(5,7,15,0.35)" stroke-width="2">
-                <line x1="59" y1="9" x2="59" y2="19"/><line x1="109" y1="59" x2="99" y2="59"/>
-                <line x1="59" y1="109" x2="59" y2="99"/><line x1="9" y1="59" x2="19" y2="59"/>
-              </g>
-            </svg>
-            <div class="ring-center"><div class="state" id="ring-state" style="color:var(--green)">Verde</div><div class="sub">estado de hoy</div></div>
-          </div>
-          <div class="ring-info">
-            <div class="title" id="ring-title">Buena base para hoy</div>
-            <div class="desc" id="ring-desc"></div>
-          </div>
-        </div>
-        <div class="row" style="display:none;"><span class="label">Hoy toca</span><span class="value" id="hoy-toca" style="font-size:12px; max-width:200px;">–</span></div>
-        <div class="row"><span class="label">Sueño (media 7 días)</span><span class="value" id="hoy-sueno-media">–</span></div>
-        <div class="row"><span class="label">FC en reposo (media 7 días)</span><span class="value" id="hoy-fcreposo-media">–</span></div>
-        <div class="row"><span class="label">Estrés semanal</span><span class="value" id="hoy-estres">–</span></div>
-        <div class="row"><span class="label">Body Battery semanal</span><span class="value" id="hoy-bb">–</span></div>
-      </div>
+      <details class="card plegable" id="why-card">
+        <summary>Por qué esto, hoy</summary>
+        <div id="why-body" style="margin-top:6px;"></div>
+      </details>
 
-      <div class="card" id="manana-card">
-        <h3>Mañana y próximos días</h3>
-        <div id="manana-body"></div>
-      </div>
+<div id="hoy-alerts"></div>
 
-      <div class="card" id="proxima-carrera-card">
-        <h3>Próximo entreno de carrera</h3>
-        <div id="proxima-carrera-body"></div>
-      </div>
-
-      <div id="hoy-alerts"></div>
-
-      <div class="card" id="repaso-card">
-        <h3>Repaso semanal (Estrés / Body Battery) <span class="muted" id="repaso-semana-label"></span></h3>
-        <div id="repaso-body"></div>
-      </div>
-        </section>
+      
+    </section>
 
 <!-- ============ PLAN COMPLETO ============ -->
     <section class="screen" data-screen="plan">
@@ -292,6 +208,18 @@
         <div style="font-size:10.5px; color:var(--text-dim); margin-top:3px;" id="fase-motivo-texto"></div>
       </div>
       <div id="plan-ajustes"></div>
+
+      <div class="card" id="manana-card">
+        <h3>Mañana y próximos días</h3>
+        <div id="manana-body"></div>
+      </div>
+
+      <div class="card" id="proxima-carrera-card">
+        <h3>Próximo entreno de carrera</h3>
+        <div id="proxima-carrera-body"></div>
+      </div>
+
+      
 
       <div class="card">
         <h3>Objetivo semanal</h3>
@@ -392,6 +320,11 @@
       <div class="card" id="cadencia-card">
         <h3>Tu cadencia</h3>
         <div id="cadencia-body"></div>
+      </div>
+
+      <div class="card" id="calendario-card">
+        <h3>Calendario de sesiones</h3>
+        <div id="calendario-body"></div>
       </div>
 <div class="card">
         <h3>Progreso hacia el objetivo</h3>
@@ -651,6 +584,7 @@
 
       <details class="card plegable">
         <summary>Ajustes avanzados</summary>
+        <label style="display:flex; gap:8px; align-items:center; font-size:12px; margin:8px 0;"><input type="checkbox" id="p-biblioteca"> Mostrar mi biblioteca de consejos en la app (Hoy, Nutrición y la pestaña Biblioteca)</label>
         <div class="profile-item"><span class="l">Una molestia se considera importante tras (días seguidos)</span><input type="number" id="p-escalada" step="1"></div>
       </details>
 
@@ -692,6 +626,99 @@
     <button class="navbtn" data-nav="ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>Yo</button>
   </div>
 
+    <div id="estado-modal" style="position:absolute; inset:0; background:var(--bg); z-index:55; overflow-y:auto; padding:22px 20px 40px; display:none;">
+    <button class="btn ghost small" id="estado-cerrar">← Volver a Hoy</button>
+    <h1 class="page-title" style="margin-top:12px;">Cómo estoy hoy</h1>
+    <div class="card" id="estado-card">
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg width="110" height="110" viewBox="0 0 118 118">
+              <circle cx="59" cy="59" r="50" fill="none" stroke="var(--line)" stroke-width="10"/>
+              <circle id="ring-arc" cx="59" cy="59" r="50" fill="none" stroke="var(--green)" stroke-width="10" stroke-dasharray="314" stroke-dashoffset="30" stroke-linecap="round"/>
+              <g stroke="rgba(5,7,15,0.35)" stroke-width="2">
+                <line x1="59" y1="9" x2="59" y2="19"/><line x1="109" y1="59" x2="99" y2="59"/>
+                <line x1="59" y1="109" x2="59" y2="99"/><line x1="9" y1="59" x2="19" y2="59"/>
+              </g>
+            </svg>
+            <div class="ring-center"><div class="state" id="ring-state" style="color:var(--green)">Verde</div><div class="sub">estado de hoy</div></div>
+          </div>
+          <div class="ring-info">
+            <div class="title" id="ring-title">Buena base para hoy</div>
+            <div class="desc" id="ring-desc"></div>
+          </div>
+        </div>
+        <div class="row" style="display:none;"><span class="label">Hoy toca</span><span class="value" id="hoy-toca" style="font-size:12px; max-width:200px;">–</span></div>
+        <div class="row"><span class="label">Sueño (media 7 días)</span><span class="value" id="hoy-sueno-media">–</span></div>
+        <div class="row"><span class="label">FC en reposo (media 7 días)</span><span class="value" id="hoy-fcreposo-media">–</span></div>
+        <div class="row"><span class="label">Estrés semanal</span><span class="value" id="hoy-estres">–</span></div>
+        <div class="row"><span class="label">Body Battery semanal</span><span class="value" id="hoy-bb">–</span></div>
+      </div>
+
+      
+    <div class="card">
+        <h3>Check-in diario</h3>
+        <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Normalmente no hace falta tocarlo: solo si hoy no estás bien o notas alguna molestia. Ajusta lo de hoy y lo de los próximos días.</div>
+        <div class="checkin-q">
+          <div class="qtext">¿Cómo te encuentras hoy?</div>
+          <div class="btn-row">
+            <button class="btn" data-q="animo" data-v="bien">Bien</button>
+            <button class="btn" data-q="animo" data-v="normal">Normal</button>
+            <button class="btn" data-q="animo" data-v="mal">Mal</button>
+          </div>
+        </div>
+        <div class="checkin-q">
+          <div class="qtext">¿Notas alguna molestia o dolor ahora mismo?</div>
+          <div class="btn-row">
+            <button class="btn" data-q="molestia" data-v="no">No</button>
+            <button class="btn" data-q="molestia" data-v="si">Sí</button>
+          </div>
+        </div>
+
+        <div id="molestia-extra" class="molestia-extra" style="display:none;">
+          <div class="field">
+            <label>Zona del cuerpo</label>
+            <select id="mol-zona">
+              <option>Rodilla</option><option>Tobillo</option><option>Gemelo</option><option>Isquiotibiales</option>
+              <option>Cuádriceps</option><option>Cadera</option><option>Espalda baja</option><option>Pie / planta</option><option>Otra</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Tipo de molestia</label>
+            <select id="mol-tipo">
+              <option>Dolor agudo</option><option>Molestia leve</option><option>Rigidez</option><option>Inflamación</option><option>Sobrecarga muscular</option><option>Otro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Nivel de dolor (1-5)</label>
+            <select id="mol-nivel"><option value="1">1 · apenas notable</option><option value="2">2</option><option value="3">3 · moderado</option><option value="4">4</option><option value="5">5 · intenso</option></select>
+          </div>
+          <div class="field">
+            <label>¿Lo estás tratando?</label>
+            <select id="mol-tratamiento"><option>No</option><option>Sí, en casa (hielo/reposo/estiramientos)</option><option>Sí, con un profesional</option></select>
+          </div>
+          <div class="field">
+            <label>Notas (opcional)</label>
+            <input type="text" id="mol-notas" placeholder="ej. me duele al bajar escaleras">
+          </div>
+          <button class="btn" id="save-molestia" style="width:100%;">Guardar detalle</button>
+        </div>
+
+        <div id="alarma-wrap" style="display:none; margin-top:10px;">
+          <div class="field">
+            <label>¿Alguno de estos síntomas? (marca los que apliquen)</label>
+            <div class="btn-row">
+              <button class="btn small alarma-opt" data-v="torax">Dolor torácico</button>
+              <button class="btn small alarma-opt" data-v="disnea">Falta de aire</button>
+              <button class="btn small alarma-opt" data-v="sincope">Mareo/síncope</button>
+              <button class="btn small alarma-opt" data-v="palpitaciones">Palpitaciones</button>
+            </div>
+          </div>
+          <div id="alarma-aviso"></div>
+        </div>
+      </div>
+
+      
+  </div>
   <div id="detalle-modal" style="position:absolute; inset:0; background:var(--bg); z-index:55; overflow-y:auto; padding:22px 20px; display:none;">
     <div class="eyebrow">Detalle</div>
     <h1 class="page-title" id="detalle-titulo"></h1>
@@ -1526,11 +1553,11 @@ function rutaSugerida(distKm, desnivelM){
   return mejor.e<=0.8 ? {fecha:mejor.c.fecha, dist:mejor.c.dist, desnivel:mejor.c.desnivelM} : null;
 }
 // Selector "¿cambias el terreno de esta salida?": avisar antes de improvisar; la app recalcula la semana y lo explica
-function terrenoSelectorHTML(fecha, dia){
+function terrenoSelectorHTML(fecha, dia, compacto){
   if(!dia || dia.tipo!=='Carrera' || fecha<TODAY || actividadesDelDia(fecha).length || semaforoActual().parada) return '';
   const m=(state.terrenoManual||{})[fecha]||'';
   const op=[['','Lo previsto'],['trail','🌲 Monte'],['asfalto','🛣️ Asfalto'],['pista','🏟️ Pista']];
-  return `<div style="margin-top:10px;"><div style="font-size:11.5px; color:var(--text-dim); margin-bottom:4px;">¿${fecha===TODAY?'Hoy':'Ese día'} cambias el terreno? Si improvisas, la app recalcula el resto de la semana.</div><div class="btn-row" style="margin-top:0;">${op.map(([v,l])=>`<button class="btn small terr-btn${m===v?' selected':''}" data-f="${fecha}" data-v="${v}">${l}</button>`).join('')}</div></div>`;
+  return `<div style="margin-top:${compacto?'6':'10'}px;"><div style="font-size:11px; color:var(--text-dim); margin-bottom:4px;">${compacto?'Terreno:':`¿${fecha===TODAY?'Hoy':'Ese día'} cambias el terreno? Si improvisas, la app recalcula el resto de la semana.`}</div><div class="btn-row" style="margin-top:0;">${op.map(([v,l])=>`<button class="btn small terr-btn${m===v?' selected':''}" data-f="${fecha}" data-v="${v}">${l}</button>`).join('')}</div></div>`;
 }
 document.addEventListener('click', e=>{
   const b=e.target.closest('.terr-btn'); if(!b) return;
@@ -1831,7 +1858,8 @@ function computeCoachPlan(){
     return {
       hoyTitulo:'Hoy: entreno hecho ✓', hoyTexto:'Ya has entrenado hoy.',
       planTitulo:'Entrenamiento del día',
-      planHTML:`<div style="font-size:12.5px; margin-bottom:6px;"><b>Hoy ya has entrenado</b> <span class="tag">${{alta:'carga alta',media:'carga media',baja:'carga baja'}[nivel]}</span></div>${lista}<div style="font-size:12px; color:var(--text-dim); line-height:1.5; margin-top:8px;">${previsto}<br>${consejo}</div>`,
+      planHTML:`<div style="font-size:12.5px; margin-bottom:6px;"><b>Hoy ya has entrenado</b> <span class="tag">${{alta:'carga alta',media:'carga media',baja:'carga baja'}[nivel]}</span></div>${lista}`,
+      pasosHTML:`<div style="font-size:12px; color:var(--text-dim); line-height:1.5;">${previsto}<br>${consejo}</div>`,
       tipoDia: nivel==='alta' ? 'largo' : 'facil', hecho:true, glosario:''
     };
   }
@@ -1851,9 +1879,12 @@ function computeCoachPlan(){
   const tipoAct = diaHoy.tipo==='Fuerza' ? 'Fuerza' : (diaHoy.tipo==='Estiramientos' ? 'Estiramientos' : null);
   const hecha = todasActividades().some(a=>a.fecha===TODAY && (tipoAct ? a.tipo===tipoAct : (diaHoy.tipo==='Evento' ? true : a.tipo==='Carrera')));
   const tagHecha = hecha?' <span class="tag">hecha hoy</span>':'';
+  const avZonas=avisoPorZonas(TODAY, diaHoy);
+  // lo importante (avisos) se ve siempre; la información de apoyo queda dentro de "Ver cómo hacerla"
   const tagAjuste = (diaHoy.subtipoOriginal ? `<div style="font-size:11px; color:var(--amber); margin-bottom:8px;">Ajustado hoy: originalmente ${diaHoy.subtipoOriginal}, suavizado por un evento cercano.</div>` : '')
     + (diaHoy.aviso ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">⚠️</div><div class="txt"><strong>Aviso</strong><span>${escapeHTML(diaHoy.aviso)}</span></div></div>` : '')
-    + (diaHoy.terrenoMotivo && diaHoy.terrenoMixto ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">🧭 ${escapeHTML(diaHoy.terrenoMotivo)}</div>` : '')
+    + (avZonas ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">💪</div><div class="txt"><strong>Según lo que anotaste</strong><span>${escapeHTML(avZonas)}</span></div></div>` : '');
+  const infoApoyo = (diaHoy.terrenoMotivo && diaHoy.terrenoMixto ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">🧭 ${escapeHTML(diaHoy.terrenoMotivo)}</div>` : '')
     + (diaHoy.nota ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">📝 ${escapeHTML(diaHoy.nota)}</div>` : '');
   let cabecera, titulo;
   if(esClase(diaHoy)){ cabecera=`Clase de funcional · cuerpo completo${(state.profile.claseIntensidad||'alta')==='alta'?' · exigente':''}`; titulo='Hoy: clase de funcional'; }
@@ -1865,7 +1896,8 @@ function computeCoachPlan(){
   return {
     hoyTitulo: titulo,
     hoyTexto: 'Ver el detalle de la sesión abajo.', glosario: glosarioDe(diaHoy),
-    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:12.5px; margin-bottom:8px;">${cabecera}${tagHecha}</div>`+renderPasosHTML(diaHoy.pasos)+terrenoSelectorHTML(TODAY, diaHoy),
+    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:13px; line-height:1.5; margin-bottom:4px;">${cabecera}${tagHecha}</div>`+terrenoSelectorHTML(TODAY, diaHoy, true),
+    pasosHTML: infoApoyo+renderPasosHTML(diaHoy.pasos),
     tipoDia: diaHoy.tipo==='Evento' ? 'evento' : (diaHoy.tipo==='Fuerza' ? 'fuerza' : (diaHoy.tipo==='Estiramientos' ? 'descanso' : (['Tempo','Series'].includes(diaHoy.subtipo)?'duro':(diaHoy.subtipo==='Largo'?'largo':'facil'))))
   };
 }
@@ -1890,6 +1922,7 @@ function renderCheckinButtons(){
     : '';
 }
 function renderRepasoSemanal(){
+  if(!document.getElementById('repaso-body')) return; // el repaso semanal manual ya no tiene pantalla: los datos semanales llegan de Garmin
   const wk = isoWeek(TODAY);
   document.getElementById('repaso-semana-label').textContent = '· '+wk.slice(5);
   const existing = repasoReciente();
@@ -1944,6 +1977,10 @@ function renderHoy(){
   document.getElementById('ring-state').style.color=sem.color;
   document.getElementById('ring-state').textContent=sem.label;
   document.getElementById('ring-desc').textContent=sem.text;
+  // píldora de estado en Hoy: el detalle y el check-in viven en la hoja "Cómo estoy hoy"
+  const cHoy=state.checkinByDate[TODAY]||{};
+  document.getElementById('estado-pill-dot').style.background=sem.color;
+  document.getElementById('estado-pill-txt').textContent = sem.parada ? 'Parada de seguridad' : (sem.label==='Verde' ? (cHoy.molestia==='si' ? 'Con una molestia anotada' : 'Estás bien para entrenar') : sem.label+' · '+sem.text.slice(0,60));
 
   const wk = repasoReciente();
   document.getElementById('hoy-estres').innerHTML = wk? `${wk.estres} <span style="color:var(--text-dim)">(${wk.fuente==='importado'?'importado':'manual'})</span>` : '–';
@@ -1981,7 +2018,21 @@ function renderHoy(){
   document.getElementById('hoy-toca').textContent = plan.hoyTitulo.replace(/^Hoy: /,'');
 
   renderManana();
-  renderRepasoSemanal();
+}
+document.getElementById('estado-pill').addEventListener('click', ()=>{ document.getElementById('estado-modal').style.display='block'; });
+document.getElementById('estado-cerrar').addEventListener('click', ()=>{ document.getElementById('estado-modal').style.display='none'; });
+// Lo que la persona anota de los músculos (tras clases o salidas) se tiene en cuenta, a grandes rasgos, para el día siguiente
+function avisoPorZonas(fecha, dia){
+  if(!dia) return '';
+  const z=((state.sesionNotas||{})[restarUnDia(fecha)]||{}).zonas; if(!z) return '';
+  const piernas=(z.muslos||0)+(z.gluteos||0)+(z.gemelos||0);
+  const tronco=(z.core||0)+(z.espalda_baja||0);
+  const superior=(z.hombros||0)+(z.brazos||0)+(z.pecho||0)+(z.espalda_alta||0);
+  if(dia.tipo==='Carrera' && piernas>=2) return 'Ayer marcaste piernas o glúteos muy trabajados: esta salida mejor suave, y si notas pesadez, acórtala o cámbiala por descanso.';
+  if(dia.tipo==='Carrera' && tronco>=3 && ['Largo','Series','Tempo'].includes(dia.subtipo)) return 'Ayer marcaste core y espalda baja muy trabajados: cuida la postura y no fuerces esta sesión.';
+  if(esClase(dia) && superior>=3) return 'Ayer marcaste hombros, brazos o pecho muy trabajados: en la clase de hoy suaviza esa zona.';
+  if(esClase(dia) && piernas>=3) return 'Ayer marcaste las piernas muy trabajadas: en la clase de hoy baja el peso o el impacto en piernas.';
+  return '';
 }
 function ultimoDatoImportado(){
   const fs=[...state.importedSueno.map(s=>s.fecha), ...state.importedActividades.map(a=>a.fecha)].sort();
@@ -2013,6 +2064,8 @@ function recomendacionManana(){
   if(f.fatigado && dia && (dia.tipo==='Carrera' || dia.tipo==='Fuerza') && !motivos.length){
     motivos.push('señales de recuperación justa ('+f.motivo+'): hazla suave si no te encuentras bien');
   }
+  const avMus=avisoPorZonas(manana, dia); // lo que anotaste hoy de tus músculos
+  if(avMus) motivos.push(avMus.replace(/^Ayer/,'Hoy'));
   const ult=ultimoDatoImportado();
   if(!ult) motivos.push('aún no has importado datos de Garmin: la recomendación se basa solo en tu plan y tu check-in');
   else if(daysBetween(ult, TODAY)>=3) motivos.push(`tus datos de Garmin llevan ${daysBetween(ult, TODAY)} días sin actualizar — importa para afinar`);
@@ -2287,7 +2340,7 @@ function cargarDatosAuto(cb){ // cb(resultado): 'nuevo' | 'sin-cambios' | 'no-ar
     else { fuente='nube'; fin(r.estado); }
   });
 }
-const APP_VERSION='2026-10-19 · actualizar con un toque';
+const APP_VERSION='2026-10-20 · Hoy más limpio, calendario y plan con meta';
 document.getElementById('app-version').textContent=APP_VERSION;
 function renderNubeCard(){
   const card=document.getElementById('garmin-nube-card'); if(!card) return;
@@ -2669,6 +2722,9 @@ function renderPerfil(){
   document.getElementById('p-alergias').value = state.profile.alergias || '';
   document.getElementById('p-lesiones-notas').value = state.profile.lesionesNotas || '';
   document.getElementById('p-escalada').value = state.profile.escaladaMolestiaDias;
+  document.getElementById('p-objetivo').oninput = ()=>{ window.__metaTocada=true; };
+  document.getElementById('p-biblioteca').checked = !!state.profile.mostrarBiblioteca;
+  document.getElementById('p-biblioteca').onchange = e=>{ state.profile.mostrarBiblioteca=e.target.checked; saveState(); renderConsejos(); renderBiblioteca(); };
 
   document.getElementById('p-fase-actual').textContent = FASE_LABELS[state.fase.actual] || state.fase.actual;
   const proxEv=(state.eventos||[]).filter(e=>e.fecha>=TODAY).sort((a,b)=>a.fecha<b.fecha?-1:1)[0];
@@ -2740,6 +2796,8 @@ document.getElementById('save-perfil').addEventListener('click', ()=>{
   p.alimentacion = v('p-alim'); p.alergias = v('p-alergias');
   p.lesionesNotas = v('p-lesiones-notas');
   p.escaladaMolestiaDias = parseInt(v('p-escalada')) || 3;
+  p.mostrarBiblioteca = document.getElementById('p-biblioteca').checked;
+  if(window.__metaTocada){ p.metaElegida = true; window.__metaTocada=false; } // solo cuenta como elegida si la has tocado tú
   saveState(); recalcularPlan();
   renderAll(); updateCharts();
   toast('Perfil guardado — plan recalculado');
@@ -3284,7 +3342,7 @@ document.getElementById('ob-siguiente').addEventListener('click', ()=>{
   obDatos.objetivoTipo = obDatos.busco==='carrera' ? (obDatos.carreraTipoDist==='Otra' ? objKm+' km' : obDatos.carreraTipoDist) : (obDatos.busco==='cuidarme' ? 'Mantenimiento' : 'Mejorar');
   Object.assign(state.profile, {
     busco:obDatos.busco, competitividad:obDatos.competitividad, parq:obDatos.parq,
-    objetivoTipo:obDatos.objetivoTipo, objetivoKm:objKm, superficie:obDatos.superficie, desnivelObjetivoM:obDatos.desnivelObjetivoM,
+    objetivoTipo:obDatos.objetivoTipo, objetivoKm:objKm, metaElegida:true, superficie:obDatos.superficie, desnivelObjetivoM:obDatos.desnivelObjetivoM,
     nivelBase:obDatos.nivelBase, distanciaBaseKm:obDatos.distanciaBaseKm, tiempoBaseMin:obDatos.tiempoBaseMin,
     salidasSemana:obDatos.salidasSemana, kmSemanaBase:obDatos.kmSemanaBase,
     disponibilidad:obDatos.disponibilidad, claseIntensidad:obDatos.claseIntensidad, claseMin:obDatos.claseMin, lesionesNotas:obDatos.lesionesNotas,
@@ -3428,73 +3486,104 @@ function renderEntrenoDelDia(){
   const plan=computeCoachPlan();
   document.getElementById('coach-plan-titulo').textContent = 'Entrenamiento del día';
   document.getElementById('coach-plan-body').innerHTML = plan.planHTML || `<div style="font-size:12.5px; color:var(--text-dim); line-height:1.5;"><b style="color:var(--text)">${plan.hoyTitulo.replace(/^Hoy: /,'')}</b><br>${plan.hoyTexto}</div>`;
+  const det=document.getElementById('coach-detalle');
+  document.getElementById('coach-pasos').innerHTML = plan.pasosHTML || '';
   document.getElementById('coach-glosario').innerHTML = plan.glosario || '';
+  det.style.display = (plan.pasosHTML || plan.glosario) ? 'block' : 'none';
   renderSesionFeedback(plan);
 }
 function renderSesionFeedback(plan){
   const cont=document.getElementById('sesion-feedback');
   if(semaforoActual().parada){ cont.innerHTML=''; return; }
-  const nota=(state.sesionNotas||{})[TODAY];
-  // El mapa de zonas se ofrece en sesiones guiadas (funcional / estiramientos), planificadas o ya hechas hoy
-  const diaPlanHoy=diaDePlan(TODAY);
-  const mostrarZonas = (diaPlanHoy && (diaPlanHoy.tipo==='Fuerza' || diaPlanHoy.tipo==='Estiramientos')) || actividadesDelDia(TODAY).some(a=>a.tipo==='Fuerza'||a.tipo==='Estiramientos');
-  window.__fbZonas = window.__fbZonas || {};
+  construirFeedback(cont, TODAY);
+}
+// Formulario "Cómo me ha ido" de un día (hoy o uno pasado): sensación, zonas trabajadas, molestias y nota
+function construirFeedback(cont, fecha){
+  const esHoy=fecha===TODAY;
+  const nota=(state.sesionNotas||{})[fecha];
+  const diaPlan=diaDePlan(fecha);
+  const mostrarZonas=(diaPlan && (diaPlan.tipo==='Fuerza' || diaPlan.tipo==='Estiramientos')) || actividadesDelDia(fecha).some(a=>a.tipo==='Fuerza'||a.tipo==='Estiramientos');
   const zonasNota = nota && nota.zonas ? Object.entries(nota.zonas).filter(([,n])=>n>0).map(([z,n])=>`${ZONAS_LABEL[z]}${n===2?' ●●':' ●'}`).join(', ') : '';
-  const resumen = nota ? `<div style="font-size:11.5px; color:var(--text-dim); margin-bottom:6px;">Anotado hoy: sensación <b style="color:var(--text)">${nota.rpe||'–'}</b>${nota.molestia?` · molestia en ${escapeHTML(nota.zona||'')} (nivel ${nota.nivel})`:' · sin molestias'}${zonasNota?` · zonas: ${zonasNota}`:''}${nota.nota?' · '+escapeHTML(nota.nota):''}</div>` : '';
-  cont.innerHTML = resumen + `<button class="btn ghost small" id="fb-abrir">${nota?'Cambiar lo anotado':'Cómo me ha ido'}</button>
-    <div id="fb-form" class="molestia-extra" style="display:${window.__fbAbierto?'block':'none'};">
-      <div class="qtext" style="font-size:12.5px; margin-bottom:6px;">¿Cómo ha sido la sensación?</div>
+  const resumen = nota ? `<div style="font-size:11.5px; color:var(--text-dim); margin-bottom:6px;">Anotado ${esHoy?'hoy':fmtShort(fecha)}: sensación <b style="color:var(--text)">${nota.rpe||'–'}</b>${nota.molestia?` · molestia en ${escapeHTML(nota.zona||'')} (nivel ${nota.nivel})`:' · sin molestias'}${zonasNota?` · zonas: ${zonasNota}`:''}${nota.nota?' · '+escapeHTML(nota.nota):''}</div>` : '';
+  const fb={rpe:nota?nota.rpe:null, mol:null, alarma:new Set(), zonas:Object.assign({}, nota&&nota.zonas||{})};
+  const abierto = esHoy ? !!window.__fbAbierto : !nota;
+  cont.innerHTML = resumen + `<button class="btn ghost small fb-abrir">${nota?'Cambiar lo anotado':(esHoy?'Cómo me ha ido':'Anotar cómo me fue')}</button>
+    <div class="fb-form molestia-extra" style="display:${abierto?'block':'none'};">
+      <div class="qtext" style="font-size:12.5px; margin-bottom:6px;">¿Cómo fue la sensación?</div>
       <div class="btn-row" style="margin-top:0;"><button class="btn small fb-rpe" data-v="suave">Suave</button><button class="btn small fb-rpe" data-v="normal">Normal</button><button class="btn small fb-rpe" data-v="duro">Duro</button></div>
-      ${mostrarZonas ? `<div class="qtext" style="font-size:12.5px; margin:10px 0 4px;">¿Qué zonas has trabajado más?</div>
-        <div style="font-size:11px; color:var(--text-dim); margin-bottom:6px;">Toca una zona: 1 toque = trabajada, 2 toques = muy trabajada, 3 = borrar.</div>
-        <div id="fb-mapa"></div>` : ''}
-      <div class="qtext" style="font-size:12.5px; margin:10px 0 6px;">¿Has notado alguna molestia durante o después del entreno?</div>
+      ${mostrarZonas ? `<div class="qtext" style="font-size:12.5px; margin:10px 0 4px;">¿Qué zonas trabajaste más?</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-bottom:6px;">Toca una zona: 1 toque = trabajada, 2 toques = muy trabajada, 3 = borrar. Lo tengo en cuenta, a grandes rasgos, para los días siguientes.</div>
+        <div class="fb-mapa"></div>` : ''}
+      <div class="qtext" style="font-size:12.5px; margin:10px 0 6px;">¿Notaste alguna molestia durante o después?</div>
       <div class="btn-row" style="margin-top:0;"><button class="btn small fb-mol" data-v="no">No</button><button class="btn small fb-mol" data-v="si">Sí</button></div>
-      <div id="fb-mol-extra" style="display:none; margin-top:10px;">
-        <div class="field"><label>Zona</label><select id="fb-zona"><option>Rodilla</option><option>Tobillo</option><option>Gemelo</option><option>Isquiotibiales</option><option>Cuádriceps</option><option>Cadera</option><option>Espalda baja</option><option>Pie / planta</option><option>Otra</option></select></div>
-        <div class="field"><label>Nivel de dolor (1-5)</label><select id="fb-nivel"><option value="1">1 · apenas notable</option><option value="2">2</option><option value="3">3 · moderado</option><option value="4">4</option><option value="5">5 · intenso</option></select></div>
-        <div class="field"><label>Síntomas de alarma</label>
-          <div class="btn-row" style="margin-top:0;"><button class="btn small fb-alarma" data-v="torax">Dolor torácico</button><button class="btn small fb-alarma" data-v="disnea">Falta de aire</button><button class="btn small fb-alarma" data-v="sincope">Mareo/síncope</button><button class="btn small fb-alarma" data-v="palpitaciones">Palpitaciones</button></div></div>
+      <div class="fb-mol-extra" style="display:none; margin-top:10px;">
+        <div class="field"><label>Zona</label><select class="fb-zona"><option>Rodilla</option><option>Tobillo</option><option>Gemelo</option><option>Isquiotibiales</option><option>Cuádriceps</option><option>Cadera</option><option>Espalda baja</option><option>Pie / planta</option><option>Otra</option></select></div>
+        <div class="field"><label>Nivel de dolor (1-5)</label><select class="fb-nivel"><option value="1">1 · apenas notable</option><option value="2">2</option><option value="3">3 · moderado</option><option value="4">4</option><option value="5">5 · intenso</option></select></div>
+        ${esHoy ? `<div class="field"><label>Síntomas de alarma</label>
+          <div class="btn-row" style="margin-top:0;"><button class="btn small fb-alarma" data-v="torax">Dolor torácico</button><button class="btn small fb-alarma" data-v="disnea">Falta de aire</button><button class="btn small fb-alarma" data-v="sincope">Mareo/síncope</button><button class="btn small fb-alarma" data-v="palpitaciones">Palpitaciones</button></div></div>` : ''}
       </div>
-      <div class="field" style="margin-top:10px;"><label>Nota (opcional)</label><input type="text" id="fb-nota" placeholder="ej. cuesta arriba me pesaban las piernas"></div>
-      <button class="btn" id="fb-guardar" style="width:100%;">Guardar</button>
+      <div class="field" style="margin-top:10px;"><label>Nota (opcional)</label><input type="text" class="fb-nota" placeholder="ej. cuesta arriba me pesaban las piernas" value="${escapeHTML((nota&&nota.nota)||'')}"></div>
+      <button class="btn fb-guardar" style="width:100%;">Guardar</button>
     </div>`;
-  const fb=window.__fb=window.__fb||{rpe:null, mol:null, alarma:new Set()};
-  document.getElementById('fb-abrir').addEventListener('click', ()=>{ window.__fbAbierto=!window.__fbAbierto; document.getElementById('fb-form').style.display=window.__fbAbierto?'block':'none'; });
-  cont.querySelectorAll('.fb-rpe').forEach(b=>{ b.classList.toggle('selected', fb.rpe===b.dataset.v); b.addEventListener('click',()=>{ fb.rpe=b.dataset.v; cont.querySelectorAll('.fb-rpe').forEach(x=>x.classList.toggle('selected', x===b)); }); });
-  cont.querySelectorAll('.fb-mol').forEach(b=>{ b.classList.toggle('selected', fb.mol===b.dataset.v); b.addEventListener('click',()=>{ fb.mol=b.dataset.v; cont.querySelectorAll('.fb-mol').forEach(x=>x.classList.toggle('selected', x===b)); document.getElementById('fb-mol-extra').style.display=fb.mol==='si'?'block':'none'; }); });
-  cont.querySelectorAll('.fb-alarma').forEach(b=>{ b.classList.toggle('selected', fb.alarma.has(b.dataset.v)); b.addEventListener('click',()=>{ if(fb.alarma.has(b.dataset.v)) fb.alarma.delete(b.dataset.v); else fb.alarma.add(b.dataset.v); b.classList.toggle('selected'); }); });
-  if(fb.mol==='si') document.getElementById('fb-mol-extra').style.display='block';
+  const q=s=>cont.querySelector(s), qa=s=>cont.querySelectorAll(s);
+  q('.fb-abrir').addEventListener('click', ()=>{ const f=q('.fb-form'); const ab=f.style.display==='none'; f.style.display=ab?'block':'none'; if(esHoy) window.__fbAbierto=ab; });
+  qa('.fb-rpe').forEach(b=>{ b.classList.toggle('selected', fb.rpe===b.dataset.v); b.addEventListener('click',()=>{ fb.rpe=b.dataset.v; qa('.fb-rpe').forEach(x=>x.classList.toggle('selected', x===b)); }); });
+  qa('.fb-mol').forEach(b=>b.addEventListener('click',()=>{ fb.mol=b.dataset.v; qa('.fb-mol').forEach(x=>x.classList.toggle('selected', x===b)); q('.fb-mol-extra').style.display=fb.mol==='si'?'block':'none'; }));
+  qa('.fb-alarma').forEach(b=>b.addEventListener('click',()=>{ if(fb.alarma.has(b.dataset.v)) fb.alarma.delete(b.dataset.v); else fb.alarma.add(b.dataset.v); b.classList.toggle('selected'); }));
   if(mostrarZonas){
-    if(!Object.keys(window.__fbZonas).length && nota && nota.zonas) window.__fbZonas=Object.assign({}, nota.zonas);
     const pintar=()=>{
-      const cont2=document.getElementById('fb-mapa');
-      cont2.innerHTML=bodyMapSVG(window.__fbZonas, true);
-      cont2.querySelectorAll('[data-z]').forEach(g=>g.addEventListener('click', ()=>{
-        const z=g.dataset.z; window.__fbZonas[z]=((window.__fbZonas[z]||0)+1)%3; pintar();
-      }));
+      const c2=q('.fb-mapa'); c2.innerHTML=bodyMapSVG(fb.zonas, true);
+      c2.querySelectorAll('[data-z]').forEach(g=>g.addEventListener('click', ()=>{ const z=g.dataset.z; fb.zonas[z]=((fb.zonas[z]||0)+1)%3; pintar(); }));
     };
     pintar();
   }
-  document.getElementById('fb-guardar').addEventListener('click', ()=>{
+  q('.fb-guardar').addEventListener('click', ()=>{
     state.sesionNotas=state.sesionNotas||{};
     const mol=fb.mol==='si';
-    const zona=document.getElementById('fb-zona').value, nivel=document.getElementById('fb-nivel').value, txt=document.getElementById('fb-nota').value;
-    const zonasMarcadas=Object.fromEntries(Object.entries(window.__fbZonas||{}).filter(([,n])=>n>0));
-    state.sesionNotas[TODAY]={rpe:fb.rpe, molestia:mol, zona:mol?zona:null, nivel:mol?nivel:null, nota:txt, zonas:zonasMarcadas};
-    window.__fbZonas={};
+    const zona=q('.fb-zona').value, nivel=q('.fb-nivel').value, txt=q('.fb-nota').value;
+    const zonasMarcadas=Object.fromEntries(Object.entries(fb.zonas).filter(([,n])=>n>0));
+    state.sesionNotas[fecha]={rpe:fb.rpe, molestia:mol, zona:mol?zona:null, nivel:mol?nivel:null, nota:txt, zonas:zonasMarcadas};
     if(mol){
-      state.molestiaHistorial.push({fecha:TODAY, zona, tipo:'Durante o después del entreno', nivel, tratamiento:'No', notas:txt});
-      state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {molestia:'si'});
+      state.molestiaHistorial.push({fecha, zona, tipo:'Durante o después del entreno', nivel, tratamiento:'No', notas:txt});
+      if(esHoy) state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {molestia:'si'});
     }
-    if(mol && fb.alarma.size){
+    if(esHoy && mol && fb.alarma.size){
       const prev=new Set((state.checkinByDate[TODAY]||{}).alarmaSintomas||[]);
       fb.alarma.forEach(x=>prev.add(x));
       state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {alarmaSintomas:[...prev]});
     }
-    window.__fb={rpe:null, mol:null, alarma:new Set()}; window.__fbAbierto=false;
+    if(esHoy) window.__fbAbierto=false;
     saveState(); recalcularPlan(); renderAll(); toast('Anotado — plan recalculado');
+    if(!esHoy && document.getElementById('detalle-modal').style.display==='block'){ const acts=actividadesDelDia(fecha); if(acts.length) mostrarDetalleActividad(acts[0]); }
   });
+}
+/* ================= CALENDARIO DE SESIONES (para anotar sensaciones de días pasados) ================= */
+let __calMes=null;
+function renderCalendario(){
+  const el=document.getElementById('calendario-body'); if(!el) return;
+  const mes=__calMes||TODAY.slice(0,7);
+  const [y,m]=mes.split('-').map(Number);
+  const dow0=(new Date(`${mes}-01T00:00:00Z`).getUTCDay()+6)%7;
+  const nDias=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  let celdas=''; for(let i=0;i<dow0;i++) celdas+='<div></div>';
+  let pend=0;
+  for(let d=1; d<=nDias; d++){
+    const f=`${mes}-${String(d).padStart(2,'0')}`;
+    const acts=actividadesDelDia(f).filter(a=>['Carrera','Fuerza','Estiramientos'].includes(a.tipo));
+    const nota=(state.sesionNotas||{})[f];
+    const ico=acts.map(a=>({Carrera:'🏃',Fuerza:'🏋️',Estiramientos:'🧘'}[a.tipo])).join('');
+    if(acts.length && !nota && f<TODAY) pend++;
+    celdas+=`<button class="cal-dia${f===TODAY?' hoy':''}" data-f="${f}" ${acts.length?'':'disabled'}><b>${d}</b><span>${ico||'·'}</span><i>${acts.length?(nota?'✓':(f<TODAY?'○':'')):''}</i></button>`;
+  }
+  el.innerHTML=`<div class="btn-row" style="margin-top:0; align-items:center; justify-content:space-between;"><button class="btn ghost small cal-nav" data-d="-1">‹</button><b style="font-size:13px;">${MESES[m-1]} ${y}</b><button class="btn ghost small cal-nav" data-d="1">›</button></div>
+    <div class="cal-grid" style="margin-top:8px;">${['L','M','X','J','V','S','D'].map(x=>`<div class="cal-cab">${x}</div>`).join('')}${celdas}</div>
+    <div style="font-size:11px; color:var(--text-dim); margin-top:8px; line-height:1.5;">Toca un día con sesión para ver su análisis y anotar cómo te fue. ✓ = ya anotada · ○ = sin anotar.${pend?` <b style="color:var(--text)">Tienes ${pend} sin anotar este mes.</b>`:''}</div>`;
+  el.querySelectorAll('.cal-nav').forEach(b=>b.addEventListener('click',()=>{ const d=new Date(`${mes}-01T00:00:00Z`); d.setUTCMonth(d.getUTCMonth()+(+b.dataset.d)); __calMes=d.toISOString().slice(0,7); renderCalendario(); }));
+  el.querySelectorAll('.cal-dia:not([disabled])').forEach(b=>b.addEventListener('click',()=>{
+    const acts=actividadesDelDia(b.dataset.f).filter(a=>['Carrera','Fuerza','Estiramientos'].includes(a.tipo)).sort((a,c)=>(c.tipo==='Carrera')-(a.tipo==='Carrera'));
+    if(acts.length) mostrarDetalleActividad(acts[0]);
+  }));
 }
 function mostrarDetalleActividad(a){
   const z=a.fc ? zonaDeFC(a.fc) : null;
@@ -3528,6 +3617,11 @@ function mostrarDetalleActividad(a){
   document.getElementById('detalle-titulo').textContent = a.nombre || resumenActividad(a);
   document.getElementById('detalle-body').innerHTML = `<div class="card">${filas.join('')}</div><div class="interp"><b>En cristiano:</b><br>${lineas.join('<br>')}</div>`
     + (['Carrera','Fuerza','Estiramientos'].includes(a.tipo) ? `<div class="card"><h3>Qué has hecho bien y qué mejorar</h3>${analisisHTML(a)}</div>` : '');
+  if(a.fecha<=TODAY && ['Carrera','Fuerza','Estiramientos'].includes(a.tipo)){
+    const c=document.createElement('div'); c.className='card'; c.innerHTML='<h3>Cómo me fue</h3><div class="fb-host"></div>';
+    document.getElementById('detalle-body').appendChild(c);
+    construirFeedback(c.querySelector('.fb-host'), a.fecha);
+  }
   document.getElementById('detalle-modal').style.display='block';
 }
 document.getElementById('detalle-cerrar').addEventListener('click', ()=>{ document.getElementById('detalle-modal').style.display='none'; });
@@ -4224,6 +4318,14 @@ function renderCadencia(){
 }
 
 /* ================= PLAN COMPLETO ================= */
+function fijarMeta(km){
+  if(!(km>0)) return;
+  state.profile.objetivoKm=km; state.profile.metaElegida=true; saveState(); recalcularPlan(); renderAll(); updateCharts(); toast('Meta de '+km+' km guardada');
+}
+document.addEventListener('click', e=>{
+  const b=e.target.closest('.meta-btn'); if(b){ fijarMeta(+b.dataset.v); return; }
+  if(e.target.closest('#meta-otra-ok')) fijarMeta(parseFloat(document.getElementById('meta-otra').value));
+});
 function renderPlanCompleto(){
   const futuros=(state.eventos||[]).filter(e=>e.fecha>=TODAY).sort((a,b)=>a.fecha<b.fecha?-1:1);
   const meta=futuros.find(e=>e.prioridad==='A') || null;
@@ -4257,6 +4359,13 @@ function renderPlanCompleto(){
   }
   resumen += `<br><br>Esta semana: <b style="color:var(--text)">${nRun}</b> sesiones de running, <b style="color:var(--text)">${nFz}</b> de funcional y <b style="color:var(--text)">${nEs}</b> de estiramientos.`;
   document.getElementById('plan-resumen-titulo').textContent = meta ? `Camino a ${meta.nombre}` : (state.profile.busco==='cuidarme' ? 'Tu plan para cuidarte' : `Hacia tu meta de ${state.profile.objetivoKm||10} km`);
+  // Si la meta se rellenó sola en versiones anteriores (no la eligió la persona), se pregunta una vez
+  if(!meta && !state.profile.metaElegida){
+    const etq=v=>v===21.1?'Media (21)':(v===42.2?'Maratón (42)':v+' km');
+    resumen += `<div class="molestia-extra" style="margin-top:10px;"><div style="font-size:12px; color:var(--text); line-height:1.5;"><b>Tu meta de distancia está en ${state.profile.objetivoKm||10} km</b>, pero no la elegiste tú: se rellenó sola al empezar. ¿Cuál es tu meta?</div>
+      <div class="btn-row">${[5,10,15,21.1,30,42.2].map(v=>`<button class="btn small meta-btn" data-v="${v}">${etq(v)}</button>`).join('')}</div>
+      <div class="btn-row"><input type="number" id="meta-otra" step="0.5" placeholder="otra distancia (km)" style="flex:1; min-width:0;"><button class="btn small" id="meta-otra-ok">Usar</button></div></div>`;
+  }
   document.getElementById('plan-resumen').innerHTML = resumen;
 
   const nombres=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
@@ -4296,7 +4405,15 @@ function consejosPara(claves, tipo, max=2){
 function consejoHTML(b){
   return `<div style="font-size:11.5px; line-height:1.5; margin-top:6px;"><b>${escapeHTML(b.titulo)}</b>${b.notas?': '+escapeHTML(b.notas):''}${b.url?` <a href="${escapeHTML(b.url)}" target="_blank" rel="noopener" style="color:var(--accent);">ver fuente</a>`:''}</div>`;
 }
+// La biblioteca de consejos es opcional: por defecto no se muestra en ningún sitio (se activa en Yo › Perfil › Ajustes avanzados)
+function aplicarBiblioteca(){
+  const on=!!state.profile.mostrarBiblioteca;
+  document.querySelectorAll('.ajustes-tabs button[data-sub="biblioteca"]').forEach(b=>{ b.style.display=on?'':'none'; });
+  if(!on && document.querySelector('.screen.active') && document.querySelector('.screen.active').dataset.screen==='biblioteca') irAPantalla('perfil','ajustes');
+}
 function renderConsejos(){
+  aplicarBiblioteca();
+  if(!state.profile.mostrarBiblioteca){ document.getElementById('coach-consejos').innerHTML=''; document.getElementById('nutri-consejos').innerHTML=''; return; }
   const plan=computeCoachPlan();
   const dia=diaDePlan(TODAY);
   const claves = dia ? (TAGS_POR_SUBTIPO[dia.subtipo] || (dia.tipo==='Evento'?['carrera','competición']:[])) : [];
@@ -4351,6 +4468,7 @@ function renderAll(){
   renderAprendido();
   renderAnalisisHoy();
   renderCadencia();
+  renderCalendario();
 }
 
 /* ================= INIT ================= */
