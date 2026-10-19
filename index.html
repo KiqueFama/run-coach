@@ -337,14 +337,13 @@
       
 
       <div class="card chart-card">
-        <h3>1 · Distancia máxima continua</h3>
-        <div class="chart-box" id="chart-maxdist"></div>
-        <div class="scroll-hint">← desliza para ver lo anterior</div>
-        <div class="explain"><b>Qué significa:</b> la carrera más larga que has hecho hasta cada fecha. Solo sube o se mantiene.</div>
-        <div class="interp" id="interp-1"></div>
-      </div>
-      <div class="card chart-card">
-        <h3>2 · Ritmo, pulsaciones y desnivel</h3>
+        <h3>1 · Ritmo, pulsaciones y desnivel</h3>
+        <div class="toggle-group" id="terr-toggle">
+          <button data-t="asfalto" class="active">Asfalto</button>
+          <button data-t="trail">Monte</button>
+          <button data-t="todas">Todas</button>
+        </div>
+        <div style="font-size:11px; color:var(--text-dim); margin:2px 0 6px;">Por defecto solo asfalto, para comparar ritmos de verdad (el monte va más lento por el desnivel). Vale también para la gráfica 2.</div>
         <div class="chart-box" id="chart-ritmo"></div>
         <div class="scroll-hint">← desliza para ver lo anterior</div>
         <div class="legend-mini"><span><i style="background:#4E9F6E"></i>Ritmo (min/km)</span><span><i style="background:#C75450"></i>FC media</span><span><i style="background:#6B9BD1"></i>Desnivel (m)</span></div>
@@ -352,14 +351,14 @@
         <div class="interp" id="interp-2"></div>
       </div>
       <div class="card chart-card">
-        <h3>3 · Pulsaciones medias por carrera</h3>
+        <h3>2 · Pulsaciones medias por carrera</h3>
         <div class="chart-box" id="chart-fc"></div>
         <div class="scroll-hint">← desliza para ver lo anterior</div>
         <div class="explain"><b>Qué significa:</b> con qué pulsaciones medias corriste. Es normal que suban en carreras rápidas o con mucho desnivel.</div>
         <div class="interp" id="interp-3"></div>
       </div>
       <div class="card chart-card">
-        <h3>4 · Carga de running</h3>
+        <h3>3 · Carga de running</h3>
         <div class="toggle-group" id="carga-toggle">
           <button data-g="semana" class="active">Semana</button>
           <button data-g="mes">Mes</button>
@@ -371,7 +370,7 @@
         <div class="interp" id="interp-4"></div>
       </div>
       <div class="card chart-card">
-        <h3>5 · Recuperación</h3>
+        <h3>4 · Recuperación</h3>
         <div class="chart-box" id="chart-recuperacion"></div>
         <div class="scroll-hint">← desliza para ver lo anterior</div>
         <div class="legend-mini"><span><i style="background:#4E9F6E"></i>Sueño (nota 0-100)</span><span><i style="background:#D9A441"></i>FC en reposo (ppm)</span></div>
@@ -379,7 +378,7 @@
         <div class="interp" id="interp-5"></div>
       </div>
       <div class="card chart-card">
-        <h3>6 · Progreso hacia el objetivo</h3>
+        <h3>5 · Progreso hacia la meta</h3>
         <div class="chart-box" id="chart-progreso10k"></div>
         <div class="scroll-hint">← desliza para ver lo anterior</div>
         <div class="explain"><b>Qué significa:</b> tu <b>distancia sostenida</b> (la mediana de tu mejor tirada semanal en las últimas semanas activas) como % de tu objetivo. No es tu récord puntual: mide si lo mantienes con regularidad.</div>
@@ -1750,7 +1749,7 @@ function irAPantalla(pantalla, nav){
   document.querySelectorAll('.ajustes-tabs button').forEach(b=>b.classList.toggle('active', b.dataset.sub===pantalla));
   document.getElementById('screens').scrollTop=0;
   if(SUBTABS_AJUSTES.includes(pantalla)) window.__ultimoAjuste=pantalla;
-  if(pantalla==='evolucion') setTimeout(()=>['chart-maxdist','chart-ritmo','chart-fc','chart-carga','chart-recuperacion','chart-progreso10k'].forEach(scrollFinal), 0);
+  if(pantalla==='evolucion') setTimeout(()=>['chart-ritmo','chart-fc','chart-carga','chart-recuperacion','chart-progreso10k'].forEach(scrollFinal), 0);
 }
 document.querySelectorAll('.navbtn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -1896,7 +1895,9 @@ function computeCoachPlan(){
   return {
     hoyTitulo: titulo,
     hoyTexto: 'Ver el detalle de la sesión abajo.', glosario: glosarioDe(diaHoy),
-    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:13px; line-height:1.5; margin-bottom:4px;">${cabecera}${tagHecha}</div>`+terrenoSelectorHTML(TODAY, diaHoy, true),
+    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:13px; line-height:1.5; margin-bottom:4px;">${cabecera}${tagHecha}</div>`
+      + (diaHoy.cadenciaObj ? `<div style="font-size:12px; line-height:1.5; margin:6px 0; padding:6px 10px; background:var(--accent-soft); border-radius:10px;">🎯 <b>Hoy trabajas la cadencia:</b> ${(planCadencia(TODAY)||{}).bloque||'bloques cortos'} a <b>${diaHoy.cadenciaObj} pasos/min</b> en mitad del rodaje, con metrónomo y pasos más cortos (el detalle está en "Ver cómo hacerla").</div>` : '')
+      + terrenoSelectorHTML(TODAY, diaHoy, true),
     pasosHTML: infoApoyo+renderPasosHTML(diaHoy.pasos),
     tipoDia: diaHoy.tipo==='Evento' ? 'evento' : (diaHoy.tipo==='Fuerza' ? 'fuerza' : (diaHoy.tipo==='Estiramientos' ? 'descanso' : (['Tempo','Series'].includes(diaHoy.subtipo)?'duro':(diaHoy.subtipo==='Largo'?'largo':'facil'))))
   };
@@ -2045,7 +2046,7 @@ function descripcionDia(dia){
   if(dia.tipo==='Fuerza') return 'Fuerza · '+dia.subtipo;
   if(dia.tipo==='Estiramientos') return 'Estiramientos';
   if(dia.tipo==='Evento') return `${dia.nombre}${dia.hora?' ('+dia.hora+')':''}`;
-  return `${dia.subtipo} · ${dia.distanciaKm} km${dia.terrenoMixto?({trail:' · monte', pista:' · pista', asfalto:' · asfalto'}[dia.terreno||'asfalto']):''}`;
+  return `${dia.subtipo} · ${dia.distanciaKm} km${dia.terrenoMixto?({trail:' · monte', pista:' · pista', asfalto:' · asfalto'}[dia.terreno||'asfalto']):''}${dia.cadenciaObj?' · 🎯 cadencia':''}`;
 }
 function recomendacionManana(){
   const sem=semaforoActual();
@@ -2340,7 +2341,7 @@ function cargarDatosAuto(cb){ // cb(resultado): 'nuevo' | 'sin-cambios' | 'no-ar
     else { fuente='nube'; fin(r.estado); }
   });
 }
-const APP_VERSION='2026-10-20 · Hoy más limpio, calendario y plan con meta';
+const APP_VERSION='2026-10-20 · Progreso: gráficas por terreno y cadencia en Hoy';
 document.getElementById('app-version').textContent=APP_VERSION;
 function renderNubeCard(){
   const card=document.getElementById('garmin-nube-card'); if(!card) return;
@@ -2930,19 +2931,21 @@ function ritmoADec(r){ if(!r) return null; const [m,s]=r.split(':').map(Number);
 function updateCharts(){
   const carreras=soloCarreras();
   const labels=carreras.map(c=>fmtShort(c.fecha));
-  let rollMax=0; const maxSerie=carreras.map(c=>{rollMax=Math.max(rollMax,c.dist); return +rollMax.toFixed(2);});
-  const ritmoDec=carreras.map(c=>ritmoADec(c.ritmo));
-  const fcSerie=carreras.map(c=>c.fc);
-  const desnivelSerie=carreras.map(c=>c.desnivelM!=null?c.desnivelM:null);
   const objetivo=state.profile.objetivoKm||10;
+  // las gráficas de ritmo y pulsaciones se pueden ver por terreno (por defecto asfalto: el ritmo en monte no es comparable)
+  const carrerasG = terrenoGraf==='todas' ? carreras : carreras.filter(c=>(c.superficie||'asfalto')===terrenoGraf);
+  const labelsG=carrerasG.map(c=>fmtShort(c.fecha));
+  const ritmoDec=carrerasG.map(c=>ritmoADec(c.ritmo));
+  const fcSerie=carrerasG.map(c=>c.fc);
+  const desnivelSerie=carrerasG.map(c=>c.desnivelM!=null?c.desnivelM:null);
+  const vacioG='<div style="font-size:12px; color:var(--text-dim); padding:14px 0;">No hay salidas de este terreno todavía.</div>';
 
-  document.getElementById('chart-maxdist').innerHTML = lineChartSVG(labels, [{data:maxSerie, color:'#FF8A4C', fill:true, format:v=>v.toFixed(1)}], {labelsUltimos:12});
-  document.getElementById('chart-ritmo').innerHTML = lineChartSVG(labels, [
+  document.getElementById('chart-ritmo').innerHTML = carrerasG.length ? lineChartSVG(labelsG, [
     {data:ritmoDec, color:'#4E9F6E', format:toPaceLabel},
     {data:fcSerie, color:'#C75450', format:v=>v.toFixed(0)},
     {data:desnivelSerie, color:'#6B9BD1', format:v=>Math.round(v)+'m'}
-  ], {normalizar:true, labelsUltimos:6});
-  document.getElementById('chart-fc').innerHTML = lineChartSVG(labels, [{data:fcSerie, color:'#C75450', format:v=>v.toFixed(0)}], {labelsUltimos:12});
+  ], {normalizar:true, labelsUltimos:6}) : vacioG;
+  document.getElementById('chart-fc').innerHTML = carrerasG.length ? lineChartSVG(labelsG, [{data:fcSerie, color:'#C75450', format:v=>v.toFixed(0)}], {labelsUltimos:12}) : vacioG;
 
   const sostenidaSerie = serieSostenidaProgresiva(carreras);
   document.getElementById('chart-progreso10k').innerHTML = lineChartSVG(labels, [{data:sostenidaSerie.map(d=>+(d/objetivo*100).toFixed(1)), color:'#FF8A4C', fill:true, format:v=>v.toFixed(0)+'%'}], {labelsUltimos:12});
@@ -2963,19 +2966,22 @@ function updateCharts(){
     {data:roll.map(r=>r.fc), color:'#D9A441', format:v=>v.toFixed(0)}
   ], {normalizar:true, labelsUltimos:10});
 
-  ['chart-maxdist','chart-ritmo','chart-fc','chart-carga','chart-recuperacion','chart-progreso10k'].forEach(scrollFinal);
-  interpretarGraficas(carreras, agg, roll, objetivo);
+  ['chart-ritmo','chart-fc','chart-carga','chart-recuperacion','chart-progreso10k'].forEach(scrollFinal);
+  interpretarGraficas(carreras, agg, roll, objetivo, carrerasG);
 }
-function interpretarGraficas(carreras, agg, roll, objetivo){
+let terrenoGraf='asfalto';
+document.querySelectorAll('#terr-toggle button').forEach(b=>b.addEventListener('click', ()=>{
+  terrenoGraf=b.dataset.t; document.querySelectorAll('#terr-toggle button').forEach(x=>x.classList.toggle('active', x===b)); updateCharts();
+}));
+function interpretarGraficas(carreras, agg, roll, objetivo, carrerasG){
   const sinDatos='Todavía no hay datos suficientes para interpretar esta gráfica. Se irá llenando cuando se carguen tus entrenos de Garmin.';
-  if(!carreras.length){ [1,2,3,4,6].forEach(n=>setInterp(n, sinDatos)); }
+  if(!carreras.length){ [2,3,4,6].forEach(n=>setInterp(n, sinDatos)); }
   else {
     const c=computeConsistencia(carreras);
-    const rec6=Math.max(0, ...carreras.filter(x=>{const d=daysBetween(x.fecha,TODAY); return d>=0&&d<=42;}).map(x=>x.dist));
-    // 1 · distancia máxima
-    setInterp(1, `Tu carrera más larga hasta ahora fue de <b>${c.record} km</b> (${fmtShort(c.recordFecha)}). En las últimas 6 semanas tu tirada más larga ha sido de <b>${rec6.toFixed(1)} km</b>: esa es la distancia que tu cuerpo domina hoy. ${rec6>=c.record*0.9?'Estás muy cerca de tu mejor marca: toca consolidar, no forzar.':'Tu mejor marca queda lejos de tu momento actual: no hace falta repetirla, sube poco a poco.'}`);
-    // 2 · ritmo, FC, desnivel
-    const con=carreras.filter(x=>x.ritmo), ult=con.slice(-5), prev=con.slice(-10,-5);
+    const cg=carrerasG||carreras;
+    const etqT = terrenoGraf==='trail' ? ' en monte' : (terrenoGraf==='asfalto' ? ' en asfalto' : '');
+    // 2 · ritmo, FC, desnivel (según el terreno elegido)
+    const con=cg.filter(x=>x.ritmo), ult=con.slice(-5), prev=con.slice(-10,-5);
     if(ult.length>=3 && prev.length>=3){
       const rU=mediaSimple(ult.map(x=>ritmoADec(x.ritmo))), rP=mediaSimple(prev.map(x=>ritmoADec(x.ritmo)));
       const fU=mediaSimple(ult.map(x=>x.fc)), fP=mediaSimple(prev.map(x=>x.fc));
@@ -2986,10 +2992,10 @@ function interpretarGraficas(carreras, agg, roll, objetivo){
       else if(dRit>5 && dU!=null && dP!=null && dU>dP*1.3+20) veredicto='Vas más lento, pero es por el <b>desnivel</b> (más cuestas), no porque estés peor.';
       else if(dRit>5 && fU!=null && fP!=null && fU>fP+2) veredicto='Más lento y con más pulsaciones: puede ser <b>cansancio acumulado</b>. Conviene bajar un poco el ritmo y vigilar el descanso.';
       else veredicto='Sin cambios claros: tu forma se mantiene estable.';
-      setInterp(2, `Últimas 5 carreras: ritmo <b>${toPaceLabel(rU)}/km</b> (antes ${toPaceLabel(rP)}), FC <b>${fU!=null?Math.round(fU):'–'}</b> (antes ${fP!=null?Math.round(fP):'–'})${dU!=null?`, desnivel medio <b>${Math.round(dU)} m</b> (antes ${dP!=null?Math.round(dP):'–'})`:''}. ${veredicto}`);
-    } else setInterp(2, 'Hacen falta al menos 6 carreras con ritmo para comparar tus últimas con las anteriores.');
+      setInterp(2, `Últimas 5 carreras${etqT}: ritmo <b>${toPaceLabel(rU)}/km</b> (antes ${toPaceLabel(rP)}), FC <b>${fU!=null?Math.round(fU):'–'}</b> (antes ${fP!=null?Math.round(fP):'–'})${dU!=null?`, desnivel medio <b>${Math.round(dU)} m</b> (antes ${dP!=null?Math.round(dP):'–'})`:''}. ${veredicto}`);
+    } else setInterp(2, `Hacen falta al menos 6 carreras${etqT} con ritmo para comparar tus últimas con las anteriores.`);
     // 3 · FC
-    const fcs=carreras.filter(x=>x.fc).slice(-5);
+    const fcs=cg.filter(x=>x.fc).slice(-5);
     if(fcs.length){ const m=mediaSimple(fcs.map(x=>x.fc)); const z=zonaDeFC(m); setInterp(3, `Tus últimas carreras rondan las <b>${Math.round(m)} pulsaciones</b> de media, es decir la <b>${z.zona} (${z.label.toLowerCase()})</b>. ${z.zona==='Z1'||z.zona==='Z2'?'Es lo ideal para construir base sin castigar al cuerpo.':(z.zona==='Z3'?'Es un esfuerzo medio: bien si es a propósito, pero si lo haces siempre así no recuperas del todo.':'Es un esfuerzo alto de media: alterna con carreras más suaves.')}`); }
     else setInterp(3, sinDatos);
     // 6 · progreso
@@ -4309,7 +4315,7 @@ function renderCadencia(){
   el.innerHTML = queEs
     + `<div style="font-size:12.5px; line-height:1.55; margin-top:10px;"><b>Tu cadencia en asfalto:</b> ~${t.mediana} pasos/min (entre ${t.min} y ${t.max}) en tus últimas ${t.n} salidas${t.zancadaM?`, con una zancada media de ~${t.zancadaM.toFixed(2).replace('.',',')} m`:''}. ${lectura}${rodilla}</div>`
     + `<div style="margin-top:6px;">${t.ultimas.map(u=>`<span class="chip">${fmtShort(u.fecha)} · ${u.cad} · ${u.ritmo||''}/km</span>`).join('')}</div>`
-    + (c && pc ? `<div style="font-size:12.5px; line-height:1.55; margin-top:10px; padding:8px 10px; background:var(--accent-soft); border-radius:10px;"><b>Estás trabajando tu cadencia</b> (semana ${pc.sem+1}). Objetivo en los bloques: <b>${pc.objetivo} pasos/min</b> (+${Math.round(pc.pct*100)} % sobre tus ${c.base}). Esta semana: ${pc.bloque} dentro de un rodaje suave de asfalto; ya está en tu plan.<div class="btn-row"><button class="btn ghost small" id="cad-parar">Dejar de trabajarla</button></div></div>`
+    + (c && pc ? `<div style="font-size:12.5px; line-height:1.55; margin-top:10px; padding:8px 10px; background:var(--accent-soft); border-radius:10px;"><b>Estás trabajando tu cadencia</b> (semana ${pc.sem+1}). Objetivo en los bloques: <b>${pc.objetivo} pasos/min</b> (+${Math.round(pc.pct*100)} % sobre tus ${c.base}). Esta semana: ${pc.bloque} dentro de un rodaje suave de asfalto. Lo verás marcado con 🎯 en tu plan y, el día que toque, en "Hoy" con el paso a paso.<div class="btn-row"><button class="btn ghost small" id="cad-parar">Dejar de trabajarla</button></div></div>`
       : `<div style="font-size:12.5px; line-height:1.55; margin-top:10px;">Si quieres probarlo, te propongo un trabajo muy gradual: <b>objetivo ${Math.round(t.mediana*1.05)} pasos/min (+5 %)</b>, en bloques cortos dentro de tus rodajes suaves de asfalto, y subiendo poco a poco (nunca más de +10 %).<div class="btn-row"><button class="btn small" id="cad-empezar">Empezar a trabajar mi cadencia</button></div></div>`)
     + `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-top:8px;"><b style="color:var(--text)">Cómo se hace:</b> pon un metrónomo (una app, el reloj o una lista de música a ese ritmo) y da pasos más cortos y ligeros, sin ir más rápido: lo que sube es la frecuencia, no la velocidad. Si notas molestia en rodilla, gemelo o tendón de Aquiles, vuelve a tu cadencia habitual.</div>`
     + porque;
