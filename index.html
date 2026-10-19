@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Run Coach 10K — Prototipo funcional v3</title>
+<meta name="app-build" content="8.6 · 2026-10-20">
+<meta name="application-name" content="Run Kq">
+<meta name="apple-mobile-web-app-title" content="Run Kq">
+<title>Run Kq</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23FF8A4C'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='38' fill='%231B0E05'%3EK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#12182B; --surface:#1C2440; --surface-2:#232C4D; --line:rgba(242,239,233,0.08);
+    --bg:#0F1424; --surface:#182039; --surface-2:#222B4C; --line:rgba(242,239,233,0.08);
     --text:#F2EFE9; --text-dim:#8A93AC;
     --accent:#FF8A4C; --accent-soft:rgba(255,138,76,0.16);
-    --green:#4E9F6E; --green-soft:rgba(78,159,110,0.16);
-    --amber:#D9A441; --amber-soft:rgba(217,164,65,0.16);
-    --red:#C75450; --red-soft:rgba(199,84,80,0.18);
+    --green:#3FBF7F; --green-soft:rgba(63,191,127,0.16);
+    --amber:#F0B429; --amber-soft:rgba(240,180,41,0.16);
+    --red:#EF5B5B; --red-soft:rgba(239,91,91,0.18);
     --radius:18px;
   }
   *{box-sizing:border-box;}
@@ -34,6 +38,13 @@
   @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
   h1.page-title{font-family:'Space Grotesk'; font-size:22px; margin:2px 0 18px; font-weight:600;}
   .eyebrow{font-family:'JetBrains Mono'; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); margin-bottom:4px;}
+  /* Tendencias: verde = mejora, ámbar = estable, rojo = empeora (con flecha, para no depender solo del color) */
+  :root{ --up:var(--green); --flat:var(--amber); --down:var(--red); }
+  .tnd-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .tnd{background:var(--surface-2); border-radius:14px; padding:10px 12px; border-left:3px solid var(--text-dim);}
+  .tnd.up{border-left-color:var(--up);} .tnd.flat{border-left-color:var(--flat);} .tnd.down{border-left-color:var(--down);}
+  .tnd .n{font-size:10.5px; color:var(--text-dim);} .tnd .v{font-family:'JetBrains Mono'; font-size:15px; font-weight:600; margin:2px 0;}
+  .tnd .d{font-size:11px; font-weight:600;} .tnd.up .d{color:var(--up);} .tnd.flat .d{color:var(--flat);} .tnd.down .d{color:var(--down);}
   .card{background:var(--surface); border-radius:var(--radius); padding:16px 18px; margin-bottom:14px; border:1px solid var(--line);}
   .card h3{margin:0 0 10px; font-family:'Space Grotesk'; font-size:14.5px; font-weight:600;}
   .card h3 .muted{font-family:'Inter'; font-weight:400; font-size:11px; color:var(--text-dim);}
@@ -65,9 +76,9 @@
   .checkin-q .qtext{font-size:13px; margin-bottom:8px; color:var(--text);}
   .molestia-extra{background:var(--surface-2); border-radius:14px; padding:12px; margin-top:8px;}
   .alert{border-radius:var(--radius); padding:13px 16px; margin-bottom:12px; display:flex; gap:11px; align-items:flex-start; border:1px solid;}
-  .alert.low{background:var(--amber-soft); border-color:rgba(217,164,65,0.35);}
-  .alert.high{background:var(--red-soft); border-color:rgba(199,84,80,0.5);}
-  .alert.ok{background:var(--green-soft); border-color:rgba(78,159,110,0.4);}
+  .alert.low{background:var(--amber-soft); border-color:rgba(240,180,41,0.35);}
+  .alert.high{background:var(--red-soft); border-color:rgba(239,91,91,0.5);}
+  .alert.ok{background:var(--green-soft); border-color:rgba(63,191,127,0.4);}
   .alert .icon{font-size:16px; margin-top:1px;}
   .alert .txt strong{display:block; font-size:13px; margin-bottom:2px; font-family:'Space Grotesk';}
   .alert .txt span{font-size:11.5px; color:var(--text-dim);}
@@ -157,8 +168,8 @@
 
 <div class="frame">
   <div class="topbar">
-    <div class="brand">RUN COACH <span>10K</span> <button id="persona-label" class="tag" style="cursor:pointer; border:none; font-size:10px;" title="Cambiar de persona"></button></div>
-    <div class="date" id="today-label"></div>
+    <div class="brand"><svg width="20" height="20" viewBox="0 0 20 20" style="vertical-align:-4px; margin-right:6px;"><rect width="20" height="20" rx="6" fill="#FF8A4C"/><text x="10" y="14.8" text-anchor="middle" font-family="Space Grotesk, Arial, sans-serif" font-weight="700" font-size="12" fill="#1B0E05">K</text></svg>Run <span>Kq</span> <button id="persona-label" class="tag" style="cursor:pointer; border:none; font-size:10px;" title="Cambiar de persona"></button></div>
+    <div style="text-align:right;"><div class="date" id="today-label"></div><div class="date" id="app-ver-top" style="font-size:9px; opacity:.75; cursor:pointer;" title="Versión de la app: toca para comprobar si hay otra más nueva"></div></div>
   </div>
 
   <div class="screens" id="screens">
@@ -312,6 +323,11 @@
     <section class="screen" data-screen="evolucion">
       <h1 class="page-title">Progreso</h1>
       <div style="font-size:11.5px; color:var(--text-dim); margin:-8px 0 12px;">Cada gráfica arranca en lo más reciente; desliza hacia la izquierda para ver lo anterior.</div>
+      <div class="card" id="tendencias-card">
+        <h3>Tendencias <span class="muted">(últimas 4 semanas vs 4 anteriores)</span></h3>
+        <div id="tendencias-body"></div>
+      </div>
+
       <div class="card" id="aprendido-card">
         <h3>Lo que he aprendido de ti</h3>
         <div id="aprendido-body"></div>
@@ -346,7 +362,7 @@
         <div style="font-size:11px; color:var(--text-dim); margin:2px 0 6px;">Por defecto solo asfalto, para comparar ritmos de verdad (el monte va más lento por el desnivel). Vale también para la gráfica 2.</div>
         <div class="chart-box" id="chart-ritmo"></div>
         <div class="scroll-hint">← desliza para ver lo anterior</div>
-        <div class="legend-mini"><span><i style="background:#4E9F6E"></i>Ritmo (min/km)</span><span><i style="background:#C75450"></i>FC media</span><span><i style="background:#6B9BD1"></i>Desnivel (m)</span></div>
+        <div class="legend-mini"><span><i style="background:#3FBF7F"></i>Ritmo (min/km)</span><span><i style="background:#EF5B5B"></i>FC media</span><span><i style="background:#6B9BD1"></i>Desnivel (m)</span></div>
         <div class="explain"><b>Qué significa:</b> cada punto es una carrera. Las tres líneas están a su propia escala para poder compararlas: lo importante es la forma (si suben o bajan juntas), no el valor cruzado.</div>
         <div class="interp" id="interp-2"></div>
       </div>
@@ -373,7 +389,7 @@
         <h3>4 · Recuperación</h3>
         <div class="chart-box" id="chart-recuperacion"></div>
         <div class="scroll-hint">← desliza para ver lo anterior</div>
-        <div class="legend-mini"><span><i style="background:#4E9F6E"></i>Sueño (nota 0-100)</span><span><i style="background:#D9A441"></i>FC en reposo (ppm)</span></div>
+        <div class="legend-mini"><span><i style="background:#3FBF7F"></i>Sueño (nota 0-100)</span><span><i style="background:#F0B429"></i>FC en reposo (ppm)</span></div>
         <div class="explain"><b>Qué significa:</b> es cómo de descansado llegas a cada entreno. Mira dos cosas medidas por tu reloj cada noche (promediadas 7 días para quitar ruido): la <b>nota de sueño</b> (más alta = mejor) y tus <b>pulsaciones en reposo</b> (más bajas = mejor). Si el sueño baja y el pulso sube a la vez, tu cuerpo pide un respiro.</div>
         <div class="interp" id="interp-5"></div>
       </div>
@@ -591,7 +607,7 @@
       <button class="btn ghost" id="recalcular-todo" style="width:100%; margin-bottom:8px;">Rehacer mi plan desde mis datos de Garmin</button>
       <div style="font-size:11px; color:var(--text-dim); margin:-2px 0 10px;">Vuelve a valorar tu fase y a calcular esta semana con tu historial real. Úsalo si el plan te parece corto o demasiado suave.</div>
       <button class="btn ghost" id="redo-onboarding" style="width:100%; margin-bottom:8px;">Repetir cuestionario inicial</button>
-      <div class="footnote">Cambiar cualquier dato recalcula al momento tu plan.<br>Versión de la app: <b id="app-version"></b></div>
+      <div class="footnote">Cambiar cualquier dato recalcula al momento tu plan.<br>Versión de la app: <b id="app-version"></b> <span id="app-ver-estado"></span> · <a href="#" id="app-ver-check" style="color:var(--accent);">comprobar ahora</a></div>
     </section>
 
     <!-- ============ BIBLIOTECA ============ -->
@@ -733,7 +749,7 @@
   </div>
 
   <div id="persona-modal" style="position:absolute; inset:0; background:var(--bg); z-index:60; overflow-y:auto; padding:22px 20px; display:none;">
-    <div class="eyebrow">Run Coach</div>
+    <div class="eyebrow">Run Kq</div>
     <h1 class="page-title" id="persona-titulo">¿Quién eres?</h1>
     <div id="persona-lista"></div>
     <div class="card" style="margin-top:14px;">
@@ -1091,8 +1107,11 @@ function parseGarminAPIJSON(text){
 /* ================= MOTOR DE ENTRENADOR: ZONAS FC Y RITMOS ================= */
 function calcularZonasFC(profile, fcReposoActual){
   const obs = fcMaxObservada();
-  const fcMax = profile.fcMax || (profile.edad ? 220-profile.edad : (obs || 190));
-  const fuenteFcMax = profile.fcMax ? 'perfil' : (profile.edad ? 'estimada_edad' : (obs ? 'observada' : 'generica'));
+  const est = profile.edad ? 220-profile.edad : null;
+  // La fórmula por edad puede quedarse corta (error típico de ±10 ppm): si tu reloj ha medido bastante más en tus entrenos, se usa lo medido
+  const usarObs = !profile.fcMax && est && obs && obs>=est+4;
+  const fcMax = profile.fcMax || (usarObs ? obs : (est || obs || 190));
+  const fuenteFcMax = profile.fcMax ? 'perfil' : (usarObs ? 'observada' : (est ? 'estimada_edad' : (obs ? 'observada' : 'generica')));
   const fcReposo = fcReposoActual!=null ? fcReposoActual : 60;
   const hrr = Math.max(1, fcMax-fcReposo);
   const bandas=[
@@ -1111,11 +1130,20 @@ function estimarRitmoBase(carreras, superficie){ // soloCarreras(), ascendente; 
   const decs = ultimas.map(c=>{ const [m,s]=c.ritmo.split(':').map(Number); return m+s/60; }).sort((a,b)=>a-b);
   return decs[Math.floor((decs.length-1)/2)];
 }
+// Mejor ritmo medio sostenido (salida de asfalto de ≥4 km, últimas 8 semanas): referencia real de lo que puedes mantener
+function ritmoSostenidoMejor(){
+  const l=soloCarreras().filter(c=>(c.superficie||'asfalto')==='asfalto' && c.dist>=4 && c.ritmo && daysBetween(c.fecha,TODAY)>=0 && daysBetween(c.fecha,TODAY)<=56 && !(c.desnivelM && c.dist && c.desnivelM/c.dist>=30));
+  return l.length>=3 ? Math.min(...l.map(c=>ritmoADec(c.ritmo))) : null;
+}
 function rangosRitmoPorTipo(base){
-  return {
+  const r={
     suave:[base+.5, base+1], rodaje:[base-.25, base+.25], tempo:[base-.58, base-.33],
     series:[base-.92, base-.58], largo:[base+.15, base+.35]
   };
+  // Tempo y series se anclan a lo que ya has sostenido de verdad, no solo a tu ritmo mediano (que ya es esfuerzo medio-alto en muchas personas)
+  const ref=ritmoSostenidoMejor();
+  if(ref!=null){ r.tempo=[ref-0.10, ref+0.10]; r.series=[ref-0.45, ref-0.20]; }
+  return r;
 }
 
 /* ================= MOTOR DE ENTRENADOR: ESCALACIÓN DE MOLESTIA ================= */
@@ -1244,7 +1272,7 @@ function decidirSubtipoBase(fase, dCode, diasRunning, taper){
 function construirPasosPorSubtipo(subtipo, dist, ritmoRango, zonaObjetivo, esTrail){
   const ritmoTxt = ritmoRango ? `${toPaceLabel(ritmoRango[0])}-${toPaceLabel(ritmoRango[1])} /km` : (esTrail ? 'por esfuerzo y zona de FC (camina las cuestas largas, el desnivel manda sobre el ritmo)' : 'por sensación (RPE 4-5/10)');
   const pasos=[{titulo:'Calentamiento (5-10 min)', detalle:'Caminar + movilidad de tobillo, rodilla y cadera.'}];
-  if(subtipo==='Series') pasos.push({titulo:'Series', detalle:`6-8 x 400m fuertes (zona ${zonaObjetivo}) con 90s trote suave de recuperación entre series.`});
+  if(subtipo==='Series') pasos.push({titulo:'Series', detalle:`4-8 repeticiones de 400 m (unos ${dist} km de trabajo, sin contar calentamiento ni vuelta a la calma): 4-5 la primera vez y una más cada semana hasta 8. Esfuerzo duro pero controlado (7-8 sobre 10, zona ${zonaObjetivo}), con 90 s de trote suave entre una y otra. Si en las últimas ya no puedes mantener el ritmo, te has pasado: la próxima vez, una menos o un poco más suave.`});
   else if(subtipo==='Tempo') pasos.push({titulo:'Tempo', detalle:`${Math.max(2,+(dist*0.6).toFixed(1))} km sostenidos a ${ritmoTxt} (zona ${zonaObjetivo}).`});
   else if(subtipo==='Largo') pasos.push({titulo:'Tirada larga', detalle:`${dist} km continuos a ${ritmoTxt} (zona ${zonaObjetivo}), sin prisa.`});
   else if(subtipo==='Progresivo') pasos.push({titulo:'Progresivo', detalle:`${dist} km empezando suave y bajando el ritmo cada km hasta terminar cómodo-fuerte (zona ${zonaObjetivo}).`});
@@ -2013,7 +2041,8 @@ function renderHoy(){
       alertaHTML=`<div class="alert ok"><div class="icon">✅</div><div class="txt"><strong>Datos de Garmin al día</strong><span>Último dato: ${fmtShort(ult)}${d===0?' (hoy)':''}.</span></div></div>`;
     }
   }
-  document.getElementById('hoy-alerts').innerHTML = alertaHTML + (repoGitHub() ? `<div class="btn-row" style="margin-top:-4px;"><button class="btn ghost small btn-actualizar">🔄 Actualizar datos de Garmin</button></div><div class="act-estado" style="font-size:12px; line-height:1.5; margin:6px 0 10px;"></div>` : '');
+  const avisoVer = (window.__verRemota && cmpVer(window.__verRemota,APP_BUILD)>0) ? `<div class="alert low"><div class="icon">🔄</div><div class="txt"><strong>Hay una versión nueva (v${escapeHTML(window.__verRemota)})</strong><span>Tienes la v${escapeHTML(APP_BUILD)}. <a href="#" id="app-recargar" style="color:var(--accent);">Actualizar la app</a></span></div></div>` : '';
+  document.getElementById('hoy-alerts').innerHTML = avisoVer + alertaHTML + (repoGitHub() ? `<div class="btn-row" style="margin-top:-4px;"><button class="btn ghost small btn-actualizar">🔄 Actualizar datos de Garmin</button></div><div class="act-estado" style="font-size:12px; line-height:1.5; margin:6px 0 10px;"></div>` : '');
 
   const plan=computeCoachPlan();
   document.getElementById('hoy-toca').textContent = plan.hoyTitulo.replace(/^Hoy: /,'');
@@ -2341,8 +2370,39 @@ function cargarDatosAuto(cb){ // cb(resultado): 'nuevo' | 'sin-cambios' | 'no-ar
     else { fuente='nube'; fin(r.estado); }
   });
 }
-const APP_VERSION='2026-10-20 · Progreso: gráficas por terreno y cadencia en Hoy';
-document.getElementById('app-version').textContent=APP_VERSION;
+/* ---- Versión de la app y comprobación de si hay otra más nueva publicada ---- */
+const APP_META=(document.querySelector('meta[name="app-build"]')||{}).content||'?';
+const APP_BUILD=APP_META.split(' · ')[0];
+const cmpVer=(a,b)=>{ const x=String(a).split('.').map(Number), y=String(b).split('.').map(Number); for(let i=0;i<Math.max(x.length,y.length);i++){ const d=(x[i]||0)-(y[i]||0); if(d) return d; } return 0; };
+window.__verRemota=null; window.__verComprobada=false;
+function pintarVersion(){
+  const r=repoGitHub(), rem=window.__verRemota, nueva=rem && cmpVer(rem,APP_BUILD)>0;
+  const top=document.getElementById('app-ver-top'); if(top) top.textContent='v'+APP_BUILD+(nueva?' ⟳':'');
+  const estado = !r ? 'copia local (no se compara)' : (!window.__verComprobada ? 'comprobando…' : (rem ? (nueva ? `⚠️ hay una versión más nueva publicada (v${rem}): recarga` : '✓ es la última publicada') : 'no he podido comprobar si hay otra más nueva'));
+  const v=document.getElementById('app-version'); if(v) v.textContent='v'+APP_META;
+  const e=document.getElementById('app-ver-estado'); if(e) e.textContent='— '+estado;
+}
+async function comprobarVersion(){
+  const r=repoGitHub(); window.__verComprobada=false;
+  if(!r){ pintarVersion(); return; }
+  pintarVersion();
+  const ctrl=new AbortController();
+  try{
+    const res=await fetch(`https://raw.githubusercontent.com/${r.usuario}/${r.repo}/main/index.html?t=${Date.now()}`,{cache:'no-store', signal:ctrl.signal});
+    const reader=res.body.getReader(), dec=new TextDecoder(); let txt='';
+    while(true){ const {done,value}=await reader.read(); if(done) break; txt+=dec.decode(value,{stream:true}); if(/name="app-build" content="[^"]+"/.test(txt) || txt.length>6000) break; }
+    ctrl.abort();
+    const m=/name="app-build" content="([^"]+)"/.exec(txt);
+    window.__verRemota = m ? m[1].split(' · ')[0] : null;
+  }catch(e){ window.__verRemota=null; }
+  window.__verComprobada=true; pintarVersion();
+  try{ renderHoy(); }catch(e){}
+}
+document.getElementById('app-ver-top').addEventListener('click', ()=>{ comprobarVersion().then(()=>toast(!repoGitHub()?'Copia local: sin comparación':(window.__verRemota ? (cmpVer(window.__verRemota,APP_BUILD)>0?'Hay una versión más nueva: v'+window.__verRemota:'Estás en la última versión (v'+APP_BUILD+')') : 'No he podido comprobarlo'))); });
+document.addEventListener('click', e=>{ if(e.target.closest('#app-ver-check')){ e.preventDefault(); document.getElementById('app-ver-top').click(); return; }
+  if(e.target.closest('#app-recargar')){ e.preventDefault(); location.href=location.pathname+'?v='+encodeURIComponent(window.__verRemota||Date.now()); } });
+pintarVersion();
+setTimeout(comprobarVersion, 1500);
 function renderNubeCard(){
   const card=document.getElementById('garmin-nube-card'); if(!card) return;
   const n=window.__nube;
@@ -2702,7 +2762,9 @@ function renderZonasCard(){
   const desc={Z1:'Calentar y recuperar. Muy fácil.', Z2:'La más importante: puedes hablar con frases completas. Aquí se construye la base.', Z3:'Moderada: hablas con frases cortas. Cansa pero es sostenible.', Z4:'Dura (umbral): solo para tramos cortos y controlados.', Z5:'Máximo esfuerzo: segundos o pocos minutos. Casi nunca.'};
   document.getElementById('zonas-body').innerHTML =
     z.bandas.map(b=>`<div class="zona-fila"><div><b>${b.zona}</b> · ${b.label}<div style="color:var(--text-dim); font-size:11px;">${desc[b.zona]}</div></div><div style="font-family:'JetBrains Mono'; white-space:nowrap;">${b.min}-${b.max}</div></div>`).join('')
-    + `<div style="font-size:11px; color:var(--text-dim); margin-top:8px; line-height:1.5;">Pulsaciones por minuto. Calculadas con la fórmula de Karvonen usando tu FC en reposo (${Math.round(z.fcReposo)}) y FC máxima ${z.fcMax}, basada en ${fuente}. Son una guía, no una prueba médica.</div>`;
+    + `<div style="font-size:11px; color:var(--text-dim); margin-top:8px; line-height:1.5;">Pulsaciones por minuto. Calculadas con la fórmula de Karvonen usando tu FC en reposo (${Math.round(z.fcReposo)}) y FC máxima ${z.fcMax}, basada en ${fuente}. Son una guía, no una prueba médica.</div>`
+    + ((state.profile.fcMax && fcMaxObservada() && fcMaxObservada()>=state.profile.fcMax+6) ? `<div class="alert low" style="margin-top:8px;"><div class="icon">💓</div><div class="txt"><strong>Tu FC máxima podría ser mayor</strong><span>Tu reloj ha medido hasta ${fcMaxObservada()} ppm en tus entrenos y tienes puesta ${state.profile.fcMax}. Con una máxima más alta tus zonas suben (y tus rodajes suaves quedarían en zona 2 en vez de 3). <a href="#" id="usar-fcmax-obs" style="color:var(--accent);">Usar ${fcMaxObservada()}</a></span></div></div>` : '');
+  const uo=document.getElementById('usar-fcmax-obs'); if(uo) uo.addEventListener('click', e=>{ e.preventDefault(); state.profile.fcMax=fcMaxObservada(); saveState(); recalcularPlan(); renderAll(); toast('FC máxima actualizada'); });
 }
 function renderPerfil(){
   const persona=store.personas[store.activeId];
@@ -2941,11 +3003,11 @@ function updateCharts(){
   const vacioG='<div style="font-size:12px; color:var(--text-dim); padding:14px 0;">No hay salidas de este terreno todavía.</div>';
 
   document.getElementById('chart-ritmo').innerHTML = carrerasG.length ? lineChartSVG(labelsG, [
-    {data:ritmoDec, color:'#4E9F6E', format:toPaceLabel},
-    {data:fcSerie, color:'#C75450', format:v=>v.toFixed(0)},
+    {data:ritmoDec, color:'#3FBF7F', format:toPaceLabel},
+    {data:fcSerie, color:'#EF5B5B', format:v=>v.toFixed(0)},
     {data:desnivelSerie, color:'#6B9BD1', format:v=>Math.round(v)+'m'}
   ], {normalizar:true, labelsUltimos:6}) : vacioG;
-  document.getElementById('chart-fc').innerHTML = carrerasG.length ? lineChartSVG(labelsG, [{data:fcSerie, color:'#C75450', format:v=>v.toFixed(0)}], {labelsUltimos:12}) : vacioG;
+  document.getElementById('chart-fc').innerHTML = carrerasG.length ? lineChartSVG(labelsG, [{data:fcSerie, color:'#EF5B5B', format:v=>v.toFixed(0)}], {labelsUltimos:12}) : vacioG;
 
   const sostenidaSerie = serieSostenidaProgresiva(carreras);
   document.getElementById('chart-progreso10k').innerHTML = lineChartSVG(labels, [{data:sostenidaSerie.map(d=>+(d/objetivo*100).toFixed(1)), color:'#FF8A4C', fill:true, format:v=>v.toFixed(0)+'%'}], {labelsUltimos:12});
@@ -2962,8 +3024,8 @@ function updateCharts(){
     return {f:s.fecha, p:avgP!=null?+avgP.toFixed(1):null, fc:avgF!=null?+avgF.toFixed(1):null};
   });
   document.getElementById('chart-recuperacion').innerHTML = lineChartSVG(roll.map(r=>fmtShort(r.f)), [
-    {data:roll.map(r=>r.p), color:'#4E9F6E', format:v=>v.toFixed(0)},
-    {data:roll.map(r=>r.fc), color:'#D9A441', format:v=>v.toFixed(0)}
+    {data:roll.map(r=>r.p), color:'#3FBF7F', format:v=>v.toFixed(0)},
+    {data:roll.map(r=>r.fc), color:'#F0B429', format:v=>v.toFixed(0)}
   ], {normalizar:true, labelsUltimos:10});
 
   ['chart-ritmo','chart-fc','chart-carga','chart-recuperacion','chart-progreso10k'].forEach(scrollFinal);
@@ -3887,6 +3949,37 @@ function aprendizajes(){
   if(cl.length) out.push({k:'clase', t:'Tus clases', txt:`Has hecho ${cl.length} sesiones de funcional en 8 semanas (~${(cl.length/8).toFixed(1).replace('.',',')} por semana).`});
   return out;
 }
+// Tendencias con color: verde mejora, ámbar estable, rojo empeora (umbral de "estable": ±2 %)
+function renderTendencias(){
+  const el=document.getElementById('tendencias-body'); if(!el) return;
+  const car=soloCarreras(), su=todoSueno();
+  const rango=(arr,d0,d1)=>arr.filter(x=>{ const d=daysBetween(x.fecha,TODAY); return d>=d0 && d<d1; });
+  const kmSem=(d0)=>rango(car,d0,d0+28).reduce((a,c)=>a+(c.dist||0),0)/4;
+  const asf=(d0)=>rango(car,d0,d0+28).filter(c=>c.ritmo && c.dist>=3 && (c.superficie||'asfalto')==='asfalto');
+  const ritmoMed=(d0)=>{ const a=asf(d0); return a.length>=3 ? mediana(a.map(c=>ritmoADec(c.ritmo))) : null; };
+  const efi=c=>(c.dist>=3 && c.fc && c.ritmo && (c.superficie||'asfalto')==='asfalto') ? (60/ritmoADec(c.ritmo))*(kmEquivalentes(c)/c.dist)/c.fc : null;
+  const efiMed=(d0)=>{ const v=rango(car,d0,d0+28).map(efi).filter(x=>x); return v.length>=3 ? mediana(v) : null; };
+  const sueno=(d0,campo)=>{ const v=rango(su,d0,d0+28).map(s=>s[campo]).filter(x=>x!=null&&!isNaN(x)); return v.length>=8 ? v.reduce((a,b)=>a+b,0)/v.length : null; };
+  const fmt1=x=>x.toFixed(1).replace('.',',');
+  const M=[
+    {n:'Km por semana', a:kmSem(0), b:kmSem(28), mejor:'sube', f:x=>fmt1(x)+' km', min:1, nota:'sube = más volumen'},
+    {n:'Ritmo en asfalto', a:ritmoMed(0), b:ritmoMed(28), mejor:'baja', f:x=>toPaceLabel(x)+'/km', nota:'baja = más rápido'},
+    {n:'Eficiencia (velocidad por pulsación)', a:efiMed(0), b:efiMed(28), mejor:'sube', f:x=>(x*100).toFixed(1).replace('.',','), nota:'sube = más forma aeróbica'},
+    {n:'Sueño (nota)', a:sueno(0,'puntuacion'), b:sueno(28,'puntuacion'), mejor:'sube', f:x=>x.toFixed(0), nota:'sube = duermes mejor'},
+    {n:'FC en reposo', a:sueno(0,'fcReposo'), b:sueno(28,'fcReposo'), mejor:'baja', f:x=>x.toFixed(0)+' ppm', nota:'baja = más recuperado'}
+  ];
+  const celdas=M.map(m=>{
+    if(m.a==null || m.b==null || !m.b) return `<div class="tnd"><div class="n">${m.n}</div><div class="v">–</div><div class="d" style="color:var(--text-dim); font-weight:400;">faltan datos</div></div>`;
+    const pct=(m.a/m.b-1)*100, estable=Math.abs(pct)<2;
+    const mejora=(m.mejor==='sube'?pct>0:pct<0);
+    const cls=estable?'flat':(mejora?'up':'down'), flecha=estable?'●':(pct>0?'▲':'▼');
+    const txt=estable?'estable':`${flecha} ${Math.abs(pct).toFixed(1).replace('.',',')} % ${mejora?'mejor':'peor'}`;
+    return `<div class="tnd ${cls}"><div class="n">${m.n}</div><div class="v">${m.f(m.a)}</div><div class="d">${estable?flecha+' ':''}${txt}</div><div class="n" style="margin-top:2px;">antes ${m.f(m.b)}</div></div>`;
+  });
+  const r=ratioCarga(); let cc='';
+  if(r){ const v=r.ratio, cls=(v>=0.8&&v<=1.3)?'up':(v>1.5?'down':'flat'); cc=`<div class="tnd ${cls}"><div class="n">Carga (7 días vs media de 4 semanas)</div><div class="v">${v.toFixed(2).replace('.',',')}</div><div class="d">${v>1.5?'▼ sube demasiado deprisa':(v>1.3?'● algo alta':(v<0.8?'● baja':'▲ en equilibrio'))}</div></div>`; }
+  el.innerHTML=`<div class="tnd-grid">${celdas.join('')}${cc}</div><div style="font-size:10.5px; color:var(--text-dim); margin-top:8px; line-height:1.5;"><span style="color:var(--green)">Verde</span> = mejora · <span style="color:var(--amber)">ámbar</span> = estable (±2 %) · <span style="color:var(--red)">rojo</span> = empeora. Son tendencias de tus datos de Garmin, no un diagnóstico; el calor, el terreno y el cansancio también influyen. Los umbrales de carga son orientativos.</div>`;
+}
 function renderAprendido(){
   const el=document.getElementById('aprendido-body'); if(!el) return;
   el.innerHTML=aprendizajes().map(a=>{ const k=CONOCIMIENTO[a.k]; return `<div class="why-item" style="padding:8px 0; border-bottom:1px solid var(--line); cursor:pointer;"><div style="font-size:12.5px; line-height:1.5;"><b>${a.t}.</b> ${escapeHTML(a.txt)}</div><div class="why-more" style="display:none; margin-top:6px; font-size:11.5px; line-height:1.5; color:var(--text-dim); background:var(--surface-2); border-radius:10px; padding:8px 10px;">${k?`<b style="color:var(--text)">${k.t}</b> <span class="tag">${k.ev}</span><br>${k.por}<br><i>Fuente: ${k.fuente}</i>`:''}</div></div>`; }).join('')
@@ -4472,6 +4565,7 @@ function renderAll(){
   renderSuplementos();
   renderWhy();
   renderAprendido();
+  renderTendencias();
   renderAnalisisHoy();
   renderCadencia();
   renderCalendario();
