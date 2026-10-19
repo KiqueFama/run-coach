@@ -18,7 +18,12 @@
   }
   *{box-sizing:border-box;}
   body{margin:0; background:#05070F; font-family:'Inter',sans-serif; color:var(--text); display:flex; justify-content:center; padding:24px 0;}
-  .frame{width:390px; max-width:100vw; height:844px; background:var(--bg); border-radius:40px; overflow:hidden; position:relative; box-shadow:0 40px 80px rgba(0,0,0,0.5); display:flex; flex-direction:column;}
+  .frame{width:390px; max-width:100vw; height:min(844px, calc(100vh - 48px)); height:min(844px, calc(100dvh - 48px)); background:var(--bg); border-radius:40px; overflow:hidden; position:relative; box-shadow:0 40px 80px rgba(0,0,0,0.5); display:flex; flex-direction:column;}
+  /* En el móvil la app ocupa toda la pantalla: la barra de abajo queda siempre a la vista y solo se desplaza el contenido */
+  @media (max-width:520px){
+    body{padding:0; display:block;}
+    .frame{width:100%; max-width:100%; height:100vh; height:100dvh; border-radius:0; box-shadow:none;}
+  }
   .topbar{padding:22px 20px 12px; display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--line); flex-shrink:0;}
   .brand{font-family:'Space Grotesk'; font-weight:700; font-size:15px;}
   .brand span{color:var(--accent);}
@@ -96,7 +101,7 @@
   .profile-item .l{font-size:12px; color:var(--text-dim); margin-bottom:6px; display:block;}
   .chip{display:inline-block; background:var(--surface-2); padding:4px 9px; border-radius:8px; font-size:11px; margin:2px 3px 0 0;}
   .footnote{font-size:10.5px; color:var(--text-dim); text-align:center; margin:18px 0 4px; line-height:1.5;}
-  .navbar{position:absolute; bottom:0; left:0; right:0; background:rgba(28,36,64,0.92); backdrop-filter:blur(10px); border-top:1px solid var(--line); display:flex; padding:8px 4px 18px;}
+  .navbar{position:absolute; bottom:0; left:0; right:0; background:rgba(28,36,64,0.92); backdrop-filter:blur(10px); border-top:1px solid var(--line); display:flex; padding:8px 4px 18px; padding-bottom:calc(18px + env(safe-area-inset-bottom, 0px)); z-index:40;}
   .navbtn{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; color:var(--text-dim); font-family:'Inter'; font-size:9px; cursor:pointer; padding:4px 0;}
   .navbtn svg{width:18px; height:18px;}
   .navbtn.active{color:var(--accent);}
@@ -653,7 +658,7 @@
       <button class="btn ghost" id="recalcular-todo" style="width:100%; margin-bottom:8px;">Rehacer mi plan desde mis datos de Garmin</button>
       <div style="font-size:11px; color:var(--text-dim); margin:-2px 0 10px;">Vuelve a valorar tu fase y a calcular esta semana con tu historial real. Úsalo si el plan te parece corto o demasiado suave.</div>
       <button class="btn ghost" id="redo-onboarding" style="width:100%; margin-bottom:8px;">Repetir cuestionario inicial</button>
-      <div class="footnote">Cambiar cualquier dato recalcula al momento tu plan.</div>
+      <div class="footnote">Cambiar cualquier dato recalcula al momento tu plan.<br>Versión de la app: <b id="app-version"></b></div>
     </section>
 
     <!-- ============ BIBLIOTECA ============ -->
@@ -1363,12 +1368,28 @@ function generarPlanSemana(semanaISO){
   const prevWk=semanaAnterior(semanaISO);
   const prevPlan=state.planSemanal[prevWk] || (window.__planesTmp||{})[prevWk];
   const consist=computeConsistencia(carreras);
-  let baseline = (prevWk>=isoWeek(TODAY) && prevPlan && prevPlan.targetWeekKm) ? (prevPlan.taper && prevPlan.baselineKm ? prevPlan.baselineKm : prevPlan.targetWeekKm) : sumaDistanciaSemana(carreras, prevWk);
+  let baseline;
+  if(prevWk>=isoWeek(TODAY) && prevPlan && prevPlan.targetWeekKm){
+    // semanas futuras: se encadenan con la anterior (el nivel de carga, no el valor de una semana de descarga)
+    baseline = prevPlan.taper && prevPlan.baselineKm ? prevPlan.baselineKm : (prevPlan.cargaBase || prevPlan.targetWeekKm);
+  } else {
+    // punto de partida real: la última semana, o el 90 % de tu media de las últimas 4 semanas con carreras si es mayor (una semana floja no te baja el plan)
+    let w=prevWk; const tot=[];
+    for(let i=0;i<4;i++){ tot.push(sumaDistanciaSemana(carreras, w)); w=semanaAnterior(w); }
+    const activas=tot.filter(t=>t>0), prom=activas.length ? activas.reduce((a,b)=>a+b,0)/activas.length : 0;
+    baseline = +Math.max(tot[0], 0.9*prom).toFixed(1);
+  }
   // sin semana previa real: la "distancia sostenida" es la mejor tirada semanal (~60 % del volumen semanal), no el total
   if(!baseline || baseline<=0) baseline = consist.sostenida>0 ? +(consist.sostenida*1.6).toFixed(1) : baseKmManual();
   const objKm=state.profile.objetivoKm||10;
   const cuidarme = state.profile.busco==='cuidarme';
-  let targetWeekKm = (fase==='aumento' && !cuidarme) ? Math.min(Math.max(objKm*3, baseline), +(baseline*tasaProgresion()).toFixed(1)) : baseline;
+  // crecimiento semanal por fase: Base +5 %, Aumento según años corriendo (7/10/12 %); en Reactivación, Consolidación y Mantenimiento se sostiene
+  const factorCrec = (cuidarme || taper) ? 1 : ({base:1.05, aumento:tasaProgresion()}[fase] || 1);
+  let nivelKm = factorCrec>1 ? Math.min(+(baseline*factorCrec).toFixed(1), Math.max(baseline, objKm*3)) : baseline;
+  // cada 4.ª semana de crecimiento es de descarga (−20 %) para asimilar la carga; el nivel de carga sigue creciendo después
+  const semIdx = Math.max(0, Math.round(daysBetween(mondayOfIsoWeek(isoWeek(state.fase.desde||TODAY)), lunes)/7));
+  const descarga = factorCrec>1 && semIdx%4===3;
+  let targetWeekKm = descarga ? +(nivelKm*0.8).toFixed(1) : nivelKm;
   if(taper) targetWeekKm=calcularVolumenTaper(baseline, diasAlA);
   if(!targetWeekKm || targetWeekKm<=0) targetWeekKm = baseKmManual();
 
@@ -1492,7 +1513,7 @@ function generarPlanSemana(semanaISO){
       dias[d]={tipo:'Descanso'};
     }
   });
-  const plan={semanaISO, generadoEn:TODAY, faseEnGeneracion:fase, taper, targetWeekKm, baselineKm:baseline, dias, ajustes:[]};
+  const plan={semanaISO, generadoEn:TODAY, faseEnGeneracion:fase, taper, targetWeekKm, baselineKm:baseline, cargaBase:nivelKm, descarga, dias, ajustes:[]};
   ajustesT.forEach(a=>plan.ajustes.push({fecha:a.fecha, origen:'terreno', motivo:a.motivo}));
   ajustarPlanPorEventos(plan);
   return plan;
@@ -1954,7 +1975,7 @@ function renderHoy(){
       alertaHTML=`<div class="alert ok"><div class="icon">✅</div><div class="txt"><strong>Datos de Garmin al día</strong><span>Último dato: ${fmtShort(ult)}${d===0?' (hoy)':''}.</span></div></div>`;
     }
   }
-  document.getElementById('hoy-alerts').innerHTML = alertaHTML;
+  document.getElementById('hoy-alerts').innerHTML = alertaHTML + (repoGitHub() ? `<div class="btn-row" style="margin-top:-4px;"><button class="btn ghost small btn-actualizar">🔄 Actualizar datos de Garmin</button></div><div class="act-estado" style="font-size:12px; line-height:1.5; margin:6px 0 10px;"></div>` : '');
 
   const plan=computeCoachPlan();
   document.getElementById('hoy-toca').textContent = plan.hoyTitulo.replace(/^Hoy: /,'');
@@ -2266,23 +2287,83 @@ function cargarDatosAuto(cb){ // cb(resultado): 'nuevo' | 'sin-cambios' | 'no-ar
     else { fuente='nube'; fin(r.estado); }
   });
 }
+const APP_VERSION='2026-10-19 · actualizar con un toque';
+document.getElementById('app-version').textContent=APP_VERSION;
 function renderNubeCard(){
   const card=document.getElementById('garmin-nube-card'); if(!card) return;
   const n=window.__nube;
   if(!n || n.fuente!=='nube'){ card.style.display='none'; return; }
   card.style.display='block';
   const r=repoGitHub();
-  const forzar = r ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-top:8px;">¿Quieres que la nube vuelva a descargar de Garmin ahora mismo (por ejemplo tras un entreno)? Abre <a href="https://github.com/${r.usuario}/${r.repo}/actions/workflows/sync-datos.yml" target="_blank" rel="noopener" style="color:var(--accent);">este enlace</a> y pulsa <b>Run workflow</b>; tarda un minuto y luego pulsa "Actualizar ahora" aquí.</div>` : '';
+  const tok=ghToken();
   document.getElementById('garmin-nube-msg').innerHTML = necesitaClave() ? '' :
-    `Tus datos se descargan solos de Garmin <b style="color:var(--text)">una vez al día, por la noche</b>, y se guardan cifrados. Lo de hoy aparece mañana, o antes si pides una actualización. Al abrir la app se bajan y se descifran aquí.${state.ultimoGenerado?` Última descarga: <b style="color:var(--text)">${state.ultimoGenerado.slice(0,10)} ${state.ultimoGenerado.slice(11,16)} (UTC)</b>.`:''}`;
+    `Tus datos se descargan solos de Garmin <b style="color:var(--text)">una vez al día, por la noche</b>, y se guardan cifrados. Si acabas de entrenar y quieres verlo ya, pulsa <b style="color:var(--text)">Actualizar ahora</b>.${state.ultimoGenerado?` Última descarga: <b style="color:var(--text)">${state.ultimoGenerado.slice(0,10)} ${state.ultimoGenerado.slice(11,16)} (UTC)</b>.`:''}`;
   const zona=document.getElementById('garmin-nube-clave');
   if(necesitaClave()){ if(!zona.firstChild || !zona.querySelector('.in-clave') || n.estado==='clave-incorrecta') pintarPideClave(zona); } else zona.innerHTML='';
-  document.getElementById('garmin-nube-extra').innerHTML=forzar;
+  const ex=document.getElementById('garmin-nube-extra');
+  if(!r){ ex.innerHTML=''; return; }
+  ex.innerHTML = `<div class="act-estado" style="font-size:12px; line-height:1.5; margin-top:8px;"></div>`
+    + (tok
+      ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-top:8px;">✓ Este dispositivo puede pedir la actualización a GitHub con un toque. <a href="#" id="gh-quitar" style="color:var(--accent);">Quitar el permiso</a><br><a href="#" id="garmin-solo-recargar" style="color:var(--accent);">Solo recargar lo que ya está publicado</a></div>`
+      : `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-top:8px;">Para que "Actualizar ahora" descargue de Garmin al momento, este dispositivo necesita un permiso de GitHub. Se configura <b style="color:var(--text)">una sola vez</b>.</div>
+        <div class="btn-row"><button class="btn small" id="gh-setup-abrir">Configurar (una sola vez)</button></div>
+        <div id="gh-setup" class="molestia-extra" style="display:${window.__mostrarToken?'block':'none'}; font-size:12px; line-height:1.6;">
+          <b>Pasos (desde este mismo móvil):</b><br>
+          1. Abre <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--accent);">este enlace</a> (inicia sesión en GitHub si te lo pide).<br>
+          2. <b>Token name:</b> run-coach. <b>Expiration:</b> 1 year.<br>
+          3. <b>Repository access:</b> "Only select repositories" y elige <b>${escapeHTML(r.repo)}</b>.<br>
+          4. En <b>Permissions › Repository permissions › Actions</b> elige <b>Read and write</b>. No marques nada más.<br>
+          5. Pulsa <b>Generate token</b>, copia el texto que empieza por <code>github_pat_</code> y pégalo aquí:
+          <div class="field" style="margin-top:6px;"><input type="text" id="gh-token-in" autocapitalize="none" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="github_pat_…"></div>
+          <div class="btn-row"><button class="btn small" id="gh-token-guardar">Guardar permiso</button></div>
+          <div style="font-size:11px; color:var(--text-dim);">Solo sirve para pedir que se descargue de Garmin; no da acceso a tu cuenta entera ni al contenido del repositorio. Se guarda únicamente en este dispositivo. Si lo pierdes o quieres anularlo, bórralo en GitHub (Settings › Developer settings).</div>
+        </div>`);
+  const q=document.getElementById('gh-quitar'); if(q) q.addEventListener('click', e=>{ e.preventDefault(); lsBorrar('runcoach-gh-token'); renderNubeCard(); });
+  const sr=document.getElementById('garmin-solo-recargar'); if(sr) sr.addEventListener('click', e=>{ e.preventDefault(); cargarDatosAuto(x=>setActEstado(x==='nuevo'?'✅ Datos nuevos cargados.':'✅ Ya tienes lo último publicado.')); });
+  const sa=document.getElementById('gh-setup-abrir'); if(sa) sa.addEventListener('click', ()=>{ window.__mostrarToken=true; document.getElementById('gh-setup').style.display='block'; });
+  const sg=document.getElementById('gh-token-guardar'); if(sg) sg.addEventListener('click', ()=>{
+    const v=(document.getElementById('gh-token-in').value||'').trim();
+    if(!/^(github_pat_|ghp_)/.test(v)){ setActEstado('❌ Ese texto no parece un permiso de GitHub: debe empezar por github_pat_'); return; }
+    lsEscribir('runcoach-gh-token', v); window.__mostrarToken=false; renderNubeCard(); setActEstado('✅ Permiso guardado. Ya puedes pulsar "Actualizar ahora".');
+  });
 }
-document.getElementById('garmin-actualizar').addEventListener('click', ()=>{
-  toast('Buscando datos nuevos…');
-  cargarDatosAuto(r=>toast({nuevo:'Datos nuevos cargados', 'sin-cambios':'Ya tienes lo último publicado', 'no-archivo':'No encuentro datos en la nube', invalido:'Los datos no se pudieron leer', 'necesita-clave':'Falta la clave de tus datos', 'clave-incorrecta':'La clave no es correcta'}[r]||'Listo'));
-});
+/* ---- Actualizar ahora: pide a GitHub que descargue de Garmin y trae los datos nuevos ---- */
+function ghToken(){ return lsLeer('runcoach-gh-token'); }
+function setActEstado(msg){ document.querySelectorAll('.act-estado').forEach(e=>{ e.innerHTML=msg||''; }); }
+let __actEnCurso=false;
+async function actualizarAhora(){
+  const r=repoGitHub();
+  if(!r){ cargarDatosAuto(x=>toast(x==='nuevo'?'Datos nuevos cargados':'Ya tienes lo último publicado')); return; }
+  if(__actEnCurso) return;
+  const tok=ghToken();
+  if(!tok){ window.__mostrarToken=true; irAPantalla('garmin','ajustes'); renderNubeCard(); setActEstado('ℹ️ Primero hay que dar el permiso a este dispositivo (una sola vez): sigue los pasos de arriba.'); return; }
+  __actEnCurso=true;
+  const h={Authorization:'Bearer '+tok, Accept:'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'};
+  const base=`https://api.github.com/repos/${r.usuario}/${r.repo}/actions/workflows/sync-datos.yml`;
+  try{
+    setActEstado('⏳ Pidiendo a GitHub que descargue de Garmin…');
+    const t0=Date.now()-20000;
+    const res=await fetch(base+'/dispatches',{method:'POST',headers:h,body:JSON.stringify({ref:'main'})});
+    if(res.status===401 || res.status===403 || res.status===404){ lsBorrar('runcoach-gh-token'); window.__mostrarToken=true; irAPantalla('garmin','ajustes'); renderNubeCard(); setActEstado('❌ GitHub no ha aceptado el permiso (¿caducó o está mal copiado, o falta "Actions: Read and write"?). Créalo de nuevo con los pasos de arriba.'); return; }
+    if(res.status!==204){ setActEstado('❌ GitHub respondió con un error ('+res.status+'). Inténtalo de nuevo en un rato.'); return; }
+    for(let i=0;i<40;i++){
+      await new Promise(f=>setTimeout(f, i===0?6000:8000));
+      const rr=await fetch(base+'/runs?event=workflow_dispatch&per_page=5',{headers:h}); if(!rr.ok) continue;
+      const j=await rr.json(); const run=(j.workflow_runs||[]).find(x=>new Date(x.created_at).getTime()>=t0);
+      if(!run){ setActEstado('⏳ Esperando a que GitHub arranque la descarga…'); continue; }
+      if(run.status!=='completed'){ setActEstado('⏳ Descargando de Garmin y cifrando… (suele tardar 1-2 minutos)'); continue; }
+      if(run.conclusion!=='success'){ setActEstado('❌ La descarga ha fallado: puede que Garmin haya pedido volver a entrar. Dímelo y lo reviso.'); return; }
+      setActEstado('⏳ Descarga lista: trayendo tus datos nuevos…');
+      await new Promise(f=>setTimeout(f,4000));
+      cargarDatosAuto(x=>{ setActEstado(x==='nuevo'?'✅ Datos nuevos cargados.':(x==='sin-cambios'?'✅ Hecho: Garmin no tenía nada nuevo desde la última vez.':'ℹ️ Resultado: '+x)); toast(x==='nuevo'?'Datos nuevos cargados':'Actualizado'); });
+      return;
+    }
+    setActEstado('⌛ Está tardando más de lo normal. Cuando termine, pulsa "Solo recargar lo que ya está publicado".');
+  }catch(e){ setActEstado('❌ No se pudo contactar con GitHub ('+(e.message||'sin conexión')+').'); }
+  finally{ __actEnCurso=false; }
+}
+document.getElementById('garmin-actualizar').addEventListener('click', ()=>actualizarAhora());
+document.addEventListener('click', e=>{ if(e.target.closest('.btn-actualizar')) actualizarAhora(); });
 
 /* ================= RENDER: NUTRICIÓN ================= */
 const AJUSTE_CALORICO_DIA = {
@@ -3606,7 +3687,7 @@ function explicarSesion(fecha){
     else if(p.anosCorriendo!=null) add('diez',`Llevas ${p.anosCorriendo} año(s) corriendo: subo como máximo un ${Math.round((tasaProgresion()-1)*100)} % por semana.`,7);
     if(plan && plan.targetWeekKm){
       const pct = plan.baselineKm ? (plan.targetWeekKm/plan.baselineKm-1)*100 : null;
-      add(plan.taper?'taper':'diez',`Esta semana suma ${plan.targetWeekKm} km${pct!=null?` (${pct>=0?'+':''}${pct.toFixed(0)} % sobre ${plan.baselineKm} km de la semana base)`:''}; esta sesión son ${dia.distanciaKm} km.${plan.taper?' Es semana de bajada de carga.':''}`,4);
+      add(plan.taper?'taper':'diez',`Esta semana suma ${plan.targetWeekKm} km${pct!=null?` (${pct>=0?'+':''}${pct.toFixed(0)} % sobre ${plan.baselineKm} km de la semana base)`:''}; esta sesión son ${dia.distanciaKm} km.${plan.taper?' Es semana de bajada de carga.':''}${plan.descarga?' Es una semana de descarga (−20 %): cada 4.ª semana se baja un poco para asimilar la carga y seguir subiendo después.':''}`,4);
     }
     const r=ratioCarga();
     if(r) add('carga',`Tus últimos 7 días suman ${r.aguda} km-equivalentes frente a tu media de 4 semanas (${r.cronica}): ratio ${r.ratio.toFixed(2).replace('.',',')} — ${r.ratio<0.8?'por debajo de tu hábito':(r.ratio<=1.3?'en tu zona cómoda':'por encima de tu hábito, mejor suave')}.`, r.ratio>1.3?1:5);
@@ -4148,7 +4229,7 @@ function renderPlanCompleto(){
   const meta=futuros.find(e=>e.prioridad==='A') || null;
   const semActual=isoWeek(TODAY);
   const lunesActual=mondayOfIsoWeek(semActual);
-  const nSem = meta ? Math.min(26, Math.floor(daysBetween(lunesActual, meta.fecha)/7)+2) : 4;
+  const nSem = meta ? Math.min(26, Math.floor(daysBetween(lunesActual, meta.fecha)/7)+2) : 6;
   const fase=FASE_LABELS[state.fase.actual]||state.fase.actual;
   const planActual=state.planSemanal[semActual];
   const nRun=planActual? Object.values(planActual.dias).filter(d=>d.tipo==='Carrera'||(d.tipo==='Evento'&&d.subtipo!=='salida')).length : 0;
@@ -4159,10 +4240,23 @@ function renderPlanCompleto(){
     const dias=daysBetween(TODAY, meta.fecha);
     resumen=`Tu carrera principal es <b style="color:var(--text)">${escapeHTML(meta.nombre)}</b> el ${fmtShort(meta.fecha)} (en ${dias} días${dias>=14?`, unas ${Math.round(dias/7)} semanas`:''}). El plan va construyendo poco a poco hasta las 2 últimas semanas, que son de <b style="color:var(--text)">puesta a punto</b>: menos volumen y piernas frescas para el día de la carrera. Ahora estás en fase <b style="color:var(--text)">${fase}</b>.`;
   } else {
-    resumen=`No tienes ninguna carrera principal prevista, así que tu plan es de <b style="color:var(--text)">mantenimiento</b>: salidas suaves y constantes, algo de fuerza y movilidad, con el volumen que ya llevas y sin subirlo con prisa. Fase actual: <b style="color:var(--text)">${fase}</b>. Si añades una carrera con prioridad A (Entreno › Añadir una carrera o salida), el plan se reorganiza hacia ella. Abajo ves las próximas ${nSem} semanas; el resto se va generando solo.`;
+    // sin carrera principal: el resumen sale de tu fase, tu volumen previsto y tu meta de distancia (nada fijo)
+    const FASE_DESC={reactivacion:'recuperar la rutina con sesiones suaves y poco volumen mientras compruebo cómo respondes', base:'construir una base aeróbica con salidas suaves y regulares y una subida suave del volumen', aumento:'subir poco a poco la distancia hacia tu meta', consolidacion:'estabilizar la distancia que ya has alcanzado', mantenimiento:'sostener tu nivel sin subir el volumen'};
+    const proy=[0,1,2,3].map(i=>planParaFecha(sumarDias(lunesActual,7*i))).filter(p=>p && p.targetWeekKm);
+    const largo=p=>Math.max(0,...Object.values(p.dias).filter(d=>d.tipo==='Carrera').map(d=>d.distanciaKm||0));
+    const k0=proy.length?(proy[0].cargaBase||proy[0].targetWeekKm):null, k3=proy.length?(proy[proy.length-1].cargaBase||proy[proy.length-1].targetWeekKm):null; // nivel de carga, sin contar las semanas de descarga
+    const desc=proy.some(p=>p.descarga) ? ' (incluye una semana de descarga)' : '';
+    const sost=computeConsistencia(soloCarreras()).sostenida;
+    const objKmP=state.profile.objetivoKm||10;
+    const vol = !k0 ? '' : (state.profile.busco==='cuidarme'
+      ? `Tu objetivo es cuidarte, así que el volumen se sostiene en torno a <b style="color:var(--text)">${k0} km</b> por semana.`
+      : (k3>k0*1.03
+        ? `Tu volumen semanal previsto pasa de <b style="color:var(--text)">${k0} km</b> esta semana a <b style="color:var(--text)">${k3} km</b> en ${proy.length-1} semanas${desc}, y tu salida más larga de ${largo(proy[0])} a ${largo(proy[proy.length-1])} km.`
+        : `Tu volumen semanal previsto se mantiene en torno a <b style="color:var(--text)">${k0} km</b>${desc}.`));
+    resumen=`Estás en fase <b style="color:var(--text)">${fase}</b>: ${FASE_DESC[state.fase.actual]||''}. ${vol} Tu meta de distancia es <b style="color:var(--text)">${objKmP} km</b> por salida${sost?` y ahora mantienes con regularidad unos ${sost} km`:''}. Si añades una carrera con prioridad A (Plan › Añadir una carrera o salida), el plan se reorganiza hacia ella. Abajo ves las próximas ${nSem} semanas; el resto se va generando solo.`;
   }
   resumen += `<br><br>Esta semana: <b style="color:var(--text)">${nRun}</b> sesiones de running, <b style="color:var(--text)">${nFz}</b> de funcional y <b style="color:var(--text)">${nEs}</b> de estiramientos.`;
-  document.getElementById('plan-resumen-titulo').textContent = meta ? `Camino a ${meta.nombre}` : 'Plan de mantenimiento';
+  document.getElementById('plan-resumen-titulo').textContent = meta ? `Camino a ${meta.nombre}` : (state.profile.busco==='cuidarme' ? 'Tu plan para cuidarte' : `Hacia tu meta de ${state.profile.objetivoKm||10} km`);
   document.getElementById('plan-resumen').innerHTML = resumen;
 
   const nombres=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
