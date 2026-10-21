@@ -68,7 +68,10 @@ def sincronizar() -> bool:
 def unir(previo: dict, nuevo: dict) -> dict:
     out = dict(previo)  # conserva campos extra (por ejemplo el perfil)
     por_actividad = {a["activityId"]: a for a in previo.get("actividades", [])}
-    por_actividad.update({a["activityId"]: a for a in nuevo.get("actividades", [])})
+    for a in nuevo.get("actividades", []):
+        # lo nuevo manda, pero no pierde lo que ya se tenia (por ejemplo los parciales) si esta vez no ha llegado
+        ant = por_actividad.get(a["activityId"], {})
+        por_actividad[a["activityId"]] = {**ant, **{k: v for k, v in a.items() if v is not None}}
     out["actividades"] = sorted(por_actividad.values(), key=lambda a: (a.get("fecha") or "", a["activityId"]))
     for clave in ("sueno", "diario"):
         por_fecha = {x["fecha"]: x for x in previo.get(clave, [])}

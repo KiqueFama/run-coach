@@ -85,6 +85,42 @@ def sync_activities(client, conn, start: date, end: date):
         )
     conn.commit()
     print(f"  {len(activities)} actividades sincronizadas.")
+    sync_splits(client, conn, activities)
+
+
+def sync_splits(client, conn, activities, pausa=0.7):
+    """Parciales (un tramo por km) de las carreras. Solo se piden los que aun no estan guardados."""
+    cur = conn.cursor()
+    hechos = {r[0] for r in cur.execute("SELECT activity_id FROM splits")}
+    pend = [
+        a for a in activities
+        if "running" in ((a.get("activityType") or {}).get("typeKey") or "") and a.get("activityId") not in hechos
+    ]
+    nuevos = 0
+    for act in pend:
+        try:
+            s = client.get_activity_splits(act["activityId"]) or {}
+        except Exception as e:
+            print(f"  ! parciales de {act['activityId']}: {type(e).__name__}", file=sys.stderr)
+            continue
+        laps = [
+            [
+                round(l.get("distance") or 0),
+                round(l.get("duration") or 0, 1),
+                l.get("averageHR"),
+                round(l.get("elevationGain") or 0),
+                round(l["averageRunCadence"], 1) if l.get("averageRunCadence") else None,
+                round(l["strideLength"], 1) if l.get("strideLength") else None,
+            ]
+            for l in (s.get("lapDTOs") or [])
+            if (l.get("distance") or 0) > 0
+        ]
+        if laps:
+            cur.execute("INSERT OR REPLACE INTO splits (activity_id, splits_json) VALUES (?, ?)", (act["activityId"], json.dumps(laps)))
+            nuevos += 1
+        time.sleep(pausa)
+    conn.commit()
+    print(f"  Parciales: {nuevos} carreras nuevas.")
 
 
 def sync_day(client, conn, d: date):

@@ -21,6 +21,11 @@ CREATE TABLE IF NOT EXISTS activities (
     raw_json TEXT
 );
 
+CREATE TABLE IF NOT EXISTS splits (
+    activity_id INTEGER PRIMARY KEY,
+    splits_json TEXT
+);
+
 CREATE TABLE IF NOT EXISTS sleep (
     date TEXT PRIMARY KEY,
     total_sleep_sec INTEGER,

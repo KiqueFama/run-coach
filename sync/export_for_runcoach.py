@@ -13,6 +13,7 @@ def export(output_path: str, persona=None):
     conn = get_conn(persona)
     cur = conn.cursor()
 
+    parciales = {r[0]: json.loads(r[1]) for r in cur.execute("SELECT activity_id, splits_json FROM splits")}
     actividades = []
     for row in cur.execute(
         """
@@ -40,6 +41,7 @@ def export(output_path: str, persona=None):
                 "nombre": name,
                 "deporte": activity_type,
                 "fecha": (start_time or "")[:10],
+                "hora": (start_time or "")[11:16] or None,
                 "duracionSec": duration_sec,
                 "distanciaM": distance_m,
                 "calorias": calories,
@@ -51,18 +53,25 @@ def export(output_path: str, persona=None):
                 "teAnaerobico": te_anaerobic,
                 "cadencia": round(cadencia, 1) if cadencia else None,
                 "zancadaCm": round(zancada, 1) if zancada else None,
+                # parciales: [distancia m, duracion s, FC media, desnivel m] por tramo
+                "parciales": parciales.get(activity_id),
             }
         )
 
     resting_hr_by_date = {}
+    bb_wake_by_date = {}
     diario = {}
     for row in cur.execute(
         """
-        SELECT date, steps, resting_hr, avg_stress, calories_total, calories_active
+        SELECT date, steps, resting_hr, avg_stress, calories_total, calories_active, raw_json
         FROM daily_summary
         """
     ):
-        fecha, steps, resting_hr, avg_stress, cal_total, cal_active = row
+        fecha, steps, resting_hr, avg_stress, cal_total, cal_active, raw_d = row
+        try:
+            bb_wake_by_date[fecha] = (json.loads(raw_d) if raw_d else {}).get("bodyBatteryAtWakeTime")
+        except Exception:
+            pass
         resting_hr_by_date[fecha] = resting_hr
         diario[fecha] = {
             "fecha": fecha,
@@ -88,6 +97,7 @@ def export(output_path: str, persona=None):
                 "puntuacion": sleep_score,
                 "fcReposo": resting_hr_by_date.get(fecha),
                 "horas": round(total_sec / 3600, 2) if total_sec else None,
+                "bbDespertar": bb_wake_by_date.get(fecha),
             }
         )
     sueno.sort(key=lambda x: x["fecha"])
@@ -147,3 +157,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
