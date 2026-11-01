@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-build" content="10.0 · 2026-11-01">
+<meta name="app-build" content="10.1 · 2026-11-02">
 <meta name="application-name" content="Run Kq">
 <meta name="apple-mobile-web-app-title" content="Run Kq">
 <title>Run Kq</title>
@@ -1260,15 +1260,25 @@ function rangosRitmoPorTipo(base){
 function molestiaDelDia(f){
   const e=state.molestiaDias[f], c=state.checkinByDate[f];
   const enHist=state.molestiaHistorial.some(m=>m.fecha===f);
-  if(e) return {fecha:f, nivel:e.nivel||2, tendencia:e.tendencia||'', agrava:e.agrava||[], camina:e.camina||'', zona:e.zona, lado:e.lado, nota:e.nota, conDetalle:true};
+  if(e) return {fecha:f, nivel:e.nivel||2, tendencia:e.tendencia||'', agrava:e.agrava||[], camina:e.camina||'', zona:e.zona, lado:e.lado, nota:e.nota, conDetalle:true, supuesto:!!e.supuesto};
   if((c&&c.molestia==='si')||enHist) return {fecha:f, nivel:2, tendencia:'', agrava:[], camina:'', zona:null, conDetalle:false};
   return null;
 }
 // Episodio = días seguidos con molestia hacia atrás desde hoy. Tolera huecos de hasta 2 días sin check-in (no se reinicia por olvidarlo);
 // un "No" explícito lo cierra.
 function episodioMolestia(){
+  // 1) la última señal de los últimos 21 días: si es molestia, el episodio sigue activo aunque no abras la app;
+  //    si es un "No" explícito, no hay episodio. Los días sin abrir la app se suponen "igual que la última vez".
+  let ultimo=null;
+  for(let i=0;i<=21;i++){
+    const f=restarUnDiaN(TODAY,i), m=molestiaDelDia(f), c=state.checkinByDate[f];
+    if(m){ ultimo=m; break; }
+    if(c && c.molestia==='no') return null;
+  }
+  if(!ultimo) return null;
+  // 2) hacia atrás desde esa última señal hasta el inicio (se toleran huecos de hasta 2 días sin anotar)
   const dias=[]; let huecos=0;
-  for(let i=0;i<90;i++){
+  for(let i=daysBetween(ultimo.fecha,TODAY); i<=120; i++){
     const f=restarUnDiaN(TODAY,i), m=molestiaDelDia(f), c=state.checkinByDate[f];
     if(m){ dias.push(m); huecos=0; }
     else if(c && c.molestia==='no') break;
@@ -1276,27 +1286,39 @@ function episodioMolestia(){
   }
   while(dias.length && dias[dias.length-1].vacio) dias.pop();
   const reg=dias.filter(d=>!d.vacio);
-  if(!reg.length) return null;
-  const inicio=reg[reg.length-1].fecha, ultimo=reg[0];
-  return {dias, reg, inicio, diasTotales:daysBetween(inicio,TODAY)+1, ultimo, sinDatoHoy:ultimo.fecha!==TODAY};
+  const inicio=reg[reg.length-1].fecha;
+  // 3) días posteriores a la última anotación hasta hoy: se supone que sigue igual
+  const supuestos=[];
+  for(let f=sumarDias(ultimo.fecha,1); f<=TODAY; f=sumarDias(f,1)) supuestos.unshift(Object.assign({}, ultimo, {fecha:f, tendencia:'igual', supuesto:true, camina:'', nota:''}));
+  return {dias:[...supuestos, ...dias], reg, inicio, diasTotales:daysBetween(inicio,TODAY)+1, ultimo, sinDatoHoy:ultimo.fecha!==TODAY, diasSinAnotar:supuestos.length};
+}
+// Rellena con "igual que la última vez" los días que no abriste la app (se marcan como supuestos y se pueden corregir)
+function rellenarDiasSupuestos(){
+  const ep=episodioMolestia(); if(!ep || !ep.diasSinAnotar) return 0;
+  let n=0;
+  for(let f=sumarDias(ep.ultimo.fecha,1); f<TODAY; f=sumarDias(f,1)){
+    if(!state.molestiaDias[f]){ const u=ep.ultimo; state.molestiaDias[f]={zona:u.zona, lado:u.lado||'', tipo:'', nivel:u.nivel, tendencia:'igual', agrava:u.agrava||[], camina:'', nota:'', supuesto:true}; n++; }
+  }
+  return n;
 }
 // Reglas visibles: qué toca hoy con la molestia y por qué (criterio conservador de la app, ver CONOCIMIENTO.molestia_lumbar)
 function decisionMolestia(){
   const ep=episodioMolestia(); if(!ep) return null;
-  const u=ep.ultimo, nivel=u.nivel, tend=u.tendencia, motivos=[];
+  const u=ep.ultimo, nivel=u.nivel, motivos=[]; const tend=ep.sinDatoHoy?'igual':u.tendencia, camina=ep.sinDatoHoy?'':u.camina; // sin anotar hoy: no se da por cierto lo de otro día
   const COT={agacharme:'agacharte', levantarme:'levantarte', andar:'andar', sentarme:'estar sentado'};
   const cot=(u.agrava||[]).filter(x=>COT[x]);
   let decision;
   if(nivel>=3){ decision='parar'; motivos.push(`El dolor es de nivel ${nivel} sobre 5: a partir de 3 no se añade impacto.`); }
   else if(tend==='peor'){ decision='parar'; motivos.push('Dices que va peor que ayer: mientras empeore, no se corre.'); }
   else if(cot.length){
-    if(nivel<=1 && tend==='mejor' && u.camina==='si'){ decision='probar'; motivos.push('Casi no se nota, va a mejor y caminas 30 min sin que aumente: se puede probar algo muy suave.'); }
+    if(nivel<=1 && tend==='mejor' && camina==='si'){ decision='probar'; motivos.push('Casi no se nota, va a mejor y caminas 30 min sin que aumente: se puede probar algo muy suave.'); }
     else { decision='esperar'; motivos.push(`Te sigue molestando al ${cot.map(x=>COT[x]).join(' y ')}: si un gesto de cada día aún molesta, correr (impacto repetido) es pronto.`); }
   }
   else if(ep.reg.length===1 && ep.diasTotales===1){ decision='suave'; motivos.push('Primer día de molestia leve: hoy solo algo suave y sin calidad, y vigila cómo evoluciona.'); }
-  else if(u.camina==='si' && tend!=='peor'){ decision='probar'; motivos.push('Mejora y caminas 30 min sin que aumente: se puede probar algo muy suave.'); }
+  else if(camina==='si' && tend!=='peor'){ decision='probar'; motivos.push('Mejora y caminas 30 min sin que aumente: se puede probar algo muy suave.'); }
   else { decision='esperar'; motivos.push('Va mejor, pero antes de correr conviene confirmar que puedes caminar 30 min sin que aumente (se marca en el formulario).'); }
-  if(ep.sinDatoHoy) motivos.push(`La última vez que anotaste cómo estabas fue ${fmtShort(u.fecha)}: actualízalo para afinar.`);
+  if(decision==='esperar' && nivel<=2) motivos.push('Con una molestia leve es muy habitual el miedo a empeorarla: por eso la vuelta es gradual y la primera salida es una prueba corta con andar y trote, no tu sesión normal.');
+  if(ep.sinDatoHoy) motivos.push(`No has anotado nada desde el ${fmtShort(u.fecha)} (${ep.diasSinAnotar} día${ep.diasSinAnotar>1?'s':''}): lo tomo como que sigue igual (nivel ${nivel}). Confírmalo abajo para afinar.`);
   const consulta = nivel>=4 || (ep.diasTotales>=7 && tend!=='mejor') || ep.diasTotales>=10;
   return Object.assign({decision, motivos, nivel, tend, consulta}, ep);
 }
@@ -2012,7 +2034,8 @@ document.querySelectorAll('.alarma-opt').forEach(btn=>{
 /* ---- Detalle de la molestia de hoy: una entrada por día, se rellena sola al volver y se guarda al cambiar cada dato ---- */
 function molestiaBase(){ // punto de partida del formulario: lo de hoy, o lo último de los 3 días anteriores
   if(state.molestiaDias[TODAY]) return state.molestiaDias[TODAY];
-  for(let i=1;i<=3;i++){ const m=state.molestiaDias[restarUnDiaN(TODAY,i)]; if(m) return Object.assign({}, m, {tendencia:'', camina:'', nota:''}); }
+  const ep=episodioMolestia(); const u=ep && ep.ultimo;
+  if(u && state.molestiaDias[u.fecha]) return Object.assign({}, state.molestiaDias[u.fecha], {tendencia:'', camina:'', nota:'', supuesto:false});
   return null;
 }
 function setSeg(id, v){ document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle('selected', !!v && b.dataset.v===String(v))); }
@@ -2034,6 +2057,7 @@ function leerFormMolestia(){
 // Registra (o edita) la molestia de hoy fusionando lo nuevo con lo que ya había; una sola entrada por día
 function registrarMolestiaHoy(datos){
   const base=molestiaBase()||{}, hora=new Date().toTimeString().slice(0,5);
+  rellenarDiasSupuestos();
   const zonaPorDefecto=(state.molestiaHistorial.slice(-1)[0]||{}).zona||'Espalda baja';
   const f=Object.assign({zona:zonaPorDefecto, agrava:[], tipo:'Molestia leve', tratamiento:'No'}, base, datos, {hora});
   state.molestiaDias[TODAY]=f;
@@ -2190,7 +2214,7 @@ function eventoCercano(fecha, ventana){
 }
 
 /* ================= MOLESTIA: QUÉ HA PASADO, POR QUÉ HOY SÍ/NO Y QUÉ HACER ================= */
-const MOTIVOS_NO_HECHO=['molestia','tiempo','cansancio','prefiero no arriesgar'];
+const MOTIVOS_NO_HECHO=['molestia','miedo a empeorarla','tiempo','cansancio','prefiero no arriesgar'];
 const DIA_LETRA=['D','L','M','X','J','V','S'];
 // Sesiones previstas (correr o clase) de los días del episodio que no se hicieron, con su motivo
 function sesionesNoHechas(ep){
@@ -2259,20 +2283,21 @@ function renderMolestiaCard(){
   const dias=[]; for(let f=dm.inicio; f<=TODAY; f=sumarDias(f,1)) dias.push(f);
   const noHechas=sesionesNoHechas(dm);
   const linea=f=>{
-    const m=molestiaDelDia(f), nh=noHechas.find(x=>x.fecha===f);
+    const mm=dm.dias.find(x=>x.fecha===f), m=(mm && !mm.vacio) ? mm : null, nh=noHechas.find(x=>x.fecha===f);
     const dt=new Date(f+'T00:00:00Z');
-    const pie = m ? `<span style="color:${colorN(m.nivel)}; font-family:'JetBrains Mono';">${m.conDetalle?m.nivel+'/5':'sí'}</span>${m.tendencia?` <span style="color:var(--text-dim)">${tendTxt[m.tendencia]||''}</span>`:''}${(m.agrava||[]).length?` <span style="color:var(--text-dim)">· ${escapeHTML(m.agrava.join(', '))}</span>`:''}` : '<span style="color:var(--text-dim)">sin dato</span>';
+    const pie = m ? `<span style="color:${colorN(m.nivel)}; font-family:'JetBrains Mono';">${m.supuesto?'~':''}${(m.conDetalle||m.supuesto||m.supuestoGuardado)?m.nivel+'/5':'sí'}</span>${m.supuesto?' <span style="color:var(--text-dim)">sin abrir la app: se supone igual</span>':(m.tendencia?` <span style="color:var(--text-dim)">${tendTxt[m.tendencia]||''}</span>`:'')}${(m.agrava||[]).length?` <span style="color:var(--text-dim)">· ${escapeHTML(m.agrava.join(', '))}</span>`:''}` : '<span style="color:var(--text-dim)">sin dato</span>';
     const sesion = nh ? `<div style="font-size:11px; color:var(--text-dim); padding-left:34px;">⏸ ${escapeHTML(nh.dia.tipo==='Carrera'?nh.dia.subtipo:'clase')} no hecha · <a href="#" class="mnh" data-f="${f}" style="color:var(--accent);">${escapeHTML(nh.motivo)}</a></div>` : '';
     return `<div style="font-size:12px; padding:4px 0; border-bottom:1px solid var(--line);"><span style="display:inline-block; width:34px; color:var(--text-dim); font-family:'JetBrains Mono';">${DIA_LETRA[dt.getUTCDay()]} ${dt.getUTCDate()}</span>${pie}</div>${sesion}`;
   };
-  const resumen=`Empezó el ${fmtShort(dm.inicio)}; llevas ${dm.diasTotales} día${dm.diasTotales>1?'s':''}${dm.reg.length<dm.diasTotales?` (${dm.reg.length} con dato)`:''}.`;
+  const resumen=`Empezó el ${fmtShort(dm.inicio)}; llevas ${dm.diasTotales} día${dm.diasTotales>1?'s':''}${dm.reg.length<dm.diasTotales?` (${dm.reg.length} con anotación; el resto, sin abrir la app, los cuento como igual)`:''}.`;
   const consejo=`<div style="font-size:12px; line-height:1.55;">
       <div>• Lo habitual en un dolor de espalda sin señales de alarma es <b>seguir activo con lo que no duela</b> (caminar) en lugar de guardar reposo total, y no pedir pruebas de imagen de rutina (<a href="https://www.nice.org.uk/ng59" target="_blank" rel="noopener" style="color:var(--accent);">guía NICE NG59</a>).</div>
       <div style="margin-top:6px;"><b>Consulta cuanto antes</b> si hay: pérdida de control de la vejiga o el intestino, entumecimiento en la ingle, los genitales o el ano, debilidad o adormecimiento en las piernas, o fiebre y malestar general (<a href="https://www.nhs.uk/conditions/back-pain/" target="_blank" rel="noopener" style="color:var(--accent);">NHS</a>). Con un golpe o caída fuerte, o dolor nocturno que no cede, también conviene valorarlo (criterio orientativo de la app).</div>
       <div style="margin-top:6px;">${dm.consulta ? `<b style="color:var(--amber)">Ya es momento de que lo valore un profesional</b>: ${dm.nivel>=4?'el dolor es de 4 o más':(dm.diasTotales>=10?'llevas 10 días o más':'llevas 7 días o más sin ir a mejor')}. ` : 'Si a los 7-10 días no va a mejor, o sube a 4 de 5, conviene que lo valore un profesional (plazo orientativo, criterio de la app). '}</div>
       <div style="color:var(--text-dim); margin-top:6px;">Orientación general; no sustituye la valoración de un profesional.</div></div>`;
   el.innerHTML=`<h3>Tu molestia ${u.zona?`<span class="muted">· ${escapeHTML(u.zona)}${u.lado?' · '+({izq:'izquierdo',der:'derecho',ambos:'ambos lados'}[u.lado]||''):''}</span>`:''}</h3>
-    <div style="font-size:12.5px; line-height:1.5; margin-bottom:10px;">${resumen} ${dm.sinDatoHoy?`<b style="color:var(--amber)">Hoy aún no has anotado cómo estás.</b>`:''}</div>
+    <div style="font-size:12.5px; line-height:1.5; margin-bottom:10px;">${resumen}</div>
+    ${dm.sinDatoHoy?`<div style="background:var(--amber-soft); border:1px solid rgba(240,180,41,.35); border-radius:14px; padding:10px 12px; margin-bottom:12px;"><div style="font-size:12.5px; line-height:1.5;">Tu última anotación fue el <b>${fmtShort(u.fecha)}</b> (dolor ${u.nivel}/5). No pasa nada por no abrir la app: <b>cuento que sigue igual</b> hasta que me digas otra cosa. ¿Cómo está hoy?</div><div class="btn-row" style="margin-top:8px;"><button class="btn small" id="mq-igual" style="flex:1;">Sigue igual</button></div></div>`:''}
     <div class="field" style="margin-bottom:8px;"><label>Dolor hoy (1 apenas se nota · 5 intenso)</label><div class="seg">${[1,2,3,4,5].map(n=>`<button type="button" data-mq="nivel" data-v="${n}" class="${hoy.nivel===n?'selected':''}">${n}</button>`).join('')}</div></div>
     <div class="field" style="margin-bottom:8px;"><label>Respecto a ayer</label><div class="seg">${['mejor','igual','peor'].map(t=>`<button type="button" data-mq="tendencia" data-v="${t}" class="${hoy.tendencia===t?'selected':''}">${t[0].toUpperCase()+t.slice(1)}</button>`).join('')}</div></div>
     <div class="btn-row" style="margin-top:6px;"><button class="btn ghost small" id="mq-detalle" style="flex:1;">Más detalle</button><button class="btn ghost small" id="mq-fin" style="flex:1;">Ya no la tengo</button></div>
@@ -2284,7 +2309,9 @@ document.addEventListener('click', e=>{
   if(q){ registrarMolestiaHoy({[q.dataset.mq]: q.dataset.mq==='nivel' ? +q.dataset.v : q.dataset.v}); return; }
   if(e.target.closest('#mq-detalle')){ abrirEstado(); return; }
   if(e.target.closest('#mq-reabrir')){ e.preventDefault(); abrirEstado(); return; }
+  if(e.target.closest('#mq-igual')){ registrarMolestiaHoy({tendencia:'igual'}); toast('Anotado: sigue igual'); return; }
   if(e.target.closest('#mq-fin')){
+    rellenarDiasSupuestos();
     state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {molestia:'no', alarmaSintomas:[]});
     delete state.molestiaDias[TODAY];
     state.molestiaHistorial=state.molestiaHistorial.filter(m=>!(m.fecha===TODAY && m.tipo!=='Durante o después del entreno'));
