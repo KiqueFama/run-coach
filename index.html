@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="app-build" content="9.3 · 2026-10-20">
+<meta name="app-build" content="10.0 · 2026-11-01">
 <meta name="application-name" content="Run Kq">
 <meta name="apple-mobile-web-app-title" content="Run Kq">
 <title>Run Kq</title>
@@ -75,6 +75,14 @@
   .checkin-q{margin-bottom:12px;}
   .checkin-q .qtext{font-size:13px; margin-bottom:8px; color:var(--text);}
   .molestia-extra{background:var(--surface-2); border-radius:14px; padding:12px; margin-top:8px;}
+  /* Selector segmentado y fichas elegibles */
+  .seg{display:flex; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:3px; gap:2px;}
+  .seg button{flex:1; background:transparent; border:none; color:var(--text-dim); font-family:'Inter'; font-weight:600; font-size:12.5px; padding:10px 6px; border-radius:9px; cursor:pointer; min-height:40px;}
+  .seg button.selected{background:var(--accent); color:#1B0E05;}
+  .chips-sel{display:flex; flex-wrap:wrap; gap:6px;}
+  .chips-sel button{background:var(--surface); border:1px solid var(--line); color:var(--text-dim); font-family:'Inter'; font-size:12px; padding:8px 12px; border-radius:100px; cursor:pointer; min-height:36px;}
+  .chips-sel button.selected{background:var(--accent-soft); border-color:var(--accent); color:var(--accent); font-weight:600;}
+  .mol-ok{font-size:11px; color:var(--green); font-family:'JetBrains Mono';}
   .alert{border-radius:var(--radius); padding:13px 16px; margin-bottom:12px; display:flex; gap:11px; align-items:flex-start; border:1px solid;}
   .alert.low{background:var(--amber-soft); border-color:rgba(240,180,41,0.35);}
   .alert.high{background:var(--red-soft); border-color:rgba(239,91,91,0.5);}
@@ -132,9 +140,10 @@
     position:absolute; bottom:90px; left:20px; right:20px; background:var(--green); color:#062012;
     padding:10px 14px; border-radius:12px; font-size:12.5px; font-weight:600; text-align:center;
     opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; transform:translateY(6px);
-    z-index:20;
+    z-index:90;
   }
   .toast.show{opacity:1; transform:translateY(0);}
+  .toast.aviso{background:var(--red); color:#fff;}
   .file-label{display:block; text-align:center; cursor:pointer;}
   .coach-plan .step{display:flex; gap:10px; margin-bottom:10px;}
   .coach-plan .step .n{
@@ -162,6 +171,67 @@
   .zona-fila{display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px solid var(--line); font-size:12px;}
   .zona-fila:last-child{border-bottom:none;}
   .dia-fila{margin-bottom:10px;}
+
+  /* ===== Rediseño v10: oscuro moderno y más ordenado ===== */
+  :root{ --radius:22px; --text-dim:#9CA5BF; --shadow:0 10px 30px rgba(0,0,0,.25); }
+  body{ background:#060912; }
+  .frame{ background:radial-gradient(110% 46% at 50% -8%, rgba(255,138,76,.11), transparent 60%), var(--bg); }
+  .topbar{ padding:20px 22px 10px; border-bottom:none; align-items:center; }
+  .brand{ font-size:16px; letter-spacing:-.01em; }
+  .screens{ padding:8px 18px 132px; }
+  h1.page-title{ font-size:30px; letter-spacing:-.025em; margin:0 0 16px; font-weight:700; }
+  .eyebrow{ font-size:11px; letter-spacing:.1em; margin-bottom:2px; }
+  .card{ border:1px solid rgba(255,255,255,.055); box-shadow:var(--shadow); padding:18px; margin-bottom:16px; }
+  .card h3{ font-size:15.5px; margin-bottom:12px; letter-spacing:-.01em; }
+  .row{ padding:12px 0; }
+  .btn{ min-height:44px; border-radius:14px; }
+  .btn.small{ min-height:38px; padding:8px 14px; }
+  .btn.ghost{ background:rgba(255,255,255,.03); }
+  .btn.selected{ box-shadow:0 4px 14px rgba(255,138,76,.30); }
+  .seg{ border-radius:14px; } .seg button{ border-radius:11px; }
+  .btn-row.seg{ margin-top:0; flex-wrap:nowrap; background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:3px; gap:2px; }
+  .btn-row.seg .btn{ background:transparent; border:none; color:var(--text-dim); min-height:40px; border-radius:11px; padding:8px 6px; }
+  .btn-row.seg .btn.selected{ background:var(--accent); color:#1B0E05; box-shadow:none; }
+  .btn-row.seg .btn svg{ width:15px; height:15px; vertical-align:-3px; margin-right:4px; }
+  .toggle-group{ background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:3px; }
+  .toggle-group button{ min-height:36px; border-radius:11px; font-weight:600; }
+  .navbar{ left:14px; right:14px; bottom:calc(12px + env(safe-area-inset-bottom, 0px)); padding:6px; border:1px solid rgba(255,255,255,.08); border-radius:28px; background:rgba(18,25,46,.80); -webkit-backdrop-filter:blur(18px); backdrop-filter:blur(18px); box-shadow:0 16px 40px rgba(0,0,0,.5); gap:2px; }
+  .navbtn{ font-size:10px; padding:7px 0; border-radius:22px; }
+  .navbtn svg{ width:22px; height:22px; }
+  .navbtn.active{ background:var(--accent-soft); }
+  .toast{ bottom:104px; }
+  /* tarjeta héroe de Hoy */
+  .coach-plan{ background:linear-gradient(145deg, rgba(255,138,76,.16), rgba(255,138,76,0) 55%), var(--surface); border-color:rgba(255,138,76,.22); }
+  .hero-t{ font-family:'Space Grotesk'; font-size:22px; font-weight:700; letter-spacing:-.02em; line-height:1.15; }
+  .hero-s{ font-size:12px; color:var(--text-dim); margin-top:4px; }
+  .hero-chips{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:14px 0 6px; }
+  .hero-chip{ background:rgba(255,255,255,.05); border-radius:14px; padding:10px 6px; text-align:center; min-width:0; }
+  .hero-chip b{ display:block; font-family:'Space Grotesk'; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .hero-chip span{ font-size:10px; color:var(--text-dim); }
+  #estado-pill{ border-radius:100px; min-height:42px; padding:8px 14px; margin-bottom:14px !important; }
+  /* modales: cabecera fija */
+  .sheet-cab{ position:sticky; top:-22px; z-index:3; margin:-22px -20px 12px; padding:16px 20px 8px; background:linear-gradient(var(--bg) 82%, rgba(15,20,36,0)); }
+  .sheet-cab .page-title{ margin:10px 0 0 !important; }
+  /* secciones plegables (Yo) */
+  .card.coll > h3{ cursor:pointer; display:flex; justify-content:space-between; align-items:center; margin-bottom:0; }
+  .card.coll > h3::after{ content:''; width:8px; height:8px; border-right:2px solid var(--text-dim); border-bottom:2px solid var(--text-dim); transform:rotate(45deg); transition:transform .2s; margin-left:8px; flex:none; }
+  .card.coll.abierta > h3{ margin-bottom:12px; }
+  .card.coll.abierta > h3::after{ transform:rotate(-135deg); }
+  .card.coll > .coll-body{ display:none; }
+  .card.coll.abierta > .coll-body{ display:block; }
+  /* explicaciones plegadas */
+  details.explain-d{ margin-top:10px; font-size:11.5px; line-height:1.55; color:var(--text-dim); }
+  details.explain-d summary{ cursor:pointer; list-style:none; } details.explain-d summary::-webkit-details-marker{ display:none; }
+  details.explain-d summary::before{ content:'ⓘ '; color:var(--accent); }
+  details.explain-d b{ color:var(--text); }
+  /* campos de formulario con el mismo estilo oscuro en toda la app */
+  .profile-item input, .profile-item select, .profile-item textarea, .field input, .field select, .field textarea, #molestia-extra input, #molestia-extra select{
+    width:100%; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; color:var(--text); padding:11px 12px; font-family:'Inter'; font-size:14px; min-height:44px; }
+  .profile-item select, .field select{ -webkit-appearance:none; appearance:none; padding-right:34px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239CA5BF' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; }
+  .profile-item textarea{ min-height:70px; resize:vertical; }
+  .profile-item input:focus, .profile-item select:focus, .profile-item textarea:focus, .field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--accent); outline-offset:1px; }
+  input[type="checkbox"]{ accent-color:var(--accent); width:18px; height:18px; min-height:0; }
 </style>
 </head>
 <body>
@@ -184,6 +254,8 @@
         <span id="estado-pill-txt" style="flex:1; font-size:12px; font-weight:400;"></span>
         <span style="color:var(--text-dim); font-size:11px; font-weight:400;">Cómo estoy ›</span>
       </button>
+
+<div class="card" id="molestia-card" style="display:none;"></div>
 
 <div class="card coach-plan" id="coach-card">
         <h3 id="coach-plan-titulo">Entrenamiento del día</h3>
@@ -642,8 +714,8 @@
   </div>
 
     <div id="estado-modal" style="position:absolute; inset:0; background:var(--bg); z-index:55; overflow-y:auto; padding:22px 20px 40px; display:none;">
-    <button class="btn ghost small" id="estado-cerrar">← Volver a Hoy</button>
-    <h1 class="page-title" style="margin-top:12px;">Cómo estoy hoy</h1>
+    <div class="sheet-cab"><button class="btn ghost small" id="estado-cerrar">‹ Volver a Hoy</button>
+    <h1 class="page-title">Cómo estoy hoy</h1></div>
     <div class="card" id="recup-card"></div>
     <div class="card" id="estado-card">
         <div class="ring-wrap">
@@ -676,7 +748,7 @@
         <div style="font-size:11.5px; color:var(--text-dim); margin-bottom:10px;">Normalmente no hace falta tocarlo: solo si hoy no estás bien o notas alguna molestia. Ajusta lo de hoy y lo de los próximos días.</div>
         <div class="checkin-q">
           <div class="qtext">¿Cómo te encuentras hoy?</div>
-          <div class="btn-row">
+          <div class="btn-row seg">
             <button class="btn" data-q="animo" data-v="bien">Bien</button>
             <button class="btn" data-q="animo" data-v="normal">Normal</button>
             <button class="btn" data-q="animo" data-v="mal">Mal</button>
@@ -684,29 +756,46 @@
         </div>
         <div class="checkin-q">
           <div class="qtext">¿Notas alguna molestia o dolor ahora mismo?</div>
-          <div class="btn-row">
+          <div class="btn-row seg">
             <button class="btn" data-q="molestia" data-v="no">No</button>
             <button class="btn" data-q="molestia" data-v="si">Sí</button>
           </div>
         </div>
 
         <div id="molestia-extra" class="molestia-extra" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;"><b style="font-size:13px;">Tu molestia de hoy</b><span id="mol-guardado" class="mol-ok"></span></div>
           <div class="field">
             <label>Zona del cuerpo</label>
             <select id="mol-zona">
               <option>Rodilla</option><option>Tobillo</option><option>Gemelo</option><option>Isquiotibiales</option>
-              <option>Cuádriceps</option><option>Cadera</option><option>Espalda baja</option><option>Pie / planta</option><option>Otra</option>
+              <option>Cuádriceps</option><option>Cadera</option><option>Espalda baja</option><option>Sacroilíaca / sobre el glúteo</option><option>Pie / planta</option><option>Otra</option>
             </select>
+          </div>
+          <div class="field">
+            <label>Lado</label>
+            <div class="seg" id="mol-lado"><button type="button" data-v="izq">Izquierdo</button><button type="button" data-v="der">Derecho</button><button type="button" data-v="ambos">Ambos</button></div>
+          </div>
+          <div class="field">
+            <label>Dolor ahora (1 apenas se nota · 5 intenso)</label>
+            <div class="seg" id="mol-nivel"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div>
+          </div>
+          <div class="field">
+            <label>Respecto a ayer</label>
+            <div class="seg" id="mol-tend"><button type="button" data-v="mejor">Mejor</button><button type="button" data-v="igual">Igual</button><button type="button" data-v="peor">Peor</button></div>
+          </div>
+          <div class="field">
+            <label>¿Qué la empeora? (marca las que apliquen)</label>
+            <div class="chips-sel" id="mol-agrava"><button type="button" data-v="agacharme">Agacharme</button><button type="button" data-v="levantarme">Levantarme</button><button type="button" data-v="andar">Andar</button><button type="button" data-v="sentarme">Estar sentado</button><button type="button" data-v="girar">Girar / toser</button><button type="button" data-v="correr">Correr</button></div>
+          </div>
+          <div class="field">
+            <label>¿Puedes caminar 30 min sin que aumente?</label>
+            <div class="seg" id="mol-camina"><button type="button" data-v="si">Sí</button><button type="button" data-v="no">No</button><button type="button" data-v="nose">No lo he probado</button></div>
           </div>
           <div class="field">
             <label>Tipo de molestia</label>
             <select id="mol-tipo">
-              <option>Dolor agudo</option><option>Molestia leve</option><option>Rigidez</option><option>Inflamación</option><option>Sobrecarga muscular</option><option>Otro</option>
+              <option>Molestia leve</option><option>Tirón al moverme</option><option>Dolor agudo</option><option>Rigidez</option><option>Inflamación</option><option>Sobrecarga muscular</option><option>Otro</option>
             </select>
-          </div>
-          <div class="field">
-            <label>Nivel de dolor (1-5)</label>
-            <select id="mol-nivel"><option value="1">1 · apenas notable</option><option value="2">2</option><option value="3">3 · moderado</option><option value="4">4</option><option value="5">5 · intenso</option></select>
           </div>
           <div class="field">
             <label>¿Lo estás tratando?</label>
@@ -714,9 +803,10 @@
           </div>
           <div class="field">
             <label>Notas (opcional)</label>
-            <input type="text" id="mol-notas" placeholder="ej. me duele al bajar escaleras">
+            <input type="text" id="mol-notas" placeholder="ej. me tira al agacharme a atarme los cordones">
           </div>
           <button class="btn" id="save-molestia" style="width:100%;">Guardar detalle</button>
+          <div style="font-size:10.5px; color:var(--text-dim); margin-top:6px;">Se guarda solo al cambiar cada dato; el botón es por si quieres confirmarlo.</div>
         </div>
 
         <div id="alarma-wrap" style="display:none; margin-top:10px;">
@@ -728,6 +818,13 @@
               <button class="btn small alarma-opt" data-v="sincope">Mareo/síncope</button>
               <button class="btn small alarma-opt" data-v="palpitaciones">Palpitaciones</button>
             </div>
+            <div style="font-size:11px; color:var(--text-dim); margin:10px 0 2px;">Si la molestia es de espalda, además:</div>
+            <div class="btn-row" style="margin-top:4px;">
+              <button class="btn small alarma-opt" data-v="esfinteres">Pierdo el control de la vejiga o el intestino</button>
+              <button class="btn small alarma-opt" data-v="entumecimiento">Entumecimiento en la ingle, genitales o ano</button>
+              <button class="btn small alarma-opt" data-v="debilidad">Debilidad o adormecimiento en las piernas</button>
+              <button class="btn small alarma-opt" data-v="fiebre">Fiebre o malestar general</button>
+            </div>
           </div>
           <div id="alarma-aviso"></div>
         </div>
@@ -736,8 +833,8 @@
       
   </div>
   <div id="detalle-modal" style="position:absolute; inset:0; background:var(--bg); z-index:55; overflow-y:auto; padding:22px 20px; display:none;">
-    <div class="eyebrow">Detalle</div>
-    <h1 class="page-title" id="detalle-titulo"></h1>
+    <div class="sheet-cab"><div class="eyebrow">Detalle</div>
+    <h1 class="page-title" id="detalle-titulo" style="margin:2px 0 0;"></h1></div>
     <div id="detalle-body"></div>
     <button class="btn ghost" id="detalle-cerrar" style="width:100%; margin-top:14px;">Cerrar</button>
   </div>
@@ -842,6 +939,8 @@ function nuevoEstado(){
     importedActividades: [],
     importedSueno: [],
     molestiaHistorial: [],
+    molestiaDias: {},      // una entrada por día: {zona, lado, tipo, nivel 0-5, tendencia, agrava[], nota, tratamiento}
+    motivoNoHecho: {},     // fecha -> 'molestia' | 'tiempo' | 'cansancio' | 'prefiero no arriesgar'
     lastImport: {carrera:'', fuerza:'', sueno:''},
     fase: {actual:'reactivacion', desde:TODAY, sostenidaAlEntrar:null},
     faseHistorial: [],
@@ -887,6 +986,12 @@ function hidratarEstado(st){
     out.eventos = [{id:'e'+Date.now(), nombre:'Carrera objetivo ('+out.profile.objetivoTipo+')', tipo:'carrera', fecha:out.profile.fechaObjetivo, hora:'09:00', distanciaKm:out.profile.objetivoKm||10, desnivelM:null, prioridad:'A', notas:''}];
   }
   out.eventos = out.eventos || [];
+  // migración: el historial de molestias pasa a una entrada por día (editable, sin duplicados)
+  out.molestiaDias = out.molestiaDias || {};
+  (out.molestiaHistorial||[]).forEach(m=>{ if(m && m.fecha && !out.molestiaDias[m.fecha]) out.molestiaDias[m.fecha]={zona:m.zona, lado:'', tipo:m.tipo||'', nivel:+m.nivel||0, tendencia:'', agrava:[], nota:m.notas||'', tratamiento:m.tratamiento||'No'}; });
+  out.motivoNoHecho = out.motivoNoHecho || {};
+  // migración: el texto "(aproximado, no es prueba de esfuerzo)" ya no se muestra, tampoco en los planes guardados
+  Object.values(out.planSemanal||{}).forEach(pl=>Object.values((pl&&pl.dias)||{}).forEach(d=>{ if(d && typeof d.ritmoObjetivo==='string') d.ritmoObjetivo=d.ritmoObjetivo.replace(/\s*\(aproximado[^)]*\)/,''); }));
   if(!out.bibliotecaSembrada){
     out.biblioteca = [...BIBLIOTECA_INICIAL.map((b,i)=>Object.assign({id:'bi'+i}, b)), ...(out.biblioteca||[])];
     out.bibliotecaSembrada = true;
@@ -925,13 +1030,16 @@ function saveState(){
   try{
     if(store.activeId && store.personas[store.activeId]) store.personas[store.activeId].state = state;
     localStorage.setItem(LS_KEY, JSON.stringify(store));
-  }catch(e){ console.error('No se pudo guardar', e); }
+  }catch(e){
+    console.error('No se pudo guardar', e);
+    if(!window.__avisoGuardado){ window.__avisoGuardado=true; try{ toast('⚠️ No se ha podido guardar en este dispositivo (¿poco espacio o modo privado?)', true); }catch(_){} setTimeout(()=>{ window.__avisoGuardado=false; }, 15000); }
+  }
 }
 async function loadState(){ loadStore(); }
-function toast(msg){
+function toast(msg, aviso){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 1800);
+  t.textContent=msg; t.classList.toggle('aviso', !!aviso); t.classList.add('show');
+  clearTimeout(window.__toastT); window.__toastT=setTimeout(()=>t.classList.remove('show'), aviso?4500:1800);
 }
 
 /* ================= FECHAS ================= */
@@ -1148,19 +1256,55 @@ function rangosRitmoPorTipo(base){
 }
 
 /* ================= MOTOR DE ENTRENADOR: ESCALACIÓN DE MOLESTIA ================= */
-function diasConsecutivosMolestia(){
-  let n=0, cursor=TODAY;
-  while(true){
-    const c=state.checkinByDate[cursor];
-    const enHist=state.molestiaHistorial.some(m=>m.fecha===cursor);
-    if((c&&c.molestia==='si')||enHist){ n++; cursor=restarUnDia(cursor); } else break;
-  }
-  return n;
+// Día con molestia: detalle anotado, o "Sí" en el check-in, o molestia tras una sesión
+function molestiaDelDia(f){
+  const e=state.molestiaDias[f], c=state.checkinByDate[f];
+  const enHist=state.molestiaHistorial.some(m=>m.fecha===f);
+  if(e) return {fecha:f, nivel:e.nivel||2, tendencia:e.tendencia||'', agrava:e.agrava||[], camina:e.camina||'', zona:e.zona, lado:e.lado, nota:e.nota, conDetalle:true};
+  if((c&&c.molestia==='si')||enHist) return {fecha:f, nivel:2, tendencia:'', agrava:[], camina:'', zona:null, conDetalle:false};
+  return null;
 }
+// Episodio = días seguidos con molestia hacia atrás desde hoy. Tolera huecos de hasta 2 días sin check-in (no se reinicia por olvidarlo);
+// un "No" explícito lo cierra.
+function episodioMolestia(){
+  const dias=[]; let huecos=0;
+  for(let i=0;i<90;i++){
+    const f=restarUnDiaN(TODAY,i), m=molestiaDelDia(f), c=state.checkinByDate[f];
+    if(m){ dias.push(m); huecos=0; }
+    else if(c && c.molestia==='no') break;
+    else { huecos++; if(huecos>2) break; dias.push({fecha:f, vacio:true}); }
+  }
+  while(dias.length && dias[dias.length-1].vacio) dias.pop();
+  const reg=dias.filter(d=>!d.vacio);
+  if(!reg.length) return null;
+  const inicio=reg[reg.length-1].fecha, ultimo=reg[0];
+  return {dias, reg, inicio, diasTotales:daysBetween(inicio,TODAY)+1, ultimo, sinDatoHoy:ultimo.fecha!==TODAY};
+}
+// Reglas visibles: qué toca hoy con la molestia y por qué (criterio conservador de la app, ver CONOCIMIENTO.molestia_lumbar)
+function decisionMolestia(){
+  const ep=episodioMolestia(); if(!ep) return null;
+  const u=ep.ultimo, nivel=u.nivel, tend=u.tendencia, motivos=[];
+  const COT={agacharme:'agacharte', levantarme:'levantarte', andar:'andar', sentarme:'estar sentado'};
+  const cot=(u.agrava||[]).filter(x=>COT[x]);
+  let decision;
+  if(nivel>=3){ decision='parar'; motivos.push(`El dolor es de nivel ${nivel} sobre 5: a partir de 3 no se añade impacto.`); }
+  else if(tend==='peor'){ decision='parar'; motivos.push('Dices que va peor que ayer: mientras empeore, no se corre.'); }
+  else if(cot.length){
+    if(nivel<=1 && tend==='mejor' && u.camina==='si'){ decision='probar'; motivos.push('Casi no se nota, va a mejor y caminas 30 min sin que aumente: se puede probar algo muy suave.'); }
+    else { decision='esperar'; motivos.push(`Te sigue molestando al ${cot.map(x=>COT[x]).join(' y ')}: si un gesto de cada día aún molesta, correr (impacto repetido) es pronto.`); }
+  }
+  else if(ep.reg.length===1 && ep.diasTotales===1){ decision='suave'; motivos.push('Primer día de molestia leve: hoy solo algo suave y sin calidad, y vigila cómo evoluciona.'); }
+  else if(u.camina==='si' && tend!=='peor'){ decision='probar'; motivos.push('Mejora y caminas 30 min sin que aumente: se puede probar algo muy suave.'); }
+  else { decision='esperar'; motivos.push('Va mejor, pero antes de correr conviene confirmar que puedes caminar 30 min sin que aumente (se marca en el formulario).'); }
+  if(ep.sinDatoHoy) motivos.push(`La última vez que anotaste cómo estabas fue ${fmtShort(u.fecha)}: actualízalo para afinar.`);
+  const consulta = nivel>=4 || (ep.diasTotales>=7 && tend!=='mejor') || ep.diasTotales>=10;
+  return Object.assign({decision, motivos, nivel, tend, consulta}, ep);
+}
+function diasConsecutivosMolestia(){ const e=episodioMolestia(); return e?e.diasTotales:0; }
 function nivelEscalacionMolestia(){
-  const dias=diasConsecutivosMolestia(), umbral=state.profile.escaladaMolestiaDias||3;
-  if(dias===0) return {nivel:'ninguna', dias, umbral};
-  return {nivel: dias>=umbral?'importante':'leve', dias, umbral};
+  const d=decisionMolestia(), umbral=state.profile.escaladaMolestiaDias||3;
+  if(!d) return {nivel:'ninguna', dias:0, umbral};
+  return {nivel:(d.decision==='parar'||d.decision==='esperar')?'importante':'leve', dias:d.diasTotales, umbral, decision:d.decision};
 }
 function tieneSintomasAlarma(){
   const c=state.checkinByDate[TODAY]||{};
@@ -1296,7 +1440,7 @@ function construirSesionRunning(subtipo, targetWeekKm, numDias, ritmoBase, zonas
     tipo:'Carrera', subtipo, distanciaKm:dist,
     superficie: esTrail?'trail':'asfalto',
     ritmoObjetivo: esTrail ? 'por esfuerzo y zona de FC (en trail el ritmo cambia con el desnivel)'
-      : (ritmoRango? `${toPaceLabel(ritmoRango[0])}-${toPaceLabel(ritmoRango[1])} /km (aproximado, no es prueba de esfuerzo)` : 've por sensación (RPE) — aún sin datos suficientes para un ritmo orientativo'),
+      : (ritmoRango? `${toPaceLabel(ritmoRango[0])}-${toPaceLabel(ritmoRango[1])} /km` : 've por sensación (RPE) — aún sin datos suficientes para un ritmo orientativo'),
     zonaFC: zonaObjetivo, fcRango: banda? `${banda.min}-${banda.max} ppm`:null,
     pasos: construirPasosPorSubtipo(subtipo, dist, ritmoRango, zonaObjetivo, esTrail)
   };
@@ -1379,6 +1523,22 @@ function notaLesiones(){ const t=state.profile.lesionesNotas||''; const l=LESION
 function tasaProgresion(){ const a=state.profile.anosCorriendo; if(a==null) return 1.10; return a<1 ? 1.07 : (a<3 ? 1.10 : 1.12); }
 function esClase(dia){ return !!(dia && dia.tipo==='Fuerza' && dia.clase); }
 
+// Vuelta controlada tras una molestia con varios días anotados: durante 2 semanas el volumen no pasa del 60 % de tu media previa y sin series ni tempo;
+// la tercera semana, hasta el 80 %. Criterio de la app (ver CONOCIMIENTO.molestia_lumbar); no mueve días, solo limita volumen e intensidad con aviso.
+function infoVuelta(lunes){
+  const fechas=Object.keys(state.molestiaDias||{}).filter(f=>f<=TODAY).sort(); if(!fechas.length) return null;
+  const L=fechas[fechas.length-1];
+  const ventana=fechas.filter(f=>daysBetween(f,L)>=0 && daysBetween(f,L)<=10);
+  if(ventana.length<3) return null;
+  const ds=daysBetween(L, lunes); // ≤0: la semana del propio episodio
+  if(ds>21) return null;
+  const inicio=ventana[0];
+  if(daysBetween(inicio, sumarDias(lunes,6))<0) return null; // semanas anteriores al episodio: no aplica
+  const prev=soloCarreras().filter(c=>{ const d=daysBetween(c.fecha, inicio); return d>=1 && d<=28; });
+  const kmPrev=prev.reduce((s,c)=>s+(c.dist||0),0)/4;
+  const factor = ds<=14 ? 0.6 : 0.8;
+  return {L, factor, tope: kmPrev>0 ? +(kmPrev*factor).toFixed(1) : null, sinCalidad: ds<=14};
+}
 function generarPlanSemana(semanaISO){
   const fase=state.fase.actual;
   const zonas=calcularZonasFC(state.profile, fcReposoRolling());
@@ -1447,6 +1607,8 @@ function generarPlanSemana(semanaISO){
   let targetWeekKm = descarga ? +(nivelKm*0.8).toFixed(1) : nivelKm;
   if(taper) targetWeekKm=calcularVolumenTaper(baseline, diasAlA);
   if(!targetWeekKm || targetWeekKm<=0) targetWeekKm = baseKmManual();
+  const iv=infoVuelta(lunes);
+  if(iv && !taper && iv.tope && targetWeekKm>iv.tope) targetWeekKm=iv.tope;
 
   // Terreno de cada salida. Perfil asfalto/trail → ese (series y tempo en pista si hay); mixto → monte para ganar fuerza y llano/pista para la calidad,
   // con variación semanal, lo que elige la persona (día fijo o cambio puntual) y la compensación si ha improvisado.
@@ -1466,6 +1628,12 @@ function generarPlanSemana(semanaISO){
       quitada[d]=subs[d]; perdidasMan.push({d, sub:subs[d], donde:manual[f]==='trail'?'monte':'asfalto'}); subs[d]='Continuo suave'; subOverride[d]='Continuo suave';
     }
   });
+  // vuelta tras una molestia: sin calidad en las dos primeras semanas
+  if(iv && iv.sinCalidad && !taper){
+    let quitadas=0;
+    diasRunning.forEach(d=>{ if(esCal(subs[d]) && fD(d)>=TODAY && !subOverride[d]){ subs[d]='Continuo suave'; subOverride[d]='Continuo suave'; quitadas++; } });
+    if(quitadas) ajustesT.push({fecha:TODAY, origen:'vuelta', motivo:`Vuelta tras tu molestia: estas dos semanas sin series ni tempo, solo rodajes suaves${iv.tope?`, y con un volumen máximo de ${String(iv.tope).replace('.',',')} km a la semana (60 % de tu media previa)`:''}.`});
+  }
   const llano=d=>(esCal(subs[d]) && pista) ? 'pista' : 'asfalto';
   const motivoLlano=d=> esCal(subs[d]) ? (pista ? 'Series y tempo en pista (o un tramo llano medido): sabes la distancia exacta y controlas el ritmo.' : 'En llano controlas ritmo y pulsaciones: es donde mejor se trabaja la calidad.') : (subs[d]==='Progresivo' ? 'En llano controlas cómo vas acelerando.' : 'Asfalto para rodar suave con el ritmo bajo control.');
   // lo que ya has hecho esta semana (para compensar si improvisas)
@@ -1602,11 +1770,12 @@ function rutaSugerida(distKm, desnivelM){
 }
 // Selector "¿cambias el terreno de esta salida?": avisar antes de improvisar; la app recalcula la semana y lo explica
 function terrenoSelectorHTML(fecha, dia, compacto){
-  if(!dia || dia.tipo!=='Carrera' || fecha<TODAY || actividadesDelDia(fecha).length || semaforoActual().parada) return '';
+  if(!dia || dia.tipo!=='Carrera' || dia.subtipo==='Prueba suave' || fecha<TODAY || actividadesDelDia(fecha).length || semaforoActual().parada) return '';
   const m=(state.terrenoManual||{})[fecha]||'';
-  const op=[['','Lo previsto'],['trail','🌲 Monte'],['asfalto','🛣️ Asfalto'],['pista','🏟️ Pista']];
+  const ic=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const op=[['','Previsto'],['trail',ic('<path d="M3 19l6-10 4 6 3-4 5 8z"/>')+'Monte'],['asfalto',ic('<path d="M8 3L5 21M16 3l3 18M12 5v3M12 11v3M12 17v3"/>')+'Asfalto'],['pista',ic('<rect x="3" y="7" width="18" height="10" rx="5"/>')+'Pista']];
   const guia=compacto?'':`<div style="font-size:10.5px; color:var(--text-dim); margin-top:4px;">🏟️ Pista = series o tempo · 🛣️ Asfalto = entrenamiento normal (rodaje) · 🌲 Monte = cuestas. Si cambias una sesión de series a asfalto o monte, pasa a rodaje suave y las series se recolocan otro día si caben.</div>`;
-  return `<div style="margin-top:${compacto?'6':'10'}px;"><div style="font-size:11px; color:var(--text-dim); margin-bottom:4px;">${compacto?'Terreno:':`¿${fecha===TODAY?'Hoy':'Ese día'} cambias el terreno? Si improvisas, la app recalcula el resto de la semana.`}</div><div class="btn-row" style="margin-top:0;">${op.map(([v,l])=>`<button class="btn small terr-btn${m===v?' selected':''}" data-f="${fecha}" data-v="${v}">${l}</button>`).join('')}</div>${guia}</div>`;
+  return `<div style="margin-top:${compacto?'6':'10'}px;"><div style="font-size:11px; color:var(--text-dim); margin-bottom:4px;">${compacto?'Terreno:':`¿${fecha===TODAY?'Hoy':'Ese día'} cambias el terreno? Si improvisas, la app recalcula el resto de la semana.`}</div><div class="btn-row seg">${op.map(([v,l])=>`<button class="btn small terr-btn${m===v?' selected':''}" data-f="${fecha}" data-v="${v}">${l}</button>`).join('')}</div>${guia}</div>`;
 }
 document.addEventListener('click', e=>{
   const b=e.target.closest('.terr-btn'); if(!b) return;
@@ -1818,6 +1987,9 @@ document.querySelectorAll('.checkin-q .btn').forEach(btn=>{
     state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {[q]:v});
     if(q==='molestia' && v==='no'){
       state.checkinByDate[TODAY].alarmaSintomas=[];
+      // hoy sin molestia: se cierra el episodio (se conserva lo anotado en días anteriores)
+      delete state.molestiaDias[TODAY];
+      state.molestiaHistorial=state.molestiaHistorial.filter(m=>!(m.fecha===TODAY && m.tipo!=='Durante o después del entreno'));
     }
     saveState();
     if(state.profile.onboardingCompletado) recalcularPlan();
@@ -1837,35 +2009,76 @@ document.querySelectorAll('.alarma-opt').forEach(btn=>{
     renderAll();
   });
 });
-document.getElementById('save-molestia').addEventListener('click', ()=>{
-  state.molestiaHistorial.push({
-    fecha:TODAY,
-    zona:document.getElementById('mol-zona').value,
-    tipo:document.getElementById('mol-tipo').value,
-    nivel:document.getElementById('mol-nivel').value,
-    tratamiento:document.getElementById('mol-tratamiento').value,
-    notas:document.getElementById('mol-notas').value
-  });
+/* ---- Detalle de la molestia de hoy: una entrada por día, se rellena sola al volver y se guarda al cambiar cada dato ---- */
+function molestiaBase(){ // punto de partida del formulario: lo de hoy, o lo último de los 3 días anteriores
+  if(state.molestiaDias[TODAY]) return state.molestiaDias[TODAY];
+  for(let i=1;i<=3;i++){ const m=state.molestiaDias[restarUnDiaN(TODAY,i)]; if(m) return Object.assign({}, m, {tendencia:'', camina:'', nota:''}); }
+  return null;
+}
+function setSeg(id, v){ document.querySelectorAll(`#${id} button`).forEach(b=>b.classList.toggle('selected', !!v && b.dataset.v===String(v))); }
+function valSeg(id){ const b=document.querySelector(`#${id} button.selected`); return b ? b.dataset.v : ''; }
+function pintarFormMolestia(){
+  const m=molestiaBase()||{}, ya=!!state.molestiaDias[TODAY], $=id=>document.getElementById(id);
+  const fijar=(id,v)=>{ const el=$(id); if(v && [...el.options].some(o=>o.value===v)) el.value=v; };
+  fijar('mol-zona', m.zona||(state.molestiaHistorial.slice(-1)[0]||{}).zona); fijar('mol-tipo', m.tipo); fijar('mol-tratamiento', m.tratamiento);
+  $('mol-notas').value = ya ? (m.nota||'') : '';
+  setSeg('mol-lado', m.lado); setSeg('mol-nivel', m.nivel||''); setSeg('mol-tend', ya?m.tendencia:''); setSeg('mol-camina', ya?m.camina:'');
+  document.querySelectorAll('#mol-agrava button').forEach(b=>b.classList.toggle('selected', (m.agrava||[]).includes(b.dataset.v)));
+  $('mol-guardado').textContent = ya ? 'Guardado ✓ '+(m.hora||'') : '';
+}
+function leerFormMolestia(){
+  const $=id=>document.getElementById(id);
+  return {zona:$('mol-zona').value, lado:valSeg('mol-lado'), nivel:+valSeg('mol-nivel')||null, tendencia:valSeg('mol-tend'), camina:valSeg('mol-camina'),
+    agrava:[...document.querySelectorAll('#mol-agrava button.selected')].map(b=>b.dataset.v), tipo:$('mol-tipo').value, tratamiento:$('mol-tratamiento').value, nota:$('mol-notas').value.trim()};
+}
+// Registra (o edita) la molestia de hoy fusionando lo nuevo con lo que ya había; una sola entrada por día
+function registrarMolestiaHoy(datos){
+  const base=molestiaBase()||{}, hora=new Date().toTimeString().slice(0,5);
+  const zonaPorDefecto=(state.molestiaHistorial.slice(-1)[0]||{}).zona||'Espalda baja';
+  const f=Object.assign({zona:zonaPorDefecto, agrava:[], tipo:'Molestia leve', tratamiento:'No'}, base, datos, {hora});
+  state.molestiaDias[TODAY]=f;
+  // compatibilidad con el historial antiguo: una sola entrada por día
+  state.molestiaHistorial=state.molestiaHistorial.filter(m=>!(m.fecha===TODAY && m.tipo!=='Durante o después del entreno'));
+  state.molestiaHistorial.push({fecha:TODAY, zona:f.zona, tipo:f.tipo, nivel:f.nivel?String(f.nivel):'', tratamiento:f.tratamiento, notas:f.nota||''});
+  state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {molestia:'si'});
   saveState();
   if(state.profile.onboardingCompletado) recalcularPlan();
   renderAll();
-  toast('Detalle de molestia guardado');
+  return hora;
+}
+function guardarMolestia(conAviso){
+  const hora=registrarMolestiaHoy(leerFormMolestia());
+  document.getElementById('mol-guardado').textContent='Guardado ✓ '+hora;
+  if(conAviso) toast('Detalle de molestia guardado');
+}
+document.getElementById('save-molestia').addEventListener('click', ()=>guardarMolestia(true));
+document.getElementById('molestia-extra').addEventListener('click', e=>{
+  const b=e.target.closest('.seg button, .chips-sel button'); if(!b) return;
+  const grupo=b.parentElement;
+  if(grupo.classList.contains('chips-sel')) b.classList.toggle('selected');
+  else { const ya=b.classList.contains('selected'); grupo.querySelectorAll('button').forEach(x=>x.classList.remove('selected')); if(!ya || grupo.id==='mol-nivel' || grupo.id==='mol-lado') b.classList.add('selected'); }
+  guardarMolestia(false);
 });
+['mol-zona','mol-tipo','mol-tratamiento','mol-notas'].forEach(id=>document.getElementById(id).addEventListener('change', ()=>guardarMolestia(false)));
 
 function semaforoActual(){
   if(tieneSintomasAlarma()){
-    return {color:'var(--red)', label:'Parada', text:'Has marcado síntomas de alarma en el check-in. No se genera ninguna recomendación de entrenamiento — consulta a un profesional antes de seguir.', parada:true};
+    const al=(state.checkinByDate[TODAY]||{}).alarmaSintomas||[];
+    const espalda=al.some(x=>['esfinteres','entumecimiento','debilidad','fiebre'].includes(x));
+    return {color:'var(--red)', label:'Parada', text: espalda
+      ? 'Has marcado síntomas que, junto a un dolor de espalda, justifican consultar cuanto antes (urgencias si pierdes el control de la vejiga o el intestino, notas entumecimiento en la ingle, los genitales o el ano, o tienes debilidad en las piernas). No se genera ninguna recomendación de entrenamiento.'
+      : 'Has marcado síntomas de alarma en el check-in. No se genera ninguna recomendación de entrenamiento — consulta a un profesional antes de seguir.', parada:true};
   }
   const esc=nivelEscalacionMolestia();
   const c=state.checkinByDate[TODAY]||{};
   if((c.animo==='mal' && c.molestia==='si') || esc.nivel==='importante'){
     return {color:'var(--red)', label:'Rojo', text: esc.nivel==='importante'
-      ? `Molestia ${esc.dias} días seguidos — escala a importante. Se recomienda valorar con un profesional; se suaviza también el trabajo de Fuerza.`
+      ? `Hoy no toca correr por tu molestia (día ${esc.dias}). Abajo te explico por qué y qué hacer en su lugar.`
       : 'El check-in de hoy (Mal + molestia) manda sobre cualquier dato semanal o de tendencia.'};
   }
   if(c.animo==='mal' || c.molestia==='si' || esc.nivel==='leve'){
     return {color:'var(--amber)', label:'Amarillo', text: esc.nivel==='leve'
-      ? `Molestia registrada (día ${esc.dias}/${esc.umbral}) — se suaviza el running, se mantiene el funcional.`
+      ? `Molestia en seguimiento (día ${esc.dias}): hoy solo algo suave y sin calidad.`
       : 'El check-in de hoy pesa más que el dato semanal o la tendencia mensual.'};
   }
   if(c.animo==='normal') return {color:'var(--amber)', label:'Amarillo', text:'Estado intermedio hoy — se mantiene el plan con margen para suavizar.'};
@@ -1886,14 +2099,23 @@ function computeCoachPlan(){
   if(sem.parada){
     return {hoyTitulo:'Parada de seguridad', hoyTexto:sem.text, planTitulo:'Sin recomendación', planHTML:'', tipoDia:'parada'};
   }
+  const dm=decisionMolestia();
   if(sem.color==='var(--red)'){
+    if(dm && (dm.decision==='parar' || dm.decision==='esperar')){
+      return {
+        hoyTitulo:'Hoy: no toca correr', hoyTexto:sem.text,
+        planTitulo:'Hoy, con tu molestia', planHTML:planHTMLMolestia(dm), tipoDia:'descanso'
+      };
+    }
     return {
       hoyTitulo:'Hoy: descanso', hoyTexto:sem.text+' Toca recuperar, no entrenar — no se propone sesión hasta que mejore.',
       planTitulo:'Plan pausado', planHTML:'', tipoDia:'descanso'
     };
   }
 
-  const diaHoy = diaDePlan(TODAY);
+  let diaHoy = diaDePlan(TODAY);
+  // molestia que mejora y se puede probar: en lugar de la sesión prevista, una prueba muy suave (con aviso)
+  if(dm && dm.decision==='probar' && diaHoy && diaHoy.tipo==='Carrera') diaHoy = dibujaSesionPruebaMolestia(diaHoy);
 
   // Si hoy ya hay actividad real (importada o anotada), manda lo que has hecho, no lo que estaba previsto
   const hechas=actividadesDelDia(TODAY);
@@ -1930,7 +2152,8 @@ function computeCoachPlan(){
   const tagHecha = hecha?' <span class="tag">hecha hoy</span>':'';
   const avZonas=avisoPorZonas(TODAY, diaHoy);
   // lo importante (avisos) se ve siempre; la información de apoyo queda dentro de "Ver cómo hacerla"
-  const tagAjuste = (diaHoy.subtipoOriginal ? `<div style="font-size:11px; color:var(--amber); margin-bottom:8px;">Ajustado hoy: originalmente ${diaHoy.subtipoOriginal}, suavizado por un evento cercano.</div>` : '')
+  const avMolestia = (dm && diaHoy.tipo==='Fuerza') ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">⚠️</div><div class="txt"><strong>Con tu molestia</strong><span>${esClase(diaHoy)?'La clase de hoy es exigente: hazla muy adaptada (sin flexión de tronco con carga, sin saltos ni impacto) o sáltala.':'Evita los ejercicios que te provocan la molestia y baja la carga.'} Si dudas, descansa.</span></div></div>` : '';
+  const tagAjuste = avMolestia + (diaHoy.subtipoOriginal ? `<div style="font-size:11px; color:var(--amber); margin-bottom:8px;">Ajustado hoy: originalmente ${diaHoy.subtipoOriginal}, suavizado por un evento cercano.</div>` : '')
     + (diaHoy.aviso ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">⚠️</div><div class="txt"><strong>Aviso</strong><span>${escapeHTML(diaHoy.aviso)}</span></div></div>` : '')
     + (avZonas ? `<div class="alert low" style="margin-bottom:10px;"><div class="icon">💪</div><div class="txt"><strong>Según lo que anotaste</strong><span>${escapeHTML(avZonas)}</span></div></div>` : '');
   const infoApoyo = (diaHoy.terrenoMotivo && diaHoy.terrenoMixto ? `<div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;">🧭 ${escapeHTML(diaHoy.terrenoMotivo)}</div>` : '')
@@ -1945,18 +2168,131 @@ function computeCoachPlan(){
   return {
     hoyTitulo: titulo,
     hoyTexto: 'Ver el detalle de la sesión abajo.', glosario: glosarioDe(diaHoy),
-    planTitulo:'Plan de hoy', planHTML: tagAjuste+`<div style="font-size:13px; line-height:1.5; margin-bottom:4px;">${cabecera}${tagHecha}</div>`
+    planTitulo:'Plan de hoy', planHTML: tagAjuste+(diaHoy.tipo==='Carrera' ? heroSesionHTML(diaHoy, tagHecha) : `<div style="font-size:13px; line-height:1.5; margin-bottom:4px;">${cabecera}${tagHecha}</div>`)
       + (diaHoy.cadenciaObj ? `<div style="font-size:12px; line-height:1.5; margin:6px 0; padding:6px 10px; background:var(--accent-soft); border-radius:10px;">🎯 <b>Hoy trabajas la cadencia:</b> ${(planCadencia(TODAY)||{}).bloque||'bloques cortos'} a <b>${diaHoy.cadenciaObj} pasos/min</b> en mitad del rodaje, con metrónomo y pasos más cortos (el detalle está en "Ver cómo hacerla").</div>` : '')
       + terrenoSelectorHTML(TODAY, diaHoy, true),
     pasosHTML: infoApoyo+renderPasosHTML(diaHoy.pasos),
     tipoDia: diaHoy.tipo==='Evento' ? 'evento' : (diaHoy.tipo==='Fuerza' ? 'fuerza' : (diaHoy.tipo==='Estiramientos' ? 'descanso' : (['Tempo','Series'].includes(diaHoy.subtipo)?'duro':(diaHoy.subtipo==='Largo'?'largo':'facil'))))
   };
 }
+// Sesión de correr de hoy como tarjeta: título grande y tres fichas (distancia, ritmo, zona)
+function heroSesionHTML(dia, tagHecha){
+  const rm=/(\d+:\d+)\s*-\s*(\d+:\d+)/.exec(dia.ritmoObjetivo||'');
+  const ritmo = rm ? `${rm[1]}–${rm[2]}` : (dia.superficie==='trail' ? 'por esfuerzo' : 'por sensación');
+  return `<div class="hero-t">${escapeHTML(dia.subtipo)}${dia.terrenoMixto?` <span style="font-weight:500; color:var(--text-dim); font-size:15px;">· ${etiquetaTerreno(dia)}</span>`:''}${tagHecha}</div>
+    <div class="hero-s">${dia.desnivelSug?`~+${dia.desnivelSug} m de desnivel · `:''}${dia.fcRango?`pulsaciones ${dia.fcRango}`:'sin zona de pulsaciones'}</div>
+    <div class="hero-chips"><div class="hero-chip"><b>${dia.distanciaKm} km</b><span>distancia</span></div><div class="hero-chip"><b>${ritmo}</b><span>ritmo /km</span></div><div class="hero-chip"><b>${escapeHTML(dia.zonaFC||'–')}</b><span>zona</span></div></div>`;
+}
 function eventoCercano(fecha, ventana){
   const c=(state.eventos||[]).map(e=>({ev:e, delta:daysBetween(fecha, e.fecha)})).filter(x=>Math.abs(x.delta)<=ventana)
     .sort((a,b)=>Math.abs(a.delta)-Math.abs(b.delta));
   return c[0]||null;
 }
+
+/* ================= MOLESTIA: QUÉ HA PASADO, POR QUÉ HOY SÍ/NO Y QUÉ HACER ================= */
+const MOTIVOS_NO_HECHO=['molestia','tiempo','cansancio','prefiero no arriesgar'];
+const DIA_LETRA=['D','L','M','X','J','V','S'];
+// Sesiones previstas (correr o clase) de los días del episodio que no se hicieron, con su motivo
+function sesionesNoHechas(ep){
+  const out=[];
+  ep.dias.forEach(d=>{
+    if(d.fecha>=TODAY) return;
+    const dia=diaDePlan(d.fecha); if(!dia || !['Carrera','Fuerza'].includes(dia.tipo)) return;
+    if(actividadesDelDia(d.fecha).some(a=>['Carrera','Fuerza'].includes(a.tipo))) return;
+    out.push({fecha:d.fecha, dia, motivo:state.motivoNoHecho[d.fecha]||'molestia'});
+  });
+  return out;
+}
+function alternativasMolestia(dm){
+  const diaHoy=diaDePlan(TODAY), COT={agacharme:'agacharte', levantarme:'levantarte', andar:'andar', sentarme:'estar sentado', girar:'girar o toser', correr:'correr'};
+  const lista=['Caminar 20-30 min a ritmo cómodo, en llano y sin cuestas, mientras no te aumente el dolor (seguir activo suele ir mejor que el reposo total).',
+    'Movilidad suave dentro de lo que no duela; nada que fuerce el gesto que te tira.'];
+  if(diaHoy && esClase(diaHoy)) lista.push('Hoy hay clase de funcional: o la haces muy adaptada (sin flexión de tronco con carga, sin saltos ni impacto) o la saltas. Si dudas, descansa.');
+  const ev=(dm.ultimo.agrava||[]).filter(x=>COT[x] && x!=='correr');
+  if(ev.length) lista.push(`Por ahora, evita forzar lo que te la provoca: ${ev.map(x=>COT[x]).join(', ')}.`);
+  return lista;
+}
+function dibujaSesionPruebaMolestia(dia){
+  const planKm=dia.distanciaKm||4, km=Math.max(1.5, Math.min(3, +(planKm*0.5).toFixed(1)));
+  const zonas=calcularZonasFC(state.profile, fcReposoRolling()), z1=zonas.bandas[0], z2=zonas.bandas[1];
+  return Object.assign({}, dia, {subtipo:'Prueba suave', subtipoPrevisto:dia.subtipo, distanciaKm:km, superficie:'asfalto', terreno:'asfalto', terrenoMixto:false, desnivelSug:null,
+    ritmoObjetivo:'muy suave: 2 min de trote y 1 min andando', zonaFC:'Z1-Z2', fcRango:`${z1.min}-${z2.max} ppm`, cadenciaObj:null,
+    aviso:'Prueba suave por tu molestia: no es la sesión prevista, sirve para comprobar cómo responde tu espalda.',
+    pasos:[
+      {titulo:'Calentamiento', detalle:'5-10 min andando a buen paso y movilidad suave de cadera y espalda baja, sin forzar ningún gesto que moleste.'},
+      {titulo:`Prueba suave · ${km} km`, detalle:'Alterna 2 min de trote muy suave con 1 min andando, en llano y sin cuestas. Ritmo de conversación.'},
+      {titulo:'Cuándo parar', detalle:'Si durante la prueba el dolor pasa de 3 sobre 5, para y vuelve andando.'},
+      {titulo:'Qué mirar después', detalle:'Si esta noche o mañana por la mañana estás peor que ayer, no repitas hasta que mejore. Anótalo en "Cómo estoy hoy" (Mejor / Igual / Peor).'}
+    ]});
+}
+// Lo que se enseña en la tarjeta de entrenamiento cuando hoy no toca correr por la molestia
+function planHTMLMolestia(dm){
+  const titulos={parar:'Hoy no corremos', esperar:'Hoy mejor no correr'};
+  const porque=dm.motivos.map(m=>`<div style="font-size:12.5px; line-height:1.5; padding:5px 0;">• ${escapeHTML(m)}</div>`).join('');
+  const que=alternativasMolestia(dm).map(m=>`<div style="font-size:12.5px; line-height:1.5; padding:3px 0;">• ${escapeHTML(m)}</div>`).join('');
+  const k=CONOCIMIENTO.molestia_lumbar;
+  return `<div style="font-size:13px; font-weight:600; margin-bottom:4px;">${titulos[dm.decision]||'Hoy no corremos'} · día ${dm.diasTotales} de molestia</div>
+    <div style="font-size:12px; color:var(--text-dim); margin:8px 0 2px;">Por qué</div>${porque}
+    <div class="why-item" style="cursor:pointer; padding:4px 0;"><span style="color:var(--accent); font-size:11px;">¿de dónde salen estas reglas?</span><div class="why-more" style="display:none; margin-top:6px; font-size:11.5px; line-height:1.5; color:var(--text-dim); background:var(--surface-2); border-radius:10px; padding:8px 10px;"><b style="color:var(--text)">${k.t}</b> <span class="tag">${k.ev}</span><br>${k.por}<br><i>Fuente: ${k.fuente}</i></div></div>
+    <div style="font-size:12px; color:var(--text-dim); margin:10px 0 2px;">Qué hacer hoy en su lugar</div>${que}
+    <div style="font-size:12px; color:var(--text-dim); margin:10px 0 2px;">Qué lo cambiaría</div>
+    <div style="font-size:12.5px; line-height:1.5;">Podrás probar algo muy suave cuando el dolor sea de 2 o menos, no vaya peor, los gestos de cada día (agacharte, levantarte, andar) no te molesten y puedas caminar 30 min sin que aumente. Actualízalo en la tarjeta de arriba.</div>`;
+}
+function renderMolestiaCard(){
+  const el=document.getElementById('molestia-card'); if(!el) return;
+  const dm=decisionMolestia();
+  if(!dm && state.profile.onboardingCompletado){
+    // sin molestia hoy, pero volviendo de una: se explica el plan de vuelta
+    const iv=infoVuelta(mondayOfIsoWeek(isoWeek(TODAY))), pasados=iv?daysBetween(iv.L,TODAY):-1;
+    if(iv && pasados>=1 && pasados<=21){
+      const hasta=sumarDias(iv.L, iv.sinCalidad?14:21);
+      el.style.display='block';
+      el.innerHTML=`<h3>Vuelta tras tu molestia</h3><div style="font-size:12.5px; line-height:1.55;">Tu última molestia anotada fue el ${fmtShort(iv.L)}. ${iv.sinCalidad?`Hasta el ${fmtShort(hasta)} el plan va <b>sin series ni tempo</b>`:`Hasta el ${fmtShort(hasta)} el plan sube con calma`}${iv.tope?` y con un máximo de <b>${String(iv.tope).replace('.',',')} km</b> a la semana (${Math.round(iv.factor*100)} % de tu media previa)`:''}. Si vuelve la molestia, pulsa "Sí" en <a href="#" id="mq-reabrir" style="color:var(--accent);">Cómo estoy hoy</a> y lo vuelvo a ajustar. <span style="color:var(--text-dim);">Cautela propia de la app, no una pauta médica.</span></div>`;
+      return;
+    }
+  }
+  if(!dm || !state.profile.onboardingCompletado){ el.style.display='none'; el.innerHTML=''; return; }
+  el.style.display='block';
+  const u=dm.ultimo, hoy=state.molestiaDias[TODAY]||{};
+  const colorN=n=>n>=3?'var(--red)':(n>=2?'var(--amber)':'var(--green)');
+  const tendTxt={mejor:'▲ mejor', igual:'● igual', peor:'▼ peor'};
+  const dias=[]; for(let f=dm.inicio; f<=TODAY; f=sumarDias(f,1)) dias.push(f);
+  const noHechas=sesionesNoHechas(dm);
+  const linea=f=>{
+    const m=molestiaDelDia(f), nh=noHechas.find(x=>x.fecha===f);
+    const dt=new Date(f+'T00:00:00Z');
+    const pie = m ? `<span style="color:${colorN(m.nivel)}; font-family:'JetBrains Mono';">${m.conDetalle?m.nivel+'/5':'sí'}</span>${m.tendencia?` <span style="color:var(--text-dim)">${tendTxt[m.tendencia]||''}</span>`:''}${(m.agrava||[]).length?` <span style="color:var(--text-dim)">· ${escapeHTML(m.agrava.join(', '))}</span>`:''}` : '<span style="color:var(--text-dim)">sin dato</span>';
+    const sesion = nh ? `<div style="font-size:11px; color:var(--text-dim); padding-left:34px;">⏸ ${escapeHTML(nh.dia.tipo==='Carrera'?nh.dia.subtipo:'clase')} no hecha · <a href="#" class="mnh" data-f="${f}" style="color:var(--accent);">${escapeHTML(nh.motivo)}</a></div>` : '';
+    return `<div style="font-size:12px; padding:4px 0; border-bottom:1px solid var(--line);"><span style="display:inline-block; width:34px; color:var(--text-dim); font-family:'JetBrains Mono';">${DIA_LETRA[dt.getUTCDay()]} ${dt.getUTCDate()}</span>${pie}</div>${sesion}`;
+  };
+  const resumen=`Empezó el ${fmtShort(dm.inicio)}; llevas ${dm.diasTotales} día${dm.diasTotales>1?'s':''}${dm.reg.length<dm.diasTotales?` (${dm.reg.length} con dato)`:''}.`;
+  const consejo=`<div style="font-size:12px; line-height:1.55;">
+      <div>• Lo habitual en un dolor de espalda sin señales de alarma es <b>seguir activo con lo que no duela</b> (caminar) en lugar de guardar reposo total, y no pedir pruebas de imagen de rutina (<a href="https://www.nice.org.uk/ng59" target="_blank" rel="noopener" style="color:var(--accent);">guía NICE NG59</a>).</div>
+      <div style="margin-top:6px;"><b>Consulta cuanto antes</b> si hay: pérdida de control de la vejiga o el intestino, entumecimiento en la ingle, los genitales o el ano, debilidad o adormecimiento en las piernas, o fiebre y malestar general (<a href="https://www.nhs.uk/conditions/back-pain/" target="_blank" rel="noopener" style="color:var(--accent);">NHS</a>). Con un golpe o caída fuerte, o dolor nocturno que no cede, también conviene valorarlo (criterio orientativo de la app).</div>
+      <div style="margin-top:6px;">${dm.consulta ? `<b style="color:var(--amber)">Ya es momento de que lo valore un profesional</b>: ${dm.nivel>=4?'el dolor es de 4 o más':(dm.diasTotales>=10?'llevas 10 días o más':'llevas 7 días o más sin ir a mejor')}. ` : 'Si a los 7-10 días no va a mejor, o sube a 4 de 5, conviene que lo valore un profesional (plazo orientativo, criterio de la app). '}</div>
+      <div style="color:var(--text-dim); margin-top:6px;">Orientación general; no sustituye la valoración de un profesional.</div></div>`;
+  el.innerHTML=`<h3>Tu molestia ${u.zona?`<span class="muted">· ${escapeHTML(u.zona)}${u.lado?' · '+({izq:'izquierdo',der:'derecho',ambos:'ambos lados'}[u.lado]||''):''}</span>`:''}</h3>
+    <div style="font-size:12.5px; line-height:1.5; margin-bottom:10px;">${resumen} ${dm.sinDatoHoy?`<b style="color:var(--amber)">Hoy aún no has anotado cómo estás.</b>`:''}</div>
+    <div class="field" style="margin-bottom:8px;"><label>Dolor hoy (1 apenas se nota · 5 intenso)</label><div class="seg">${[1,2,3,4,5].map(n=>`<button type="button" data-mq="nivel" data-v="${n}" class="${hoy.nivel===n?'selected':''}">${n}</button>`).join('')}</div></div>
+    <div class="field" style="margin-bottom:8px;"><label>Respecto a ayer</label><div class="seg">${['mejor','igual','peor'].map(t=>`<button type="button" data-mq="tendencia" data-v="${t}" class="${hoy.tendencia===t?'selected':''}">${t[0].toUpperCase()+t.slice(1)}</button>`).join('')}</div></div>
+    <div class="btn-row" style="margin-top:6px;"><button class="btn ghost small" id="mq-detalle" style="flex:1;">Más detalle</button><button class="btn ghost small" id="mq-fin" style="flex:1;">Ya no la tengo</button></div>
+    <details class="plegable" style="margin-top:10px;"><summary style="font-size:12px; color:var(--text-dim);">Qué ha pasado, día a día</summary><div style="margin-top:6px;">${dias.slice().reverse().map(linea).join('')}</div></details>
+    <details class="plegable" style="margin-top:8px;" ${dm.consulta?'open':''}><summary style="font-size:12px; color:var(--text-dim);">Consejo y cuándo consultar</summary><div style="margin-top:6px;">${consejo}</div></details>`;
+}
+document.addEventListener('click', e=>{
+  const q=e.target.closest('#molestia-card [data-mq]');
+  if(q){ registrarMolestiaHoy({[q.dataset.mq]: q.dataset.mq==='nivel' ? +q.dataset.v : q.dataset.v}); return; }
+  if(e.target.closest('#mq-detalle')){ abrirEstado(); return; }
+  if(e.target.closest('#mq-reabrir')){ e.preventDefault(); abrirEstado(); return; }
+  if(e.target.closest('#mq-fin')){
+    state.checkinByDate[TODAY]=Object.assign({}, state.checkinByDate[TODAY], {molestia:'no', alarmaSintomas:[]});
+    delete state.molestiaDias[TODAY];
+    state.molestiaHistorial=state.molestiaHistorial.filter(m=>!(m.fecha===TODAY && m.tipo!=='Durante o después del entreno'));
+    saveState(); if(state.profile.onboardingCompletado) recalcularPlan(); renderAll(); toast('Anotado: sin molestia hoy. Tu plan de vuelta se ajusta solo.'); return;
+  }
+  const mnh=e.target.closest('.mnh');
+  if(mnh){ e.preventDefault(); const f=mnh.dataset.f, act=state.motivoNoHecho[f]||'molestia'; state.motivoNoHecho[f]=MOTIVOS_NO_HECHO[(MOTIVOS_NO_HECHO.indexOf(act)+1)%MOTIVOS_NO_HECHO.length]; saveState(); renderMolestiaCard(); }
+});
 
 /* ================= RENDER: HOY ================= */
 function renderCheckinButtons(){
@@ -1966,6 +2302,7 @@ function renderCheckinButtons(){
   });
   document.getElementById('molestia-extra').style.display = c.molestia==='si' ? 'block' : 'none';
   document.getElementById('alarma-wrap').style.display = c.molestia==='si' ? 'block' : 'none';
+  if(c.molestia==='si') pintarFormMolestia();
   const alarmaActual = new Set(c.alarmaSintomas||[]);
   document.querySelectorAll('.alarma-opt').forEach(b=>b.classList.toggle('selected', alarmaActual.has(b.dataset.v)));
   document.getElementById('alarma-aviso').innerHTML = alarmaActual.size
@@ -2105,16 +2442,20 @@ function renderRecuperacion(){
 
 function renderHoy(){
   renderCheckinButtons();
+  renderMolestiaCard();
 
   const sem=semaforoActual();
   document.getElementById('ring-arc').setAttribute('stroke', sem.color);
   document.getElementById('ring-state').style.color=sem.color;
   document.getElementById('ring-state').textContent=sem.label;
   document.getElementById('ring-desc').textContent=sem.text;
+  document.getElementById('ring-title').textContent = sem.parada ? 'Parada de seguridad' : ({Verde:'Buena base para hoy', Amarillo:'Hoy, con cuidado', Rojo:'Hoy toca cuidarse'}[sem.label]||'Cómo estás');
   // píldora de estado en Hoy: el detalle y el check-in viven en la hoja "Cómo estoy hoy"
   const cHoy=state.checkinByDate[TODAY]||{};
   document.getElementById('estado-pill-dot').style.background=sem.color;
-  document.getElementById('estado-pill-txt').textContent = sem.parada ? 'Parada de seguridad' : (sem.label==='Verde' ? (cHoy.molestia==='si' ? 'Con una molestia anotada' : 'Estás bien para entrenar') : sem.label+' · '+sem.text.slice(0,60));
+  const dmP=decisionMolestia();
+  const textoMolestia = dmP ? ({parar:'No toca correr', esperar:'No toca correr', suave:'Solo algo suave', probar:'Prueba suave hoy'}[dmP.decision]+' · molestia, día '+dmP.diasTotales) : null;
+  document.getElementById('estado-pill-txt').textContent = sem.parada ? 'Parada de seguridad' : (textoMolestia || (sem.label==='Verde' ? (cHoy.molestia==='si' ? 'Con una molestia anotada' : 'Estás bien para entrenar') : sem.label+' · '+sem.text.slice(0,60)));
   { const rc=renderRecuperacion(); if(rc && !rc.faltan && !sem.parada && sem.label==='Verde' && cHoy.molestia!=='si'){ const e=document.getElementById('estado-pill-txt'); e.textContent += ' · recuperación '+(Math.round(rc.horas)<=0?'completa':'~'+Math.round(rc.horas)+' h'); } }
 
   const wk = repasoReciente();
@@ -2155,7 +2496,8 @@ function renderHoy(){
 
   renderManana();
 }
-document.getElementById('estado-pill').addEventListener('click', ()=>{ document.getElementById('estado-modal').style.display='block'; });
+function abrirEstado(){ document.getElementById('estado-modal').style.display='block'; document.getElementById('estado-modal').scrollTop=0; }
+document.getElementById('estado-pill').addEventListener('click', abrirEstado);
 document.getElementById('estado-cerrar').addEventListener('click', ()=>{ document.getElementById('estado-modal').style.display='none'; });
 // Lo que la persona anota de los músculos (tras clases o salidas) se tiene en cuenta, a grandes rasgos, para el día siguiente
 function avisoPorZonas(fecha, dia){
@@ -2509,6 +2851,27 @@ document.addEventListener('click', e=>{ if(e.target.closest('#app-ver-check')){ 
   if(e.target.closest('#app-recargar')){ e.preventDefault(); location.href=location.pathname+'?v='+encodeURIComponent(window.__verRemota||Date.now()); } });
 pintarVersion();
 setTimeout(comprobarVersion, 1500);
+/* ---- Secciones plegables en Yo (los ids y controles no cambian: solo se agrupa el contenido bajo cada título) ---- */
+(function plegarSeccionesPerfil(){
+  const abiertas=['Qué busco'];
+  document.querySelectorAll('[data-screen="perfil"] > .card').forEach(card=>{
+    const h=card.querySelector(':scope > h3'); if(!h || card.dataset.coll) return;
+    card.dataset.coll='1'; card.classList.add('coll');
+    const body=document.createElement('div'); body.className='coll-body';
+    [...card.childNodes].filter(n=>n!==h).forEach(n=>body.appendChild(n));
+    card.appendChild(body);
+    if(abiertas.includes(h.firstChild && h.firstChild.textContent.trim())) card.classList.add('abierta');
+    h.addEventListener('click', ()=>card.classList.toggle('abierta'));
+  });
+})();
+/* ---- Explicaciones de las gráficas: plegadas por defecto ---- */
+document.querySelectorAll('[data-screen="evolucion"] .explain').forEach(el=>{
+  if(el.id) return;
+  const b=el.querySelector('b'); const titulo=b?b.textContent.replace(/:\s*$/,''):'Qué significa';
+  const d=document.createElement('details'); d.className='explain-d';
+  d.innerHTML='<summary>'+titulo+'</summary>'+el.innerHTML.replace(/^\s*<b>[^<]*<\/b>\s*/,'');
+  el.replaceWith(d);
+});
 function renderNubeCard(){
   const card=document.getElementById('garmin-nube-card'); if(!card) return;
   const n=window.__nube;
@@ -3884,6 +4247,9 @@ const CONOCIMIENTO = {
   analisis:{t:'Cómo valoro una sesión', ev:'Criterio de la app',
     por:'Comparo lo que hiciste con lo previsto (distancia, intensidad, ritmo y terreno) y con tu propio historial, usando promedios de la sesión. Cuando Garmin me da los parciales por kilómetro, comparo la primera mitad con la segunda (corrigiendo el desnivel: 100 m ≈ 1 km) para ver si repartiste bien el esfuerzo; salir demasiado rápido y pagarlo al final es el fallo más habitual. En series no lo uso, porque cada kilómetro mezcla trabajo y descanso. Lo que sentías minuto a minuto no lo veo, por eso te pido tu sensación después.',
     fuente:'Reglas propias de la app sobre tus datos de Garmin; no sustituye a un entrenador.'},
+  molestia_lumbar:{t:'Cuándo corro y cuándo no con una molestia', ev:'Criterio conservador de la app; las guías respaldan seguir activo',
+    por:'Reglas visibles: no correr si el dolor es de 3 sobre 5 o más, o si va peor; esperar si aún molestan gestos de cada día (agacharte, levantarte, andar) o no has comprobado que caminas 30 min sin que aumente; probar algo muy suave (trote y andar alternados, en llano, la mitad de volumen) cuando el dolor es de 2 o menos, no empeora y caminas 30 min sin problema; volver al plan solo si después de esa prueba, esa noche y a la mañana siguiente no estás peor. Cuando la molestia se va, el volumen vuelve de forma gradual (alrededor del 60 % las dos primeras semanas) y sin calidad al principio. Lo que sí respaldan las guías es seguir activo con lo que no duela en vez de guardar reposo total y no pedir pruebas de imagen de rutina; los umbrales concretos (3/5, 30 min, 60 %) son cautelas propias, no cifras de un estudio. Los modelos de "monitorización del dolor" (Thomeé y cols.) se han descrito sobre todo para tendones y las cifras aceptables varían según la fuente (de 2 a 5 sobre 10): por eso la app elige la opción prudente.',
+    fuente:'NICE NG59 (dolor lumbar y ciática, mayores de 16): animar a mantener las actividades normales y no ofrecer pruebas de imagen de rutina. NHS (back pain): señales de alarma (pérdida de control de vejiga/intestino, entumecimiento en la ingle, genitales o ano, debilidad en las piernas, fiebre). Umbrales de la app: criterio propio, no verificado en un estudio. No sustituye a un profesional.'},
   te:{t:'Efecto de entrenamiento de Garmin', ev:'Dato del fabricante',
     por:'Garmin puntúa de 0 a 5 cuánto mejora tu forma aeróbica una sesión: 1-1,9 ayuda a recuperar, 2-2,9 mantiene, 3-3,9 mejora y 4-4,9 la mejora mucho. Es una estimación del reloj, no una medida de laboratorio.',
     fuente:'Manual de usuario de Garmin ("About Training Effect").'},
@@ -4119,13 +4485,16 @@ function analizarSesion(a){
     const planC=dia && dia.tipo==='Carrera';
     const z=a.fc ? zonaDeFC(a.fc) : null;
     const cr=planC ? claseReal(a, dia) : null;
-    const sub=planC ? dia.subtipo : null;
-    const suave=sub ? ['Continuo suave','Largo','Activación'].includes(sub) : null;
+    // salida hecha con una molestia en curso: se valora como prueba suave, no como la sesión prevista
+    const epM=episodioMolestia(), enMolestia=!!(epM && a.fecha>=epM.inicio);
+    const sub=planC ? (enMolestia ? 'Prueba suave' : dia.subtipo) : null;
+    const suave=sub ? ['Continuo suave','Largo','Activación','Prueba suave'].includes(sub) : null;
+    if(enMolestia) N('perfil','Salida hecha con tu molestia en curso: la valoro como una prueba suave, no como la sesión prevista. Lo importante ahora es cómo responde tu espalda esta noche y mañana por la mañana (anótalo en "Cómo estoy hoy").');
     const calidad=cr==='continuo' ? false : (sub ? ['Series','Tempo'].includes(sub) : false);
     if(planC && dia.subtipo==='Series' && cr) cambioSeries=cr;
     if(!planC) N('perfil','Esta salida no estaba en el plan de ese día: la valoro con tu historial y lo que dicen tus pulsaciones.');
     // distancia
-    if(planC && dia.distanciaKm && a.dist && cr!=='continuo'){
+    if(planC && dia.distanciaKm && a.dist && cr!=='continuo' && !enMolestia){
       const r=a.dist/dia.distanciaKm;
       if(r>=0.85 && r<=1.15) B('fase',`Hiciste ${a.dist} km, justo lo previsto (${dia.distanciaKm} km): cumples el plan sin pasarte.`);
       else if(r<0.7) M('recuperacion',`Te quedaste en ${a.dist} km de los ${dia.distanciaKm} previstos. Si fue por cansancio o molestia, anótalo en "Cómo me ha ido"; si fue por tiempo, no pasa nada: la semana lo absorbe.`,'Si te falta tiempo, acorta la sesión pero mantén el tipo (suave sigue siendo suave).');
@@ -4151,7 +4520,7 @@ function analizarSesion(a){
       N('zonas',`Pulsaciones medias ${a.fc} ppm (zona ${z.zona}, ${z.label}).`);
     }
     // ritmo (solo asfalto/pista, donde el ritmo es una referencia fiable)
-    const rr=(planC && cr!=='continuo') ? rangoRitmoDe(dia) : null;
+    const rr=(planC && cr!=='continuo' && !enMolestia) ? rangoRitmoDe(dia) : null;
     if(rr && a.ritmo && a.superficie!=='trail' && dia.superficie!=='trail'){
       const pace=ritmoADec(a.ritmo);
       if(pace<rr[0]-0.33) N('zonas',`Fuiste a ${a.ritmo}/km, más rápido que el rango previsto (${toPaceLabel(rr[0])}-${toPaceLabel(rr[1])}). Si te salió sin esfuerzo, bien; si no, ojo con pasarte en los días suaves.`);
@@ -4161,7 +4530,7 @@ function analizarSesion(a){
     // terreno y desnivel
     const real=a.superficie==='trail' ? 'trail' : 'asfalto';
     const prev=planC ? (dia.terreno || (dia.superficie==='trail'?'trail':'asfalto')) : null;
-    if(planC && cr!=='continuo' && (dia.terrenoMixto || p.superficie==='mixto')){
+    if(planC && cr!=='continuo' && !enMolestia && (dia.terrenoMixto || p.superficie==='mixto')){
       const prevBase=prev==='trail'?'trail':'asfalto';
       const lab={trail:'monte', pista:'pista', asfalto:'asfalto'};
       if(prevBase===real) B('terreno',`Terreno como estaba previsto (${lab[prev]}).`);
